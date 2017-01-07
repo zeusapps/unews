@@ -18,6 +18,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZeusApps.News.Repositories"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZeusApps.News.Repository.Inmemory", "src\ZeusApps.News.Repository.Inmemory\ZeusApps.News.Repository.Inmemory.xproj", "{D3A47919-9F7E-4B7C-900A-8A39DBD618FE}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZeusApps.News.Parser", "src\ZeusApps.News.Parser\ZeusApps.News.Parser.xproj", "{D9583329-C7C3-443E-9588-1FE7B45AB4AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{D3A47919-9F7E-4B7C-900A-8A39DBD618FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3A47919-9F7E-4B7C-900A-8A39DBD618FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3A47919-9F7E-4B7C-900A-8A39DBD618FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9583329-C7C3-443E-9588-1FE7B45AB4AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9583329-C7C3-443E-9588-1FE7B45AB4AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9583329-C7C3-443E-9588-1FE7B45AB4AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9583329-C7C3-443E-9588-1FE7B45AB4AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,5 +55,6 @@ Global
 		{3B2E707D-E4F1-4785-ABAA-CC500B4A17DC} = {143FDF5F-5C82-49BC-9D16-3E4FF386EC03}
 		{D62B5D37-4C7B-4898-82D7-CC50718C3AF3} = {143FDF5F-5C82-49BC-9D16-3E4FF386EC03}
 		{D3A47919-9F7E-4B7C-900A-8A39DBD618FE} = {143FDF5F-5C82-49BC-9D16-3E4FF386EC03}
+		{D9583329-C7C3-443E-9588-1FE7B45AB4AB} = {143FDF5F-5C82-49BC-9D16-3E4FF386EC03}
 	EndGlobalSection
 EndGlobal
