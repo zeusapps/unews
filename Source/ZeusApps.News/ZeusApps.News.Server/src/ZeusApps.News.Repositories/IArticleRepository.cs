@@ -12,5 +12,7 @@ namespace ZeusApps.News.Repositories
         Task<bool> AddArticle(Article article);
 
         Task<bool> DeleteArticle(string id);
+
+        Task<bool> ContainsArticle(string url);
     }
 }

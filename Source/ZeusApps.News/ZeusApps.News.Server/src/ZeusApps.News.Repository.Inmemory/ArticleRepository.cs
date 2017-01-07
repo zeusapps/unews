@@ -50,5 +50,12 @@ namespace ZeusApps.News.Repository.Inmemory
             _articles.Remove(article);
             return Task.FromResult(true);
         }
+
+        public Task<bool> ContainsArticle(string url)
+        {
+            var result = _articles.FirstOrDefault(x => x.Url == url);
+            
+            return Task.FromResult(result != null);
+        }
     }
 }
