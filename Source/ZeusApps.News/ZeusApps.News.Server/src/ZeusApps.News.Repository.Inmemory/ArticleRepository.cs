@@ -31,7 +31,7 @@ namespace ZeusApps.News.Repository.Inmemory
             return Task.FromResult(article);
         }
 
-        public Task<bool> AddAdticle(Article article)
+        public Task<bool> AddArticle(Article article)
         {
             article.Id = Guid.NewGuid().ToString();
             _articles.Add(article);
