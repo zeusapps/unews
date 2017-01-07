@@ -13,6 +13,6 @@ namespace ZeusApps.News.Repositories
 
         Task<bool> DeleteArticle(string id);
 
-        Task<bool> ContainsArticle(string url);
+        Task<bool> ContainsUrl(string url);
     }
 }

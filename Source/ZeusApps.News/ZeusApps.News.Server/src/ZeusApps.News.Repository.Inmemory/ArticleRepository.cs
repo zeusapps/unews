@@ -33,6 +33,9 @@ namespace ZeusApps.News.Repository.Inmemory
 
         public Task<bool> AddArticle(Article article)
         {
+
+
+
             article.Id = Guid.NewGuid().ToString();
             _articles.Add(article);
 
@@ -51,7 +54,7 @@ namespace ZeusApps.News.Repository.Inmemory
             return Task.FromResult(true);
         }
 
-        public Task<bool> ContainsArticle(string url)
+        public Task<bool> ContainsUrl(string url)
         {
             var result = _articles.FirstOrDefault(x => x.Url == url);
             
