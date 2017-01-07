@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace ZeusApps.News.Parser
 {
@@ -9,6 +7,9 @@ namespace ZeusApps.News.Parser
     {
         public static void Main(string[] args)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("settings.json", optional: true, reloadOnChange: true);
         }
     }
 }
