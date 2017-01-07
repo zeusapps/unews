@@ -14,6 +14,10 @@ namespace ZeusApps.News.Models
 
         public string OriginalHtml { get; set; }
 
+        public string Url { get; set; }
+
+        public string ImageUrl { get; set; }
+
         public DateTime Published { get; set; }
 
         public DateTime Downloaded { get; set; }
