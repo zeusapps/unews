@@ -31,15 +31,17 @@ namespace ZeusApps.News.Repository.Inmemory
             return Task.FromResult(article);
         }
 
-        public Task<bool> AddArticle(Article article)
+        public async Task<bool> AddArticle(Article article)
         {
-
-
+            if (await ContainsUrl(article.Url))
+            {
+                return false;
+            }
 
             article.Id = Guid.NewGuid().ToString();
             _articles.Add(article);
 
-            return Task.FromResult(true);
+            return true;
         }
 
         public Task<bool> DeleteArticle(string id)
