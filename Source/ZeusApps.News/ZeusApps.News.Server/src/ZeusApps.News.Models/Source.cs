@@ -12,6 +12,8 @@
 
         public string ImageUrl { get; set; }
 
+        public string SourceUrl { get; set; }
+
         public string Key { get; set; }
 
         public bool IsDownloadable { get; set; }
