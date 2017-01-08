@@ -5,13 +5,12 @@
   },
 
   "dependencies": {
-    "Microsoft.Extensions.Configuration": "1.0.0",
-    "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0",
-    "Microsoft.NETCore.App": {
-      "type": "platform",
-      "version": "1.0.1"
-    },
+    "HtmlAgilityPack.NetCore": "1.5.0.1",
+    "Microsoft.Extensions.Configuration": "1.1.0",
+    "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
+    "Microsoft.Extensions.Configuration.Json": "1.1.0",
+    "Microsoft.NETCore.App": "1.1.0",
+    "System.Xml.XmlDocument": "4.0.1",
     "ZeusApps.News.Models": "1.0.0-*",
     "ZeusApps.News.Repositories": "1.0.0-*",
     "ZeusApps.News.Repository.Inmemory": "1.0.0-*"
@@ -19,7 +18,13 @@
 
   "frameworks": {
     "netcoreapp1.0": {
-      "imports": "dnxcore50"
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
     }
+  },
+  "runtimes": {
+    "win10-x64": {} 
   }
 }
