@@ -21,7 +21,37 @@ namespace ZeusApps.News.Parser.Parsers
             Repository = repository;
         }
 
-        public abstract Task<Article[]> Parse(Source source);
+        public virtual async Task<Article[]> Parse(Source source)
+        {
+            var rss = await GetSource(source.SourceUrl);
+            var items = GetRssItems(rss);
+
+            var result = new List<Article>();
+            foreach (var item in items)
+            {
+                if (await Contains(item.Link))
+                {
+                    continue;
+                }
+
+                var article = ToArticle(item, source);
+
+                if (!await DownloadHtml(article, source))
+                {
+                    continue;
+                }
+
+                ArticleOverride(article);
+                result.Add(article);
+            }
+
+            return result.ToArray();
+        }
+
+        protected virtual void ArticleOverride(Article article)
+        {
+            
+        }
 
         protected abstract string ParseHtml(string html);
 

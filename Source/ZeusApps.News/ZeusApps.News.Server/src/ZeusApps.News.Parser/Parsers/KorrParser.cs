@@ -11,32 +11,11 @@ namespace ZeusApps.News.Parser.Parsers
         public KorrParser(IArticleRepository repository) : base(repository)
         {
         }
-        
-        public override async Task<Article[]> Parse(Source source)
+
+        protected override void ArticleOverride(Article article)
         {
-            var rss = await GetSource(source.SourceUrl);
-            var items = GetRssItems(rss);
-            
-            var result = new List<Article>();
-            foreach (var item in items)
-            {
-                if (await Contains(item.Link))
-                {
-                    continue;
-                }
-
-                var article = ToArticle(item, source);
-                article.Image = article.Image?.Replace("/190x120/", "/610x385/");
-
-                if (await DownloadHtml(article, source))
-                {
-                    result.Add(article);
-                }
-            }
-
-            return result.ToArray();
+            article.Image = article.Image?.Replace("/190x120/", "/610x385/");
         }
-        
 
         protected override string ParseHtml(string html)
         {
@@ -51,7 +30,5 @@ namespace ZeusApps.News.Parser.Parsers
                 .RemoveStyles()
                 .InnerHtml;
         }
-
-       
     }
-}
+}             
