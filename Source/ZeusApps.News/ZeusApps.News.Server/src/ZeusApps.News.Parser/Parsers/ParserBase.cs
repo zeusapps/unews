@@ -14,6 +14,8 @@ namespace ZeusApps.News.Parser.Parsers
 {
     public abstract class ParserBase : IParser
     {
+        protected Source Source { get; private set; }
+
         protected readonly IArticleRepository Repository;
 
         protected ParserBase(IArticleRepository repository)
@@ -23,6 +25,8 @@ namespace ZeusApps.News.Parser.Parsers
 
         public virtual async Task<Article[]> Parse(Source source)
         {
+            Source = source;
+
             var rss = await GetSource(source.SourceUrl);
             var items = GetRssItems(rss);
 
