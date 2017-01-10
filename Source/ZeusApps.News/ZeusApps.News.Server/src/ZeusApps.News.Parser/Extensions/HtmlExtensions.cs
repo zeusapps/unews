@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using System;
+using HtmlAgilityPack;
 
 namespace ZeusApps.News.Parser.Extensions
 {
@@ -33,6 +34,28 @@ namespace ZeusApps.News.Parser.Extensions
             {
                 item.Attributes["style"].Remove();
             }
+
+            return node;
+        }
+
+        public static HtmlNode UpdateSource(this HtmlNode node, string baseUrl)
+        {
+            var items = node.SelectNodes("//*[@src]");
+
+            if (items == null)
+            {
+                return node;
+            }
+
+            foreach (var item in items)
+            {
+                var url = item.Attributes["src"].Value;
+                if (url.StartsWith("/") && !url.StartsWith("//"))
+                {
+                    item.Attributes["src"].Value = new Uri(new Uri(baseUrl), url).ToString();
+                }
+            }
+
 
             return node;
         }
