@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Extensions.Configuration;
 using ZeusApps.News.Models;
 using ZeusApps.News.Parser.Parsers;
 using ZeusApps.News.Repositories;
@@ -16,8 +15,7 @@ namespace ZeusApps.News.Parser
             //    .AddJsonFile("settings.json", optional: true, reloadOnChange: true);
 
 
-            IArticleRepository articleRepository = new ArticleRepository();
-            var source = new Source
+            var korrSource = new Source
             {
                 Key = "korr",
                 ImageUrl = "http://news.img.com.ua/img/smalllogo.gif",
@@ -29,11 +27,20 @@ namespace ZeusApps.News.Parser
                 IsDownloadable = true,
                 IsReadable = true
             };
+            var channel5Source = new Source
+            {
+                Key = "channel5",
+                Title = "Channel 5",
+                SourceUrl = "http://www.5.ua/novyny/rss/",
+                BaseUrl = "http://www.5.ua/",
+                Encoding = "utf-8",
+                Id = Guid.NewGuid().ToString(),
+                IsDownloadable = true,
+                IsReadable = true
+            };
 
-            var parser = new KorrParser(articleRepository);
 
-            var task = parser.Parse(source);
-            task.Wait();
+            ParserFactory.Parse(channel5Source)?.Wait();
         }
     }
 }
