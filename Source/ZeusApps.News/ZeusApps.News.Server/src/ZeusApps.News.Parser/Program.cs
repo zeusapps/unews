@@ -1,5 +1,11 @@
 ﻿using System;
-using ZeusApps.News.Models;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using ZeusApps.News.Parser.Infrastructure;
+using ZeusApps.News.Parser.Options;
 using ZeusApps.News.Parser.Parsers;
 using ZeusApps.News.Repositories;
 using ZeusApps.News.Repository.Inmemory;
@@ -8,39 +14,52 @@ namespace ZeusApps.News.Parser
 {
     public class Program
     {
+        private static IServiceProvider _serviceProvider;
+        private static IConfigurationRoot _configuration;
+
         public static void Main(string[] args)
         {
-            //var builder = new ConfigurationBuilder()
-            //    .SetBasePath(AppContext.BaseDirectory)
-            //    .AddJsonFile("settings.json", optional: true, reloadOnChange: true);
+            _configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("settings.json", true, true)
+                .Build();
 
+            var collection = new ServiceCollection();
+            AddServices(collection);
+            _serviceProvider = collection.BuildServiceProvider();
 
-            var korrSource = new Source
+            Run().Wait();
+        }
+
+        public static void AddServices(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddLogging()
+                .AddSingleton<IArticleRepository, ArticleRepository>()
+                .AddSingleton<ISourceRepository, SourceRepository>()
+                .AddSingleton<IParser, ParserImpl>();
+
+            serviceCollection.AddOptions();
+            serviceCollection.Configure<ExecuteOptions>(_configuration.GetSection(ExecuteOptions.Key));
+        }
+
+        public static async Task Run()
+        {
+            var sourceRepository = _serviceProvider.GetService<ISourceRepository>();
+            var parser = _serviceProvider.GetService<IParser>();
+
+            while (true)
             {
-                Key = "korr",
-                ImageUrl = "http://news.img.com.ua/img/smalllogo.gif",
-                Title = "Korrespondent.Net",
-                SourceUrl = "http://k.img.com.ua/rss/ru/all_news2.0.xml",
-                BaseUrl = "http://korrespondent.net/",
-                Encoding = "utf-8",
-                Id = Guid.NewGuid().ToString(),
-                IsDownloadable = true,
-                IsReadable = true
-            };
-            var channel5Source = new Source
-            {
-                Key = "channel5",
-                Title = "Channel 5",
-                SourceUrl = "http://www.5.ua/novyny/rss/",
-                BaseUrl = "http://www.5.ua/",
-                Encoding = "utf-8",
-                Id = Guid.NewGuid().ToString(),
-                IsDownloadable = true,
-                IsReadable = true
-            };
-
-
-            ParserFactory.Parse(channel5Source)?.Wait();
+                var sources = await sourceRepository.GetDownloadableSources();
+                var options = _serviceProvider.GetService<IOptions<ExecuteOptions>>().Value;
+                foreach (var source in sources)
+                {
+                    await parser.Parse(source);
+                    await Task.Delay(TimeSpan.FromSeconds(options.ItemDelay));
+                }
+                
+                await Task.Delay(TimeSpan.FromMinutes(options.TaskDelay));
+            }
+            // ReSharper disable once FunctionNeverReturns
         }
     }
 }
