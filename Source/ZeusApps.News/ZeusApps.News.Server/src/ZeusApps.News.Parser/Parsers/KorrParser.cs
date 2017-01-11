@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using ZeusApps.News.Models;
+﻿using ZeusApps.News.Models;
 using ZeusApps.News.Parser.Extensions;
 using ZeusApps.News.Repositories;
 
 namespace ZeusApps.News.Parser.Parsers
 {
-    public class KorrParser : ParserBase
+    public class KorrParser: ParserBase
     {
         public KorrParser(IArticleRepository repository) : base(repository)
         {
