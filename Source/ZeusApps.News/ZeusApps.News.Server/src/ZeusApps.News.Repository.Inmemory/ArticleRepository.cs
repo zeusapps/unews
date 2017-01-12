@@ -62,5 +62,28 @@ namespace ZeusApps.News.Repository.Inmemory
             
             return Task.FromResult(result != null);
         }
+
+        public Task<bool> Upvote(string id)
+        {
+            var article = _articles.FirstOrDefault(x => x.Id == id);
+            if (article != null)
+            {
+                article.Upvote++;
+            }
+
+
+            return Task.FromResult(article != null);
+        }
+
+        public Task<bool> Downvote(string id)
+        {
+            var article = _articles.FirstOrDefault(x => x.Id == id);
+            if (article != null)
+            {
+                article.Upvote++;
+            }
+
+            return Task.FromResult(article != null);
+        }
     }
 }

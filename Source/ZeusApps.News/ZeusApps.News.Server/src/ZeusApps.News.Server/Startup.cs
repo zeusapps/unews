@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ZeusApps.News.Repositories;
+using ZeusApps.News.Repository.Inmemory;
+using ZeusApps.News.Server.Services;
 
 namespace ZeusApps.News.Server
 {
@@ -29,6 +28,12 @@ namespace ZeusApps.News.Server
         {
             // Add framework services.
             services.AddMvc();
+            services
+                .AddLogging()
+                .AddSingleton<IArticleRepository, ArticleRepository>()
+                .AddSingleton<ISourceRepository, SourceRepository>()
+                .AddSingleton<IMapperService, MapperService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
