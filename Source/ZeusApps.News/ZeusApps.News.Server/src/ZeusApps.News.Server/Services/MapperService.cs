@@ -23,6 +23,8 @@ namespace ZeusApps.News.Server.Services
                 .Initialize(config =>
                 {
                     config.CreateMap<Source, SourceDto>();
+                    config.CreateMap<Article, ArticleDto>();
+                    config.CreateMap<Article, ArticleVoteDto>();
                 });
         }
 
