@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ZeusApps.News.Repositories;
 using ZeusApps.News.Server.DTOs;
 using ZeusApps.News.Server.Services;
-
-// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ZeusApps.News.Server.Controllers
 {
