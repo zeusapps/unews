@@ -23,14 +23,12 @@ namespace ZeusApps.News.Parser.Parsers
             Repository = repository;
         }
 
-        public virtual async Task<Article[]> Parse(Source source)
+        public virtual async Task Parse(Source source)
         {
             Source = source;
 
             var rss = await GetSource(source.SourceUrl);
             var items = GetRssItems(rss);
-
-            var result = new List<Article>();
             foreach (var item in items)
             {
                 if (await Contains(item.Link))
@@ -46,10 +44,8 @@ namespace ZeusApps.News.Parser.Parsers
                 }
 
                 ArticleOverride(article);
-                result.Add(article);
+                await Repository.AddArticle(article);
             }
-
-            return result.ToArray();
         }
 
         protected virtual void ArticleOverride(Article article)

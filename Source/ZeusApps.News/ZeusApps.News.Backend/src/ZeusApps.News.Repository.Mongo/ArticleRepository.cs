@@ -2,6 +2,10 @@
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.IdGenerators;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using ZeusApps.News.Models;
 using ZeusApps.News.Repositories;
@@ -14,6 +18,15 @@ namespace ZeusApps.News.Repository.Mongo
     {
         public ArticleRepository(IOptions<ConnectionStringsOption> options) : base(options)
         {
+            BsonClassMap
+                .RegisterClassMap<Article>(x =>
+                {
+                    x.AutoMap();
+                    x.GetMemberMap(s => s.Id)
+                        .SetIdGenerator(new StringObjectIdGenerator())
+                        .SetSerializer(new StringSerializer(BsonType.ObjectId));
+                });
+
             Collection.Indexes.CreateOne(Builders<Article>.IndexKeys.Ascending(x => x.Url));
         }
 
