@@ -15,7 +15,7 @@ namespace ZeusApps.News.Parser.Parsers
             _repository = repository;
         }
 
-        public Task<Article[]> Parse(Source source)
+        public Task Parse(Source source)
         {
             IParser parser;
 
