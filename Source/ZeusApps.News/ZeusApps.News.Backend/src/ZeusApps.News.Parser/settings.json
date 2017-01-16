@@ -1,6 +1,9 @@
 ﻿{
   "executeOptions": {
     "taskDelay": 15,
-    "itemDelay": 15 
-  } 
+    "itemDelay": 15
+  },
+  "ConnectionStrings": {
+    "Default": "mongo://10.4.0.55/unews"
+  }
 }
