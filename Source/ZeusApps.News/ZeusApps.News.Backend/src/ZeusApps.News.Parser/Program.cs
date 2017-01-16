@@ -68,9 +68,9 @@ namespace ZeusApps.News.Parser
 
                 foreach (var source in sources)
                 {
-                    logger.LogInformation($"Starting to parse {source.Title}");
+                    logger.LogInformation($"{DateTime.Now} :: Starting to parse {source.Title}");
                     await parser.Parse(source);
-                    logger.LogInformation($"Parse of {source.Title} finished");
+                    logger.LogInformation($"{DateTime.Now} :: Parse of {source.Title} finished");
                     await Task.Delay(TimeSpan.FromSeconds(options.ItemDelay));
                 }
                 
