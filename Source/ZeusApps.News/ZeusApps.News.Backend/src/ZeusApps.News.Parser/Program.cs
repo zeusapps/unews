@@ -26,7 +26,8 @@ namespace ZeusApps.News.Parser
         {
             _configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("settings.json", true, true)
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile("appsettings.production.json", true, true)
                 .Build();
 
             var collection = new ServiceCollection();

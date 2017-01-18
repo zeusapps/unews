@@ -4,7 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ZeusApps.News.Repositories;
-using ZeusApps.News.Repository.Inmemory;
+using ZeusApps.News.Repository.Mongo;
+using ZeusApps.News.Repository.Mongo.Options;
 using ZeusApps.News.Server.Services;
 
 namespace ZeusApps.News.Server
@@ -32,7 +33,12 @@ namespace ZeusApps.News.Server
                 .AddLogging()
                 .AddSingleton<IArticleRepository, ArticleRepository>()
                 .AddSingleton<ISourceRepository, SourceRepository>()
-                .AddSingleton<IMapperService, MapperService>();
+                .AddSingleton<IMapperService, MapperService>()
+                .AddOptions();
+
+            services
+                .Configure<ConnectionStringsOption>(
+                    Configuration.GetSection(ConnectionStringsOption.Key));
 
         }
 
