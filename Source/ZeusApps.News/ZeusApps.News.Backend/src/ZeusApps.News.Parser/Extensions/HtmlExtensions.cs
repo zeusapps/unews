@@ -7,7 +7,7 @@ namespace ZeusApps.News.Parser.Extensions
     {
         public static HtmlNode Remove(this HtmlNode node, string xpath)
         {
-            var items = node.SelectNodes(xpath);
+            var items = node?.SelectNodes(xpath);
             if (items == null)
             {
                 return node;
@@ -23,8 +23,7 @@ namespace ZeusApps.News.Parser.Extensions
 
         public static HtmlNode RemoveStyles(this HtmlNode node)
         {
-            var items = node.SelectNodes("//*[@style]");
-
+            var items = node?.SelectNodes("//*[@style]");
             if (items == null)
             {
                 return node;
@@ -40,8 +39,7 @@ namespace ZeusApps.News.Parser.Extensions
 
         public static HtmlNode UpdateSource(this HtmlNode node, string baseUrl)
         {
-            var items = node.SelectNodes("//*[@src]");
-
+            var items = node?.SelectNodes("//*[@src]");
             if (items == null)
             {
                 return node;
