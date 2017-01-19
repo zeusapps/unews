@@ -4,6 +4,8 @@
     {
         public const string Key = "ConnectionStrings";
 
-        public string Default { get; set; }
+        public string Path { get; set; }
+
+        public string Database { get; set; }
     }
 }

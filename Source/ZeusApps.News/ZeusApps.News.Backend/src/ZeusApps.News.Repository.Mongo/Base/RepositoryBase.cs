@@ -31,10 +31,8 @@ namespace ZeusApps.News.Repository.Mongo.Base
             }
 
             _collectionName = collectionName;
-            _connectionString = options.Value.Default;
-            _databaseName = string.IsNullOrWhiteSpace(_connectionString)
-                ? ""
-                : MongoUrl.Create(_connectionString).DatabaseName;
+            _connectionString = options.Value.Path;
+            _databaseName = options.Value.Database;
         }
 
         protected IMongoCollection<TItem> GetCollection<TItem>(string collectionName) =>
