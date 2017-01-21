@@ -4,9 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;
-using ZeusApps.News.Models;
 using ZeusApps.News.Parser.Infrastructure;
 using ZeusApps.News.Parser.Options;
 using ZeusApps.News.Parser.Parsers;
@@ -21,13 +19,17 @@ namespace ZeusApps.News.Parser
     {
         private static IServiceProvider _serviceProvider;
         private static IConfigurationRoot _configuration;
+        private static string _environment;
 
         public static void Main(string[] args)
         {
+            _environment = args?.Length > 0 ? args[0] : "Development";
+
+
             _configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile("appsettings.production.json", true, true)
+                .AddJsonFile($"appsettings.{_environment}.json", true, true)
                 .Build();
 
             var collection = new ServiceCollection();
