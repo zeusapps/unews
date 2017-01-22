@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ZeusApps.News.Parser": {
+      "commandName": "Project",
+      "commandLineArgs": "Development"
+    }
+  }
+}
