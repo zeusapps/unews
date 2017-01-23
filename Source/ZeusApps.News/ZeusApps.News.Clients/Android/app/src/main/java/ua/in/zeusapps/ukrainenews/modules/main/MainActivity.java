@@ -2,9 +2,12 @@ package ua.in.zeusapps.ukrainenews.modules.main;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,32 +40,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        //recyclerView = (RecyclerView) findViewById(R.id.activity_main_sourcesRecyclerView);
         ((App)getApplication()).getComponent().inject(this);
-                ButterKnife.bind(this);
+        ButterKnife.bind(this);
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         _adapter = new SourceAdapter();
         recyclerView.setAdapter(_adapter);
-
-        ISourceService sourceService = new SourceService();
-
-        sourceService.getSources()
-                .subscribe(new Subscriber<List<Source>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(List<Source> sources) {
-
-                    }
-                });
     }
 
     @Override
@@ -74,15 +57,26 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     @Override
     public void updateSources(List<Source> sources) {
         _adapter.update(sources);
+        _adapter.notifyDataSetChanged();
     }
 
-    private class SourceHolder extends RecyclerView.ViewHolder {
+    public class SourceHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.activity_main_item_template_sourceTitle)
+        TextView sourceTitle;
+
         public SourceHolder(View itemView) {
             super(itemView);
+
+            ButterKnife.bind(this, itemView);
+        }
+
+        private void update(Source source){
+            sourceTitle.setText(source.getTitle());
         }
     }
 
-    private class SourceAdapter extends RecyclerView.Adapter<SourceHolder>{
+    public class SourceAdapter extends RecyclerView.Adapter<SourceHolder>{
 
         private ArrayList<Source> _sources;
 
@@ -91,26 +85,27 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         }
 
         private void update(List<Source> sources){
-            int count = _sources.size();
-            _sources.clear();
-            notifyItemRangeRemoved(0, count);
+//            int count = _sources.size();
+//            _sources.clear();
+//            notifyItemRangeRemoved(0, count);
             _sources.addAll(sources);
-            notifyItemRangeInserted(0, _sources.size());
+            notifyDataSetChanged();
         }
 
         @Override
         public SourceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return null;
+            View view = getLayoutInflater().inflate(R.layout.activity_main_item_template, parent, false);
+            return new SourceHolder(view);
         }
 
         @Override
         public void onBindViewHolder(SourceHolder holder, int position) {
-
+            holder.update(_sources.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return _sources.size();
         }
     }
 }
