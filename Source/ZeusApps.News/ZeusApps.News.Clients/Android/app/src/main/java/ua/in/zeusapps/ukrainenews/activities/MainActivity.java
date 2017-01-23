@@ -4,15 +4,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.gson.Gson;
+import java.util.List;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Constants;
@@ -35,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
         ISourceService sourceService = retrofit.create(ISourceService.class);
 
         sourceService.getSources()
-                .observeOn(Schedulers.newThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Source[]>() {
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<List<Source>>() {
                     @Override
                     public void onCompleted() {
                         Log.e(MainActivity.class.getSimpleName(), "Download Completed");
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onNext(Source[] sources) {
+                    public void onNext(List<Source> sources) {
                         for (Source src : sources) {
                             Log.e(MainActivity.class.getSimpleName(), src.getTitle());
                         }
