@@ -1,4 +1,5 @@
-﻿using ZeusApps.News.Models;
+﻿using Microsoft.Extensions.Logging;
+using ZeusApps.News.Models;
 using ZeusApps.News.Parser.Extensions;
 using ZeusApps.News.Repositories;
 
@@ -6,7 +7,10 @@ namespace ZeusApps.News.Parser.Parsers
 {
     public class KorrParser: ParserBase
     {
-        public KorrParser(IArticleRepository repository) : base(repository)
+        public KorrParser(
+            IArticleRepository repository,
+            ILoggerFactory loggerFactory) 
+            : base(repository, loggerFactory)
         {
         }
 
@@ -25,8 +29,7 @@ namespace ZeusApps.News.Parser.Parsers
                 .Remove("//div[@class='mrt_small']")
                 .Remove("//div[@class='post-item__source']")
                 .Remove("//div[@class='post-item__tags clearfix']")
-                .RemoveStyles()
-                .InnerHtml;
+                .RemoveStyles()?.InnerHtml;
         }
     }
 }             

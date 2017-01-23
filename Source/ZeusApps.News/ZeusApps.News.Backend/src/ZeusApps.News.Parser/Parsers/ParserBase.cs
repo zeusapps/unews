@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
 using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 using ZeusApps.News.Models;
 using ZeusApps.News.Parser.Infrastructure;
 using ZeusApps.News.Parser.Models;
@@ -17,15 +18,21 @@ namespace ZeusApps.News.Parser.Parsers
         protected Source Source { get; private set; }
 
         protected readonly IArticleRepository Repository;
+        protected readonly ILogger Logger;
 
-        protected ParserBase(IArticleRepository repository)
+        protected ParserBase(
+            IArticleRepository repository,
+            ILoggerFactory loggerFactory)
         {
             Repository = repository;
+            Logger = loggerFactory.CreateLogger(GetType());
         }
 
         public virtual async Task Parse(Source source)
         {
             Source = source;
+
+            Logger.LogInformation($"Starting parse {source.Title}");
 
             var rss = await GetSource(source.SourceUrl);
             var items = GetRssItems(rss);
@@ -65,7 +72,7 @@ namespace ZeusApps.News.Parser.Parsers
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    Logger.LogError("Failed to retreve source data", e);
                     return null;
                 }
 
@@ -83,7 +90,7 @@ namespace ZeusApps.News.Parser.Parsers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger.LogError("Failed to load rss items", e);
                 return new RssItem[0];
             }
 
@@ -100,7 +107,7 @@ namespace ZeusApps.News.Parser.Parsers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger.LogError("Failed to parse rss items", e);
                 return new RssItem[0];
             }
         }
@@ -126,21 +133,31 @@ namespace ZeusApps.News.Parser.Parsers
 
         protected async Task<bool> DownloadHtml(Article article, Source source)
         {
+            string html;
+
             try
             {
                 using (var http = new HttpClient())
                 {
-                    var html = await http.GetStringAsync(article.Url);
-
-                    article.OriginalHtml = html;
-                    article.Html = ParseHtml(html);
-
-                    return true;
+                    Logger.LogInformation($"Downloading article from {article.Url}");
+                    html = await http.GetStringAsync(article.Url);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger.LogError("Failed to download html", e);
+                return false;
+            }
+
+            try
+            {
+                article.OriginalHtml = html;
+                article.Html = ParseHtml(html);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Failed to download html", e);
                 return false;
             }
         }
@@ -152,10 +169,18 @@ namespace ZeusApps.News.Parser.Parsers
 
         protected HtmlNode GetDocumentNode(string html, string selector = null)
         {
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-
-            var node = doc.DocumentNode;
+            HtmlNode node;
+            try
+            {
+                var doc = new HtmlDocument();
+                doc.LoadHtml(html);
+                node = doc.DocumentNode;
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Failed to load html document", e);
+                return null;
+            }
 
             return string.IsNullOrEmpty(selector) 
                 ? node 
