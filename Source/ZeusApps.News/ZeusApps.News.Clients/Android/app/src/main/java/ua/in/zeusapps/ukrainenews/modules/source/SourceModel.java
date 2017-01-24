@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.main;
+package ua.in.zeusapps.ukrainenews.modules.source;
 
 import java.util.List;
 
@@ -11,10 +11,10 @@ import ua.in.zeusapps.ukrainenews.common.Constants;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.ISourceService;
 
-public class MainActivityModel extends BaseModel implements MainActivityMVP.Model {
-    private ISourceService _service;
+public class SourceModel extends BaseModel implements SourceMVP.IModel {
+    private final ISourceService _service;
 
-    public MainActivityModel(){
+    public SourceModel() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
