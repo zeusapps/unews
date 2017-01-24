@@ -18,7 +18,6 @@ public class MainActivityPresenter implements MainActivityMVP.Presenter {
     @Override
     public void setView(MainActivityMVP.View view) {
         _view = view;
-
         _model.getSources().subscribe(new Subscriber<List<Source>>() {
             @Override
             public void onCompleted() {
