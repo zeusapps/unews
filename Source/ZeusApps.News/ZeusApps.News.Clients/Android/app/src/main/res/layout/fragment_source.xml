@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ua.in.zeusapps.ukrainenews.modules.main.MainActivity">
+    tools:context="ua.in.zeusapps.ukrainenews.modules.source.SourceFragment">
 
     <android.support.v7.widget.RecyclerView
         android:paddingBottom="@dimen/activity_vertical_margin"
@@ -15,16 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        android:id="@+id/activity_main_sourcesRecyclerView"/>
+        android:id="@+id/fragment_source_sourcesRecyclerView"/>
 
-    <FrameLayout
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:background="#222"
-        android:layout_gravity="start"
-        android:id="@+id/activity_main_sourceFragmentPlaceholder">
-
-    </FrameLayout>
-
-
-</android.support.v4.widget.DrawerLayout>
+</FrameLayout>
