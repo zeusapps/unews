@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import ua.in.zeusapps.ukrainenews.common.BaseActivity;
 import ua.in.zeusapps.ukrainenews.common.BaseMVP;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Source;
+import ua.in.zeusapps.ukrainenews.modules.source.SourceFragment;
 
 public class MainActivity extends BaseActivity implements MainActivityMVP.View {
 
@@ -49,6 +51,11 @@ public class MainActivity extends BaseActivity implements MainActivityMVP.View {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         _adapter = new SourceAdapter(this);
         recyclerView.setAdapter(_adapter);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.activity_main_sourceFragmentPlaceholder, new SourceFragment())
+                .commit();
     }
 
     @Override

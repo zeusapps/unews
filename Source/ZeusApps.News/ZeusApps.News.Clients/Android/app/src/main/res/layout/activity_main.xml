@@ -17,13 +17,14 @@
         android:scrollbars="vertical"
         android:id="@+id/activity_main_sourcesRecyclerView"/>
 
-    <View
+    <FrameLayout
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:background="#222"
-        android:layout_gravity="start">
+        android:layout_gravity="start"
+        android:id="@+id/activity_main_sourceFragmentPlaceholder">
 
-    </View>
+    </FrameLayout>
 
 
 </android.support.v4.widget.DrawerLayout>
