@@ -23,6 +23,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseMVP.
         ButterKnife.bind(this);
         inject(application.getComponent());
 
+        BaseMVP.IPresenter presenter = getPresenter();
+
         getPresenter().setView(this);
         onCreateOverride(savedInstanceState);
     }

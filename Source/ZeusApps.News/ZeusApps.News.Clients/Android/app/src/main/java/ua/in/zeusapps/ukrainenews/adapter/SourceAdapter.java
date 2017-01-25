@@ -1,66 +1,40 @@
 package ua.in.zeusapps.ukrainenews.adapter;
 
 import android.app.Activity;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
-public class SourceAdapter extends RecyclerView.Adapter<SourceAdapter.SourceHolder>{
-
-    private ArrayList<Source> _sources;
-    private LayoutInflater _inflater;
+public class SourceAdapter extends BaseAdapter<SourceAdapter.SourceHolder, Source> {
 
     public SourceAdapter(Activity activity) {
-        this._sources = new ArrayList<>();
-        _inflater = activity.getLayoutInflater();
-    }
-
-    public void update(List<Source> sources){
-        _sources.clear();
-        _sources.addAll(sources);
-        notifyItemRangeInserted(0, _sources.size());
+        super(activity);
     }
 
     @Override
     public SourceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = _inflater.inflate(R.layout.fragment_source_item_template, parent, false);
+        View view = getSimpleView(R.layout.fragment_source_item_template, parent);
         return new SourceAdapter.SourceHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(SourceAdapter.SourceHolder holder, int position) {
-        holder.update(_sources.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return _sources.size();
-    }
-
-
-    public class SourceHolder extends RecyclerView.ViewHolder {
+    public class SourceHolder extends BaseViewHolder<Source> {
 
         @BindView(R.id.activity_main_item_template_sourceTitle)
         TextView sourceTitle;
 
-        public SourceHolder(View itemView) {
-            super(itemView);
-
-            ButterKnife.bind(this, itemView);
+        public SourceHolder(View view) {
+            super(view);
         }
 
-        private void update(Source source){
-            itemView.setTag(source);
+        @Override
+        public void update(Context context, Source source){
+            super.update(context, source);
+
             sourceTitle.setText(source.getTitle());
         }
     }
