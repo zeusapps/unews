@@ -33,7 +33,7 @@ public class SourceAdapter extends RecyclerView.Adapter<SourceAdapter.SourceHold
 
     @Override
     public SourceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = _inflater.inflate(R.layout.activity_main_item_template, parent, false);
+        View view = _inflater.inflate(R.layout.fragment_source_item_template, parent, false);
         return new SourceAdapter.SourceHolder(view);
     }
 

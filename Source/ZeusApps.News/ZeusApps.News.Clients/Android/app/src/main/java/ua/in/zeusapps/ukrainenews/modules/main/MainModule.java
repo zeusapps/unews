@@ -7,14 +7,7 @@ import dagger.Provides;
 public class MainModule {
 
     @Provides
-    public MainActivityMVP.Presenter provideMainActivityPresenter(
-            MainActivityMVP.Model model){
-        return new MainActivityPresenter(model);
+    public MainActivityMVP.Presenter provideMainActivityPresenter(){
+        return new MainActivityPresenter();
     }
-
-    @Provides
-    public MainActivityMVP.Model provideMainActivityModel(){
-        return new MainActivityModel();
-    }
-
 }
