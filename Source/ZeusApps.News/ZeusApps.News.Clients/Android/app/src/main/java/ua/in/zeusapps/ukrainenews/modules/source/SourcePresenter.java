@@ -8,7 +8,7 @@ import ua.in.zeusapps.ukrainenews.models.Source;
 public class SourcePresenter implements SourceMVP.IPresenter {
 
     private SourceMVP.IView _view;
-    private SourceMVP.IModel _model;
+    private final SourceMVP.IModel _model;
 
     public SourcePresenter(SourceMVP.IModel model) {
         this._model = model;
@@ -18,7 +18,9 @@ public class SourcePresenter implements SourceMVP.IPresenter {
     public void setView(SourceMVP.IView view) {
         _view = view;
 
-        _model.getSources().subscribe(new Subscriber<List<Source>>() {
+        _model
+                .getSources()
+                .subscribe(new Subscriber<List<Source>>() {
             @Override
             public void onCompleted() {
 

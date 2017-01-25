@@ -1,6 +1,5 @@
 package ua.in.zeusapps.ukrainenews.modules.source;
 
-import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,7 +11,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.adapter.SourceAdapter;
-import ua.in.zeusapps.ukrainenews.common.App;
 import ua.in.zeusapps.ukrainenews.common.BaseFragment;
 import ua.in.zeusapps.ukrainenews.common.BaseMVP;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
@@ -54,7 +52,7 @@ public class SourceFragment extends BaseFragment implements SourceMVP.IView {
 
     @Override
     public void updateSources(List<Source> sources) {
-        _adapter.update(sources);
+        _adapter.replaceAll(sources);
     }
 
 //    @Override
