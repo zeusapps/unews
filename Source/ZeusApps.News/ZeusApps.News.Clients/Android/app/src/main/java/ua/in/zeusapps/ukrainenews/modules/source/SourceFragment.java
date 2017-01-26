@@ -10,13 +10,16 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
+import ua.in.zeusapps.ukrainenews.adapter.BaseAdapter;
 import ua.in.zeusapps.ukrainenews.adapter.SourceAdapter;
 import ua.in.zeusapps.ukrainenews.common.BaseFragment;
 import ua.in.zeusapps.ukrainenews.common.BaseMVP;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
-public class SourceFragment extends BaseFragment implements SourceMVP.IView {
+public class SourceFragment
+        extends BaseFragment
+        implements SourceMVP.IView, BaseAdapter.OnItemClickListener<Source> {
 
     //private OnFragmentInteractionListener mListener;
     private SourceAdapter _adapter;
@@ -44,15 +47,23 @@ public class SourceFragment extends BaseFragment implements SourceMVP.IView {
     @Override
     protected void onCreateViewOverride(View view) {
         _adapter = new SourceAdapter(getActivity());
+        _adapter.setOnItemClickListener(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(_adapter);
-
     }
 
     @Override
     public void updateSources(List<Source> sources) {
         _adapter.replaceAll(sources);
+        if (sources.size() > 0){
+            onItemClick(sources.get(0));
+        }
+    }
+
+    @Override
+    public void onItemClick(Source source) {
+
     }
 
 //    @Override

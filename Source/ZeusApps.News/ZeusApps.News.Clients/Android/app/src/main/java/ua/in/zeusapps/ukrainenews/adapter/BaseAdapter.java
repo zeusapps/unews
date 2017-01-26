@@ -1,7 +1,6 @@
 package ua.in.zeusapps.ukrainenews.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,13 +10,14 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseAdapter<THolder extends BaseViewHolder, TItem> extends RecyclerView.Adapter<THolder> {
+public abstract class BaseAdapter<THolder extends BaseViewHolder, TItem> extends RecyclerView.Adapter<THolder> implements View.OnClickListener {
 
-    protected final List<TItem> items;
+    private final List<TItem> items;
     private final Activity _activity;
     private final LayoutInflater _layoutInflater;
+    private OnItemClickListener<TItem> _listener;
 
-    public BaseAdapter(Activity activity) {
+    BaseAdapter(Activity activity) {
         this.items = new ArrayList<>();
         _activity = activity;
         _layoutInflater = activity.getLayoutInflater();
@@ -42,7 +42,9 @@ public abstract class BaseAdapter<THolder extends BaseViewHolder, TItem> extends
     }
 
     protected View getSimpleView(@LayoutRes int resourceId, ViewGroup parent){
-        return getLayoutInflater().inflate(resourceId, parent, false);
+        View view = getLayoutInflater().inflate(resourceId, parent, false);
+        view.setOnClickListener(this);
+        return view;
     }
 
     @Override
@@ -54,5 +56,24 @@ public abstract class BaseAdapter<THolder extends BaseViewHolder, TItem> extends
 
     public void onBindViewHolder(THolder holder, int position){
         holder.update(getActivity(), get(position));
+    }
+
+    public void setOnItemClickListener(OnItemClickListener<TItem> listener){
+        _listener = listener;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void onClick(View v) {
+        if (_listener == null){
+            return;
+        }
+
+        TItem item = (TItem) v.getTag();
+        _listener.onItemClick(item);
+    }
+
+    public interface OnItemClickListener<TItem>{
+        void onItemClick(TItem item);
     }
 }

@@ -12,12 +12,15 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.adapter.ArticleAdapter;
+import ua.in.zeusapps.ukrainenews.adapter.BaseAdapter;
 import ua.in.zeusapps.ukrainenews.common.BaseFragment;
 import ua.in.zeusapps.ukrainenews.common.BaseMVP;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Article;
 
-public class ArticleFragment extends BaseFragment implements ArticleMVP.IView {
+public class ArticleFragment
+        extends BaseFragment
+        implements ArticleMVP.IView, BaseAdapter.OnItemClickListener<Article> {
 
     private ArticleAdapter _adapter;
 
@@ -47,6 +50,7 @@ public class ArticleFragment extends BaseFragment implements ArticleMVP.IView {
     protected void onCreateViewOverride(View view) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         _adapter = new ArticleAdapter(getActivity());
+        _adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(_adapter);
 
         presenter.updateArticles("korr");
@@ -55,5 +59,10 @@ public class ArticleFragment extends BaseFragment implements ArticleMVP.IView {
     @Override
     public void updateArticles(List<Article> sources) {
         _adapter.replaceAll(sources);
+    }
+
+    @Override
+    public void onItemClick(Article article) {
+
     }
 }
