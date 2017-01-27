@@ -7,7 +7,7 @@ import ua.in.zeusapps.ukrainenews.common.BaseMVP;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.modules.source.SourceMVP;
 
-public class ArticleMVP {
+public interface ArticleMVP {
     interface IView extends BaseMVP.IView{
         void updateArticles(List<Article> sources);
     }
