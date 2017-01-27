@@ -15,9 +15,9 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="240dp"
+        android:layout_width="280dp"
         android:layout_height="match_parent"
-        android:background="#222"
+        android:background="#eee"
         android:layout_gravity="start"
         android:id="@+id/activity_main_sourceFragmentPlaceholder">
 
