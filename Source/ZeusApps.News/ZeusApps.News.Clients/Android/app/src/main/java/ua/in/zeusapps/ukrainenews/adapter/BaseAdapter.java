@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseAdapter<THolder extends BaseViewHolder, TItem> extends RecyclerView.Adapter<THolder> implements View.OnClickListener {
+public abstract class BaseAdapter<THolder extends BaseViewHolder, TItem>
+        extends RecyclerView.Adapter<THolder>
+        implements View.OnClickListener {
 
     private final List<TItem> items;
     private final Activity _activity;
@@ -24,9 +26,12 @@ public abstract class BaseAdapter<THolder extends BaseViewHolder, TItem> extends
     }
 
     public void replaceAll(List<TItem> newItems){
+        int count = items.size();
         items.clear();
+        notifyItemRangeRemoved(0, count);
         items.addAll(newItems);
-        notifyItemRangeInserted(0, items.size());
+        count = items.size();
+        notifyItemRangeInserted(0, count);
     }
 
     public TItem get(int position){
