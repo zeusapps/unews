@@ -9,6 +9,7 @@ import dagger.Provides;
 public class SourceModule {
 
     @Provides
+    @Singleton
     public SourceMVP.IPresenter providesPresenter(SourceMVP.IModel model){
         return new SourcePresenter(model);
     }

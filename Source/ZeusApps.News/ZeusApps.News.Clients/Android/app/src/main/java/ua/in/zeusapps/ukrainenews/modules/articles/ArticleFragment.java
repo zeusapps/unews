@@ -52,8 +52,6 @@ public class ArticleFragment
         _adapter = new ArticleAdapter(getActivity());
         _adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(_adapter);
-
-        presenter.updateArticles("korr");
     }
 
     @Override

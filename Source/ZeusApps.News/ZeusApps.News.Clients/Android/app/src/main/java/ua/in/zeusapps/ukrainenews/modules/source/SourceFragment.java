@@ -1,5 +1,6 @@
 package ua.in.zeusapps.ukrainenews.modules.source;
 
+import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,7 +22,7 @@ public class SourceFragment
         extends BaseFragment
         implements SourceMVP.IView, BaseAdapter.OnItemClickListener<Source> {
 
-    //private OnFragmentInteractionListener mListener;
+    private OnSelectedSourceChangedListener _listener;
     private SourceAdapter _adapter;
 
     @BindView(R.id.fragment_source_sourcesRecyclerView)
@@ -63,32 +64,29 @@ public class SourceFragment
 
     @Override
     public void onItemClick(Source source) {
-
+        if (_listener != null){
+            _listener.onSourceChanged(source);
+        }
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof OnSelectedSourceChangedListener) {
+            _listener = (OnSelectedSourceChangedListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnSelectedSourceChanged");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        _listener = null;
+    }
+
+    public interface OnSelectedSourceChangedListener {
+        void onSourceChanged(Source source);
+    }
 }
