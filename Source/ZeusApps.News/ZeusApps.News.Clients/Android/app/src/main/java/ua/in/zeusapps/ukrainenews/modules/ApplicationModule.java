@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import ua.in.zeusapps.ukrainenews.common.App;
+import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 @Module
 public class ApplicationModule {
@@ -21,5 +22,11 @@ public class ApplicationModule {
     @Singleton
     public Context provideContext(){
         return application;
+    }
+
+    @Provides
+    @Singleton
+    public Formatter provideFormatter(Context context){
+        return new Formatter(context);
     }
 }

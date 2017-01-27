@@ -9,14 +9,17 @@ import ua.in.zeusapps.ukrainenews.modules.source.SourceMVP;
 
 public interface ArticleMVP {
     interface IView extends BaseMVP.IView{
-        void updateArticles(List<Article> sources);
+        void updateArticles(List<Article> articles);
     }
 
     interface IPresenter extends BaseMVP.IPresenter<ArticleMVP.IView>{
         void updateArticles(String sourceId);
+        void getArticles();
     }
 
     interface IModel extends BaseMVP.IModel {
         Observable<List<Article>> getArticles(String sourceId);
+
+        Article getArticle(String id);
     }
 }

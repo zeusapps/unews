@@ -9,6 +9,7 @@ public class ArticlePresenter implements ArticleMVP.IPresenter {
 
     private final ArticleMVP.IModel _model;
     private ArticleMVP.IView _view;
+    private List<Article> _tempArticles;
 
     public ArticlePresenter(ArticleMVP.IModel model) {
         _model = model;
@@ -36,8 +37,16 @@ public class ArticlePresenter implements ArticleMVP.IPresenter {
 
                     @Override
                     public void onNext(List<Article> articles) {
+                        _tempArticles = articles;
                         _view.updateArticles(articles);
                     }
                 });
+    }
+
+    @Override
+    public void getArticles() {
+        if (_tempArticles != null){
+            _view.updateArticles(_tempArticles);
+        }
     }
 }
