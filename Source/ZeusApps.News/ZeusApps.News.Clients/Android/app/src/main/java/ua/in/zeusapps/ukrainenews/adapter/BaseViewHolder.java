@@ -17,7 +17,7 @@ public class BaseViewHolder<T> extends RecyclerView.ViewHolder {
     }
 
     public void update(Context context, T data){
-        //itemView.setTag(data);
+        itemView.setTag(data);
         _data = data;
     }
 
