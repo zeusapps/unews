@@ -3,9 +3,14 @@ package ua.in.zeusapps.ukrainenews.modules.main;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.widget.FrameLayout;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.BaseActivity;
 import ua.in.zeusapps.ukrainenews.common.BaseMVP;
@@ -24,7 +29,16 @@ public class MainActivity
             SourceFragment.OnSelectedSourceChangedListener,
             ArticleFragment.OnArticleSelectedListener {
 
+    private static final String ARTICLES_FRAGMENT_KEY = ArticleFragment.class.getSimpleName();
+    private static final String ARTICLES_VIEW_FRAGMENT_KEY = ArticleViewFragment.class.getSimpleName();
+    private static final String SOURCE_FRAGMENT_KEY = SourceFragment.class.getSimpleName();
+
     private Source _selectedSource;
+
+    @BindView(R.id.activity_main_content)
+    FrameLayout contentLayout;
+    @BindView(R.id.activity_main_drawerLayout)
+    DrawerLayout drawerLayout;
 
     @Inject
     MainActivityMVP.Presenter presenter;
@@ -54,10 +68,16 @@ public class MainActivity
 
     @Override
     protected void onCreateOverride(@Nullable Bundle savedInstanceState) {
-        getSupportFragmentManager()
+        FragmentManager manager = getSupportFragmentManager();
+
+        if (manager.findFragmentByTag(SOURCE_FRAGMENT_KEY) != null){
+            return;
+        }
+
+        manager
                 .beginTransaction()
-                .add(R.id.activity_main_sourceFragmentPlaceholder, new SourceFragment())
-                .add(R.id.activity_main_content, new ArticleFragment())
+                .add(R.id.activity_main_sourceFragmentPlaceholder, new SourceFragment(), SOURCE_FRAGMENT_KEY)
+                .add(R.id.activity_main_content, new ArticleFragment(), ARTICLES_FRAGMENT_KEY)
                 .commit();
     }
 
@@ -67,6 +87,7 @@ public class MainActivity
             return;
         }
 
+        drawerLayout.closeDrawer(GravityCompat.START);
         _selectedSource = source;
         articlePresenter.updateArticles(source.getKey());
     }
@@ -81,7 +102,7 @@ public class MainActivity
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.activity_main_content, new ArticleViewFragment())
+                .replace(R.id.activity_main_content, new ArticleViewFragment(), ARTICLES_VIEW_FRAGMENT_KEY)
                 .addToBackStack(null)
                 .commit();
     }
