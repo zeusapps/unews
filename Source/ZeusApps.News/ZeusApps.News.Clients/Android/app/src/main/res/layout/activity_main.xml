@@ -1,27 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main_drawerLayout"
+    android:id="@+id/activity_main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ua.in.zeusapps.ukrainenews.modules.main.MainActivity">
-
-    <FrameLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:id="@+id/activity_main_content">
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="280dp"
-        android:layout_height="match_parent"
-        android:background="#eee"
-        android:layout_gravity="start"
-        android:id="@+id/activity_main_sourceFragmentPlaceholder">
-
-    </FrameLayout>
-
-
-</android.support.v4.widget.DrawerLayout>
+    tools:context="ua.in.zeusapps.ukrainenews.modules.main.MainActivity"/>

@@ -10,8 +10,7 @@ public interface MainActivityMVP {
     }
 
     interface Presenter extends BaseMVP.IPresenter<View> {
-        void updateSource(Source source);
-        void updateArticle(Article article);
+        void updateArticle(Source source, Article article);
     }
 
     interface Model extends BaseMVP.IModel {

@@ -19,6 +19,8 @@ public class ArticleViewFragment
         extends BaseFragment
         implements ArticleViewMVP.IView {
 
+    public static final String TAG = ArticleViewFragment.class.getSimpleName();
+
     private static final String MIME_TYPE = "text/html";
 
     private Article _article;

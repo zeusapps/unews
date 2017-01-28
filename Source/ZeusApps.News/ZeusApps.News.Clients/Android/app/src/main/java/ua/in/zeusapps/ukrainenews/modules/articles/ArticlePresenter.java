@@ -4,14 +4,17 @@ import java.util.List;
 
 import rx.Subscriber;
 import ua.in.zeusapps.ukrainenews.models.Article;
+import ua.in.zeusapps.ukrainenews.models.Source;
 
-public class ArticlePresenter implements ArticleMVP.IPresenter {
+class ArticlePresenter implements ArticleMVP.IPresenter {
 
     private final ArticleMVP.IModel _model;
     private ArticleMVP.IView _view;
-    private List<Article> _tempArticles;
+    private List<Article> _articles;
+    private List<Source> _sources;
+    private Source _selectedSource;
 
-    public ArticlePresenter(ArticleMVP.IModel model) {
+    ArticlePresenter(ArticleMVP.IModel model) {
         _model = model;
     }
 
@@ -21,9 +24,60 @@ public class ArticlePresenter implements ArticleMVP.IPresenter {
     }
 
     @Override
-    public void updateArticles(String sourceId) {
+    public void setSelectedSource(Source source) {
+        _selectedSource = source;
+        updateArticles();
+    }
+
+    @Override
+    public Source getSelectedSource() {
+        return _selectedSource;
+    }
+
+    @Override
+    public void refresh() {
+        if (_sources != null){
+            _view.updateSources(_sources);
+        } else {
+            _model.getSources().subscribe(new Subscriber<List<Source>>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onNext(List<Source> sources) {
+                    _sources = sources;
+                    _view.updateSources(sources);
+                    if (_selectedSource != null || _sources.size() == 0){
+                        return;
+                    }
+
+                    _selectedSource = sources.get(0);
+                    updateArticles();
+                }
+            });
+        }
+
+        if (_articles != null){
+            _view.updateArticles(_articles);
+        } else {
+            updateArticles();
+        }
+    }
+
+    private void updateArticles(){
+        if (_selectedSource == null){
+            return;
+        }
+
         _model
-                .getArticles(sourceId)
+                .getArticles(_selectedSource.getKey())
                 .subscribe(new Subscriber<List<Article>>() {
                     @Override
                     public void onCompleted() {
@@ -37,16 +91,15 @@ public class ArticlePresenter implements ArticleMVP.IPresenter {
 
                     @Override
                     public void onNext(List<Article> articles) {
-                        _tempArticles = articles;
+                        if (articles.size() == 0 ||
+                                _selectedSource == null ||
+                                !articles.get(0).getSourceId().equals(_selectedSource.getKey())){
+                            return;
+                        }
+
+                        _articles = articles;
                         _view.updateArticles(articles);
                     }
                 });
-    }
-
-    @Override
-    public void getArticles() {
-        if (_tempArticles != null){
-            _view.updateArticles(_tempArticles);
-        }
     }
 }
