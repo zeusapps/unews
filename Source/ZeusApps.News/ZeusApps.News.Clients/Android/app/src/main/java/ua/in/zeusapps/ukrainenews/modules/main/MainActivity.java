@@ -33,8 +33,6 @@ public class MainActivity
     private static final String ARTICLES_VIEW_FRAGMENT_KEY = ArticleViewFragment.class.getSimpleName();
     private static final String SOURCE_FRAGMENT_KEY = SourceFragment.class.getSimpleName();
 
-    private Source _selectedSource;
-
     @BindView(R.id.activity_main_content)
     FrameLayout contentLayout;
     @BindView(R.id.activity_main_drawerLayout)
@@ -42,12 +40,6 @@ public class MainActivity
 
     @Inject
     MainActivityMVP.Presenter presenter;
-
-    @Inject
-    ArticleMVP.IPresenter articlePresenter;
-
-    @Inject
-    ArticleViewMVP.IPresenter articleViewPresenter;
 
     @Override
     protected int getContentResourceId() {
@@ -83,23 +75,17 @@ public class MainActivity
 
     @Override
     public void onSourceChanged(Source source) {
-        if (source == null){
-            return;
-        }
-
         drawerLayout.closeDrawer(GravityCompat.START);
-        _selectedSource = source;
-        articlePresenter.updateArticles(source.getKey());
+        presenter.updateSource(source);
     }
 
     @Override
     public void onArticleSelected(Article article) {
-        if (article == null && _selectedSource == null){
-            return;
-        }
+        presenter.updateArticle(article);
+    }
 
-        articleViewPresenter.showArticle(article, _selectedSource);
-
+    @Override
+    public void switchToArticleView() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.activity_main_content, new ArticleViewFragment(), ARTICLES_VIEW_FRAGMENT_KEY)
