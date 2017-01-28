@@ -1,28 +1,36 @@
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_article_drawerLayout"
-    tools:context="ua.in.zeusapps.ukrainenews.modules.source.SourceFragment">
+    tools:context="ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         android:id="@+id/fragment_article_articlesRecyclerView"/>
-
-    <FrameLayout
-        android:layout_width="@dimen/drawer_width"
+    <android.support.design.widget.NavigationView
         android:layout_height="match_parent"
+        android:layout_width="wrap_content"
         android:layout_gravity="start"
-        android:background="@color/navigationDrawerBackground"
-        android:id="@+id/fragment_article_sourceContent">
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:id="@+id/fragment_article_sourcesRecyclerView"/>
-    </FrameLayout>
+        android:fitsSystemWindows="true"
+        app:menu="@menu/fragment_article_menu"
+        android:id="@+id/fragment_article_navigationView"/>
+
+
+    <!--<FrameLayout-->
+        <!--android:layout_width="@dimen/drawer_width"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_gravity="start"-->
+        <!--android:background="@color/navigationDrawerBackground"-->
+        <!--android:id="@+id/fragment_article_sourceContent">-->
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:scrollbars="vertical"-->
+            <!--android:id="@+id/fragment_article_sourcesRecyclerView"/>-->
+    <!--</FrameLayout>-->
 
 </android.support.v4.widget.DrawerLayout>

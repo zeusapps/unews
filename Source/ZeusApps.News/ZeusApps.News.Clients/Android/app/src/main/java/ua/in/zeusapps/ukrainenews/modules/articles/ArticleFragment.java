@@ -1,10 +1,13 @@
 package ua.in.zeusapps.ukrainenews.modules.articles;
 
 import android.content.Context;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.List;
@@ -32,7 +35,8 @@ public class ArticleFragment
 
     private OnArticleSelectedListener _listener;
     private ArticleAdapter _articleAdapter;
-    private SourceAdapter _sourceAdapter;
+    private List<Source> _sources;
+    //private SourceAdapter _sourceAdapter;
 
     @Inject
     ArticleMVP.IPresenter presenter;
@@ -41,8 +45,10 @@ public class ArticleFragment
 
     @BindView(R.id.fragment_article_articlesRecyclerView)
     RecyclerView articlesRecycleView;
-    @BindView(R.id.fragment_article_sourcesRecyclerView)
-    RecyclerView sourcesRecyclerView;
+    @BindView(R.id.fragment_article_navigationView)
+    NavigationView navigationView;
+//    @BindView(R.id.fragment_article_sourcesRecyclerView)
+//    RecyclerView sourcesRecyclerView;
 
     @BindView(R.id.fragment_article_drawerLayout)
     DrawerLayout drawerLayout;
@@ -66,15 +72,15 @@ public class ArticleFragment
     protected void onCreateViewOverride(View view) {
 
         articlesRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
-        sourcesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        //sourcesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         _articleAdapter = new ArticleAdapter(getActivity(), formatter);
         _articleAdapter.setOnItemClickListener(this);
         articlesRecycleView.setAdapter(_articleAdapter);
 
-        _sourceAdapter = new SourceAdapter(getActivity());
-        _sourceAdapter.setOnItemClickListener(new SourceSelectedListener());
-        sourcesRecyclerView.setAdapter(_sourceAdapter);
+        //_sourceAdapter = new SourceAdapter(getActivity());
+        //_sourceAdapter.setOnItemClickListener(new SourceSelectedListener());
+        //sourcesRecyclerView.setAdapter(_sourceAdapter);
 
         presenter.refresh();
     }
@@ -86,7 +92,16 @@ public class ArticleFragment
 
     @Override
     public void updateSources(List<Source> sources) {
-        _sourceAdapter.replaceAll(sources);
+        //_sourceAdapter.replaceAll(sources);
+
+        _sources = sources;
+        Menu menu = navigationView.getMenu();
+
+        int i = 1;
+        for (Source source: sources){
+            menu.add(R.id.fragment_article_menu_sources, i, Menu.FIRST, source.getTitle());
+            i++;
+        }
     }
 
     @Override
@@ -116,6 +131,30 @@ public class ArticleFragment
     public interface OnArticleSelectedListener{
         void onArticleSelected(Source source, Article article);
     }
+
+
+
+//    @Override
+//    public boolean onNavigationItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//
+//        if (id == R.id.fragment_article_menu_settings){
+//            return false;
+//        }
+//
+//        if (_sources == null){
+//            return false;
+//        }
+//
+//        Source source = _sources.get(id - 1);
+//
+//        presenter.setSelectedSource(source);
+//        drawerLayout.closeDrawer(GravityCompat.START);
+//
+//
+//
+//        return true;
+//    }
 
     private class SourceSelectedListener implements BaseAdapter.OnItemClickListener<Source>{
 
