@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/sources">
+        <menu>
+            <group
+                android:checkableBehavior="single"
+                android:id="@+id/fragment_article_menu_sources"/>
+        </menu>
+    </item>
+    <group
+        android:checkableBehavior="none"
+        android:orderInCategory="999">
+        <item
+            android:id="@+id/fragment_article_menu_settings"
+            android:title="@string/settings"/>
+    </group>
+
+</menu>
