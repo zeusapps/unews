@@ -5,10 +5,6 @@
     android:layout_height="match_parent"
     tools:context="ua.in.zeusapps.ukrainenews.modules.source.SourceFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:id="@+id/fragment_source_sourcesRecyclerView"/>
+
 
 </FrameLayout>

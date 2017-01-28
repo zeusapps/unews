@@ -9,9 +9,7 @@ import ua.in.zeusapps.ukrainenews.modules.articles.ArticleMVP;
 public class MainModule {
 
     @Provides
-    public MainActivityMVP.Presenter provideMainActivityPresenter(
-            ArticleMVP.IPresenter articlePresenter,
-            ArticleViewMVP.IPresenter articleViewPresenter){
-        return new MainActivityPresenter(articlePresenter, articleViewPresenter);
+    public MainActivityMVP.Presenter provideMainActivityPresenter(ArticleViewMVP.IPresenter articleViewPresenter){
+        return new MainActivityPresenter(articleViewPresenter);
     }
 }
