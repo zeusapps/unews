@@ -25,8 +25,13 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
 
     @Override
     public void setSelectedSource(Source source) {
+        if (source == null || source.equals(_selectedSource)){
+            return;
+        }
+
         _selectedSource = source;
         updateArticles();
+        _view.setChecked(source.getId());
     }
 
     @Override

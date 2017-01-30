@@ -2,13 +2,9 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/sources">
-        <menu>
-            <group
-                android:checkableBehavior="single"
-                android:id="@+id/fragment_article_menu_sources"/>
-        </menu>
-    </item>
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/fragment_article_menu_sources"/>
     <group
         android:checkableBehavior="none"
         android:orderInCategory="999">
