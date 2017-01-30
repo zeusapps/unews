@@ -11,6 +11,7 @@ public interface ArticleMVP {
     interface IView extends BaseMVP.IView{
         void updateArticles(List<Article> articles);
         void updateSources(List<Source> sources);
+        void setChecked(String id);
     }
 
     interface IPresenter extends BaseMVP.IPresenter<ArticleMVP.IView>{
