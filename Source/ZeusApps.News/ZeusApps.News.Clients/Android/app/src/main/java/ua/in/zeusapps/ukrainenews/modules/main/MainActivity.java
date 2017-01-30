@@ -1,5 +1,6 @@
 package ua.in.zeusapps.ukrainenews.modules.main;
 
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -74,5 +75,12 @@ public class MainActivity
                         ArticleViewFragment.TAG)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    // issue with WebBrowser that contained video
+    public AssetManager getAssets() {
+        //return super.getAssets();
+        return getResources().getAssets();
     }
 }
