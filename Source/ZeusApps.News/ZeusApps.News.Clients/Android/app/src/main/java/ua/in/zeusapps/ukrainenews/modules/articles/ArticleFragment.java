@@ -88,7 +88,6 @@ public class ArticleFragment
         _sources = sources;
         Menu menu = navigationView.getMenu();
         for (int i = 0; i < sources.size(); i++){
-            // menu.addSubMenu(R.id.fragment_article_menu_sources, i, Menu.FIRST, sources.get(i).getTitle());
             menu.add(R.id.fragment_article_menu_sources, i, Menu.FIRST, sources.get(i).getTitle());
         }
     }

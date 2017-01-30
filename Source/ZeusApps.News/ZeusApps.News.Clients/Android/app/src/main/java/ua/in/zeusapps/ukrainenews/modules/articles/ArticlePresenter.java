@@ -65,6 +65,7 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
 
                     _selectedSource = sources.get(0);
                     updateArticles();
+
                 }
             });
         }
@@ -102,8 +103,10 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
                             return;
                         }
 
+                        _view.setChecked(_selectedSource.getId());
                         _articles = articles;
                         _view.updateArticles(articles);
+
                     }
                 });
     }
