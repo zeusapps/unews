@@ -50,8 +50,6 @@ dependencies {
     apt 'com.google.dagger:dagger-compiler:2.8'
     //picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
-
     testCompile 'junit:junit:4.12'
-
-
+    compile 'com.j256.ormlite:ormlite-android:5.0'
 }
