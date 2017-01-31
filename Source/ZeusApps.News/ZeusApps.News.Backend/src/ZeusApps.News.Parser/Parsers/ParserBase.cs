@@ -15,6 +15,10 @@ namespace ZeusApps.News.Parser.Parsers
 {
     public abstract class ParserBase : IParser
     {
+        private const int MIN_ARTICLE_HTML_LENGTH = 50;
+
+        protected readonly List<string> Constraints;
+
         protected Source Source { get; private set; }
 
         protected readonly IArticleRepository Repository;
@@ -26,6 +30,11 @@ namespace ZeusApps.News.Parser.Parsers
         {
             Repository = repository;
             Logger = loggerFactory.CreateLogger(GetType());
+
+            Constraints = new List<string>
+            {
+                "Інтерфакс", "Интерфакс"
+            };
         }
 
         public virtual async Task Parse(Source source)
@@ -51,6 +60,7 @@ namespace ZeusApps.News.Parser.Parsers
                 }
 
                 ArticleOverride(article);
+                article.IsClean = IsClean(article);
                 await Repository.AddArticle(article);
             }
         }
@@ -58,6 +68,15 @@ namespace ZeusApps.News.Parser.Parsers
         protected virtual void ArticleOverride(Article article)
         {
             
+        }
+
+
+        protected virtual bool IsClean(Article article)
+        {
+            return 
+                article.Html != null &&
+                article.Html.Length >= MIN_ARTICLE_HTML_LENGTH && 
+                Constraints.All(x => article.Html.IndexOf(x, StringComparison.CurrentCultureIgnoreCase) == -1);
         }
 
         protected abstract string ParseHtml(string html);

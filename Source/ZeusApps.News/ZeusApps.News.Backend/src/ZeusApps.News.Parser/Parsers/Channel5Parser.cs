@@ -15,7 +15,7 @@ namespace ZeusApps.News.Parser.Parsers
 
         protected override string ParseHtml(string html)
         {
-            return GetDocumentNode(html, "//div[@class='article-content']")
+            return GetDocumentNode(html, "//div[@class='article-body']")
                 .UpdateSource(Source.BaseUrl)?.InnerHtml;
         }
     }
