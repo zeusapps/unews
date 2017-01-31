@@ -35,12 +35,22 @@ public abstract class BaseAdapter<THolder extends BaseViewHolder, TItem>
     }
 
     public void addAll(List<TItem> items, int index){
-        if (items == null || _items.size() == 0){
+        if (!checkNewItems(items)){
             return;
         }
 
         _items.addAll(index, items);
         notifyItemRangeInserted(0, items.size());
+    }
+
+    public void addAll(List<TItem> items){
+        if (!checkNewItems(items)){
+            return;
+        }
+
+        int position = getItemCount();
+        _items.addAll(items);
+        notifyItemRangeInserted(position, items.size());
     }
 
     public TItem get(int position){
@@ -89,5 +99,13 @@ public abstract class BaseAdapter<THolder extends BaseViewHolder, TItem>
 
     public interface OnItemClickListener<TItem>{
         void onItemClick(TItem item);
+    }
+
+    private boolean checkNewItems(List<TItem> items){
+        if (items == null || _items.size() == 0){
+            return false;
+        }
+
+        return true;
     }
 }
