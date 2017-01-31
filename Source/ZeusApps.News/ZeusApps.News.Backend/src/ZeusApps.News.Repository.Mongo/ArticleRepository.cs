@@ -35,6 +35,7 @@ namespace ZeusApps.News.Repository.Mongo
             var articles = await Collection
                 .Aggregate()
                 .Match(x => x.SourceId == sourceId)
+                .Sort(Builders<Article>.Sort.Descending(x=>x.Published))
                 .Skip(offset)
                 .Limit(count)
                 .ToListAsync();
