@@ -21,6 +21,7 @@ import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.adapter.ArticleAdapter;
 import ua.in.zeusapps.ukrainenews.adapter.BaseAdapter;
+import ua.in.zeusapps.ukrainenews.adapter.EndlessRecyclerViewScrollListener;
 import ua.in.zeusapps.ukrainenews.common.BaseFragment;
 import ua.in.zeusapps.ukrainenews.common.BaseMVP;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
@@ -71,10 +72,18 @@ public class ArticleFragment
 
     @Override
     protected void onCreateViewOverride(View view) {
-        articlesRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        final EndlessRecyclerViewScrollListener listener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                presenter.loadMore();
+            }
+        };
         _articleAdapter = new ArticleAdapter(getActivity(), formatter);
         _articleAdapter.setOnItemClickListener(this);
+
+        articlesRecycleView.setLayoutManager(layoutManager);
+        articlesRecycleView.addOnScrollListener(listener);
         articlesRecycleView.setAdapter(_articleAdapter);
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -92,6 +101,11 @@ public class ArticleFragment
     @Override
     public void addNewerArticles(List<Article> articles) {
         _articleAdapter.addAll(articles, 0);
+    }
+
+    @Override
+    public void addOlderArticles(List<Article> articles) {
+        _articleAdapter.addAll(articles);
     }
 
     @Override
