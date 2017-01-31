@@ -6,11 +6,17 @@
     android:id="@+id/fragment_article_drawerLayout"
     tools:context="ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:id="@+id/fragment_article_articlesRecyclerView"/>
+        android:id="@+id/fragment_article_swipeRefreshLayout">
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:id="@+id/fragment_article_articlesRecyclerView"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
     <android.support.design.widget.NavigationView
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
@@ -18,19 +24,5 @@
         android:fitsSystemWindows="true"
         app:menu="@menu/fragment_article_menu"
         android:id="@+id/fragment_article_navigationView"/>
-
-
-    <!--<FrameLayout-->
-        <!--android:layout_width="@dimen/drawer_width"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="start"-->
-        <!--android:background="@color/navigationDrawerBackground"-->
-        <!--android:id="@+id/fragment_article_sourceContent">-->
-        <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:scrollbars="vertical"-->
-            <!--android:id="@+id/fragment_article_sourcesRecyclerView"/>-->
-    <!--</FrameLayout>-->
 
 </android.support.v4.widget.DrawerLayout>

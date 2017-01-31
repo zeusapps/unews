@@ -30,7 +30,7 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
         }
 
         _selectedSource = source;
-        updateArticles();
+        loadArticles();
         _view.setChecked(source.getId());
     }
 
@@ -44,57 +44,40 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
         if (_sources != null){
             _view.updateSources(_sources);
         } else {
-            _model.getSources().subscribe(new Subscriber<List<Source>>() {
-                @Override
-                public void onCompleted() {
-
-                }
-
-                @Override
-                public void onError(Throwable e) {
-
-                }
-
-                @Override
-                public void onNext(List<Source> sources) {
-                    _sources = sources;
-                    _view.updateSources(sources);
-                    if (_selectedSource != null || _sources.size() == 0){
-                        return;
-                    }
-
-                    _selectedSource = sources.get(0);
-                    updateArticles();
-
-                }
-            });
+            loadSources();
         }
 
         if (_articles != null){
             _view.updateArticles(_articles);
+            loadNewArticles();
         } else {
-            updateArticles();
+            loadArticles();
         }
     }
 
-    private void updateArticles(){
+    private void loadSources(){
+        _view.loadStarted();
+        _model.getSources().subscribe(new CustomSubscriber<List<Source>>() {
+            @Override
+            public void onNext(List<Source> sources) {
+                _sources = sources;
+                _view.updateSources(sources);
+                if (_selectedSource == null && _sources.size() > 0){
+                    _selectedSource = sources.get(0);
+                    loadArticles();
+                }
+            }
+        });
+    }
+
+    private void loadArticles(){
         if (_selectedSource == null){
             return;
         }
 
         _model
                 .getArticles(_selectedSource.getKey())
-                .subscribe(new Subscriber<List<Article>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
+                .subscribe(new CustomSubscriber<List<Article>>() {
                     @Override
                     public void onNext(List<Article> articles) {
                         if (articles.size() == 0 ||
@@ -103,11 +86,49 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
                             return;
                         }
 
-                        _view.setChecked(_selectedSource.getId());
                         _articles = articles;
+                        _view.setChecked(_selectedSource.getId());
                         _view.updateArticles(articles);
-
                     }
                 });
+    }
+
+    private void loadNewArticles(){
+        if (_selectedSource == null || _articles == null || _articles.size() == 0){
+            return;
+        }
+
+        Article firstArticle = _articles.get(0);
+        _model
+                .getNewerArticles(_selectedSource.getKey(), firstArticle)
+                .subscribe(new CustomSubscriber<List<Article>>() {
+                    @Override
+                    public void onNext(List<Article> articles) {
+                        if (articles.size() == 0 ||
+                                _selectedSource == null ||
+                                !articles.get(0).getSourceId().equals(_selectedSource.getKey())){
+                            return;
+                        }
+
+                        _articles.addAll(0, articles);
+                        _view.addNewerArticles(articles);
+                    }
+                });
+    }
+
+    private void showNetworkError(){
+        _view.showError("Network error");
+    }
+
+    private abstract class CustomSubscriber<T> extends Subscriber<T>{
+        @Override
+        public void onCompleted() {
+            _view.loadComplete();
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            showNetworkError();
+        }
     }
 }

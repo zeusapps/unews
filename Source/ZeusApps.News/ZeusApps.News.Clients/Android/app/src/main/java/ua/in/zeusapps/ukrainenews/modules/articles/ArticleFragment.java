@@ -3,8 +3,10 @@ package ua.in.zeusapps.ukrainenews.modules.articles;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -29,7 +31,7 @@ import ua.in.zeusapps.ukrainenews.services.Formatter;
 public class ArticleFragment
         extends BaseFragment
         implements ArticleMVP.IView,
-            BaseAdapter.OnItemClickListener<Article>, NavigationView.OnNavigationItemSelectedListener {
+            BaseAdapter.OnItemClickListener<Article>, NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = ArticleFragment.class.getSimpleName();
 
@@ -46,6 +48,8 @@ public class ArticleFragment
     RecyclerView articlesRecycleView;
     @BindView(R.id.fragment_article_navigationView)
     NavigationView navigationView;
+    @BindView(R.id.fragment_article_swipeRefreshLayout)
+    SwipeRefreshLayout refreshLayout;
 
     @BindView(R.id.fragment_article_drawerLayout)
     DrawerLayout drawerLayout;
@@ -75,6 +79,8 @@ public class ArticleFragment
 
         navigationView.setNavigationItemSelectedListener(this);
 
+        refreshLayout.setOnRefreshListener(this);
+
         presenter.refresh();
     }
 
@@ -84,11 +90,19 @@ public class ArticleFragment
     }
 
     @Override
+    public void addNewerArticles(List<Article> articles) {
+        _articleAdapter.addAll(articles, 0);
+    }
+
+    @Override
     public void updateSources(List<Source> sources) {
         _sources = sources;
         Menu menu = navigationView.getMenu();
+
         for (int i = 0; i < sources.size(); i++){
-            menu.add(R.id.fragment_article_menu_sources, i, Menu.FIRST, sources.get(i).getTitle());
+            if (menu.findItem(i) == null){
+                menu.add(R.id.fragment_article_menu_sources, i, Menu.FIRST, sources.get(i).getTitle());
+            }
         }
     }
 
@@ -101,6 +115,21 @@ public class ArticleFragment
                     .getItem(i)
                     .setChecked(flag);
         }
+    }
+
+    @Override
+    public void showError(String message) {
+        Snackbar.make(refreshLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void loadStarted() {
+        refreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void loadComplete() {
+        refreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -138,6 +167,11 @@ public class ArticleFragment
         presenter.setSelectedSource(source);
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onRefresh() {
+        presenter.refresh();
     }
 
     public interface OnArticleSelectedListener{

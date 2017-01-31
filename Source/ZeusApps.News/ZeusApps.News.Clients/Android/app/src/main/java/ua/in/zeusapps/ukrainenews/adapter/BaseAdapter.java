@@ -14,28 +14,37 @@ public abstract class BaseAdapter<THolder extends BaseViewHolder, TItem>
         extends RecyclerView.Adapter<THolder>
         implements View.OnClickListener {
 
-    private final List<TItem> items;
+    private final List<TItem> _items;
     private final Activity _activity;
     private final LayoutInflater _layoutInflater;
     private OnItemClickListener<TItem> _listener;
 
     BaseAdapter(Activity activity) {
-        this.items = new ArrayList<>();
+        _items = new ArrayList<>();
         _activity = activity;
         _layoutInflater = activity.getLayoutInflater();
     }
 
     public void replaceAll(List<TItem> newItems){
-        int count = items.size();
-        items.clear();
+        int count = _items.size();
+        _items.clear();
         notifyItemRangeRemoved(0, count);
-        items.addAll(newItems);
-        count = items.size();
+        _items.addAll(newItems);
+        count = _items.size();
         notifyItemRangeInserted(0, count);
     }
 
+    public void addAll(List<TItem> items, int index){
+        if (items == null || _items.size() == 0){
+            return;
+        }
+
+        _items.addAll(index, items);
+        notifyItemRangeInserted(0, items.size());
+    }
+
     public TItem get(int position){
-        return items.get(position);
+        return _items.get(position);
     }
 
     protected Activity getActivity(){
@@ -54,7 +63,7 @@ public abstract class BaseAdapter<THolder extends BaseViewHolder, TItem>
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return _items.size();
     }
 
     public abstract THolder onCreateViewHolder(ViewGroup parent, int viewType);
