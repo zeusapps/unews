@@ -11,6 +11,7 @@ public interface ArticleMVP {
     interface IView extends BaseMVP.IView{
         void updateArticles(List<Article> articles);
         void addNewerArticles(List<Article> articles);
+        void addOlderArticles(List<Article> articles);
         void updateSources(List<Source> sources);
         void setChecked(String id);
         void showError(String message);
@@ -22,6 +23,7 @@ public interface ArticleMVP {
         void setSelectedSource(Source source);
         Source getSelectedSource();
         void refresh();
+        void loadMore();
     }
 
     interface IModel extends BaseMVP.IModel {

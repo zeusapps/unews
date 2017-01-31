@@ -55,6 +55,28 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
         }
     }
 
+    @Override
+    public void loadMore() {
+        if (_selectedSource == null || _articles == null || _articles.size() == 0){
+            return;
+        }
+
+        Article lastArticle = _articles.get(_articles.size() - 1);
+        _model
+                .getOlderArticles(_selectedSource.getKey(), lastArticle)
+                .subscribe(new CustomSubscriber<List<Article>>() {
+                    @Override
+                    public void onNext(List<Article> articles) {
+                        if (!checkNewArticles(articles)){
+                            return;
+                        }
+
+                        _articles.addAll(articles);
+                        _view.addOlderArticles(articles);
+                    }
+                });
+    }
+
     private void loadSources(){
         _view.loadStarted();
         _model.getSources().subscribe(new CustomSubscriber<List<Source>>() {
@@ -104,9 +126,7 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
                 .subscribe(new CustomSubscriber<List<Article>>() {
                     @Override
                     public void onNext(List<Article> articles) {
-                        if (articles.size() == 0 ||
-                                _selectedSource == null ||
-                                !articles.get(0).getSourceId().equals(_selectedSource.getKey())){
+                        if (!checkNewArticles(articles)){
                             return;
                         }
 
@@ -114,6 +134,19 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
                         _view.addNewerArticles(articles);
                     }
                 });
+    }
+
+    private boolean checkNewArticles(List<Article> articles){
+        if (articles == null || articles.size() == 0){
+            return false;
+        }
+
+        Source source = _selectedSource;
+        if (source == null || !articles.get(0).getSourceId().equals(source.getKey())){
+            return false;
+        }
+
+        return true;
     }
 
     private void showNetworkError(){
