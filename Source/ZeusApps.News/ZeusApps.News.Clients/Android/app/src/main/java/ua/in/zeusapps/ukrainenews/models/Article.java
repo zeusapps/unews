@@ -2,33 +2,51 @@ package ua.in.zeusapps.ukrainenews.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DatabaseField;
 
 public class Article {
 
+    @DatabaseField(useGetSet = true)
     @SerializedName("id")
     @Expose
     private String id;
+
+    @DatabaseField(foreign = true, useGetSet = true)
     @SerializedName("sourceId")
     @Expose
     private String sourceId;
+
+    @DatabaseField(useGetSet = true)
     @SerializedName("title")
     @Expose
     private String title;
+
+    @DatabaseField(useGetSet = true)
     @SerializedName("html")
     @Expose
     private String html;
+
+    @DatabaseField(useGetSet = true)
     @SerializedName("url")
     @Expose
     private String url;
+
+    @DatabaseField(useGetSet = true)
     @SerializedName("imageUrl")
     @Expose
     private String imageUrl;
+
+    @DatabaseField(useGetSet = true)
     @SerializedName("published")
     @Expose
     private String published;
+
+    @DatabaseField(useGetSet = true)
     @SerializedName("upvote")
     @Expose
     private Integer upvote;
+
+    @DatabaseField(useGetSet = true)
     @SerializedName("downvote")
     @Expose
     private Integer downvote;
