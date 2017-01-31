@@ -87,6 +87,12 @@ public class ArticleViewFragment
         component.inject(this);
     }
 
+    @Override
+    public void onDetach() {
+        webView.destroy();
+        super.onDetach();
+    }
+
     // fix of bug http://stackoverflow.com/questions/32050784/chromium-webview-does-not-seems-to-work-with-android-applyoverrideconfiguration
     private class Client extends WebChromeClient{
         @Override
