@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ZeusApps.News.Models;
 
 namespace ZeusApps.News.Repositories
 {
     public interface IArticleRepository
     {
-        Task<Article[]> GetArticles(string sourceId, int count, int offset);
+        Task<Article[]> GetArticles(string sourceId, int count, int offset, DateTime? dateTime, bool isAfter);
 
         Task<Article> GetArticle(string id);
 
