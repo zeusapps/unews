@@ -30,11 +30,24 @@ namespace ZeusApps.News.Repository.Mongo
             Collection.Indexes.CreateOne(Builders<Article>.IndexKeys.Ascending(x => x.Url));
         }
 
-        public async Task<Article[]> GetArticles(string sourceId, int count, int offset)
+        public async Task<Article[]> GetArticles(string sourceId, int count, int offset, DateTime? dateTime, bool isAfter)
         {
-            var articles = await Collection
+            var aggr = Collection
                 .Aggregate()
                 .Match(x => x.SourceId == sourceId)
+                .Match(x => x.IsClean);
+
+            if (dateTime != null)
+            {
+                var filter = isAfter
+                    ? Builders<Article>.Filter.Lt(x => x.Published, dateTime.Value)
+                    : Builders<Article>.Filter.Gt(x => x.Published, dateTime.Value);
+
+                aggr = aggr.Match(filter);
+            }
+
+            var articles = await aggr
+                .Sort(Builders<Article>.Sort.Descending(x=>x.Published))
                 .Skip(offset)
                 .Limit(count)
                 .ToListAsync();

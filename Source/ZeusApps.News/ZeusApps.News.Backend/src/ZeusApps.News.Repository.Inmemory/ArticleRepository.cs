@@ -12,10 +12,17 @@ namespace ZeusApps.News.Repository.Inmemory
         private readonly List<Article> _articles = new List<Article>();
 
 
-        public Task<Article[]> GetArticles(string sourceId, int count, int offset)
+        public Task<Article[]> GetArticles(string sourceId, int count, int offset, DateTime? dateTime, bool isAfter)
         {
-            var articles = _articles
-                .Where(x => x.SourceId == sourceId)
+            var query = _articles
+                .Where(x => x.SourceId == sourceId);
+
+            if (dateTime != null)
+            {
+                query = query.Where(x => isAfter ? x.Published > dateTime.Value : x.Published < dateTime.Value);
+            }
+
+            var articles = query
                 .Skip(offset)
                 .Take(count)
                 .ToArray();

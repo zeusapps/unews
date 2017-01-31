@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ZeusApps.News.Repositories;
@@ -25,7 +26,7 @@ namespace ZeusApps.News.Server.Controllers
         }
 
         [HttpGet("{sourceId}")]
-        public async Task<IActionResult> Get(string sourceId, int count = 20, int offset = 0)
+        public async Task<IActionResult> Get(string sourceId, int count = 20, int offset = 0, DateTime? published = null, bool isAfter = false)
         {
             if (string.IsNullOrEmpty(sourceId))
             {
@@ -33,7 +34,7 @@ namespace ZeusApps.News.Server.Controllers
                 return BadRequest("sourceId couldn't be null or empty");
             }
 
-            var articles = await _repository.GetArticles(sourceId, count, offset);
+            var articles = await _repository.GetArticles(sourceId, count, offset, published, isAfter);
             _logger.LogInformation($"Articles: {articles.Length}");
             return Ok(_mapperService.Map<ArticleDto>(articles));
         }
