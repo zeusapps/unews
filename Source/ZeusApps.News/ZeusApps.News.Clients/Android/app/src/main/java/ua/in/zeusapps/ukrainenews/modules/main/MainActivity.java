@@ -76,11 +76,4 @@ public class MainActivity
                 .addToBackStack(null)
                 .commit();
     }
-
-    @Override
-    // issue with WebBrowser that contained video
-    public AssetManager getAssets() {
-        //return super.getAssets();
-        return getResources().getAssets();
-    }
 }

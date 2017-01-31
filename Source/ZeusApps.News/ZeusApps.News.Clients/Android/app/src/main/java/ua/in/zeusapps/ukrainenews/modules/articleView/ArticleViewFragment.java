@@ -1,6 +1,9 @@
 package ua.in.zeusapps.ukrainenews.modules.articleView;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.TextView;
 
@@ -62,6 +65,7 @@ public class ArticleViewFragment
 
         String html = formatter.formatHtml(_article.getHtml());
 
+        webView.setWebChromeClient(new Client());
         webView.clearCache(true);
         webView.clearHistory();
         webView.getSettings().setJavaScriptEnabled(true);
@@ -81,5 +85,17 @@ public class ArticleViewFragment
     @Override
     protected void inject(ApplicationComponent component) {
         component.inject(this);
+    }
+
+    // fix of bug http://stackoverflow.com/questions/32050784/chromium-webview-does-not-seems-to-work-with-android-applyoverrideconfiguration
+    private class Client extends WebChromeClient{
+        @Override
+        public Bitmap getDefaultVideoPoster() {
+            Bitmap bmp = super.getDefaultVideoPoster();
+            if (bmp != null){
+                return bmp;
+            }
+            return BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.ic_media_video_poster);
+        }
     }
 }
