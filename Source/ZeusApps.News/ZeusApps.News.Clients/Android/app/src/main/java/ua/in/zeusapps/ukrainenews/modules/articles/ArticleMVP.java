@@ -10,8 +10,12 @@ import ua.in.zeusapps.ukrainenews.models.Source;
 public interface ArticleMVP {
     interface IView extends BaseMVP.IView{
         void updateArticles(List<Article> articles);
+        void addNewerArticles(List<Article> articles);
         void updateSources(List<Source> sources);
         void setChecked(String id);
+        void showError(String message);
+        void loadStarted();
+        void loadComplete();
     }
 
     interface IPresenter extends BaseMVP.IPresenter<ArticleMVP.IView>{
@@ -22,6 +26,8 @@ public interface ArticleMVP {
 
     interface IModel extends BaseMVP.IModel {
         Observable<List<Article>> getArticles(String sourceId);
+        Observable<List<Article>> getNewerArticles(String sourceId, Article firstArticle);
+        Observable<List<Article>> getOlderArticles(String sourceId, Article lastArticle);
         Observable<List<Source>> getSources();
     }
 }
