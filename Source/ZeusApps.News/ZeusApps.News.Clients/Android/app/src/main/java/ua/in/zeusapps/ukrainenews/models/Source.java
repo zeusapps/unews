@@ -2,24 +2,36 @@ package ua.in.zeusapps.ukrainenews.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DatabaseField;
 
 public class Source {
 
+    @DatabaseField(useGetSet = true)
     @SerializedName("id")
     @Expose
     private String id;
+
+    @DatabaseField(useGetSet = true)
     @SerializedName("title")
     @Expose
     private String title;
+
+    @DatabaseField(useGetSet = true)
     @SerializedName("encoding")
     @Expose
     private String encoding;
+
+    @DatabaseField(useGetSet = true)
     @SerializedName("baseUrl")
     @Expose
     private String baseUrl;
+
+    @DatabaseField(useGetSet = true)
     @SerializedName("imageUrl")
     @Expose
     private String imageUrl;
+
+    @DatabaseField(useGetSet = true)
     @SerializedName("key")
     @Expose
     private String key;
@@ -72,4 +84,19 @@ public class Source {
         this.key = key;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Source source = (Source) o;
+
+        return id != null ? id.equals(source.id) : source.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

@@ -24,18 +24,4 @@ public abstract class BaseModel {
                 .observeOn(_observeOn)
                 .subscribeOn(_subscribeOn);
     }
-
-    protected Retrofit getRetrofit(){
-        if (_retrofit != null){
-            return _retrofit;
-        }
-
-        _retrofit = new Retrofit.Builder()
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(Constants.REMOTE_URL)
-                .build();
-
-        return _retrofit;
-    }
 }
