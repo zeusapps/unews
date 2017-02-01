@@ -147,23 +147,6 @@ public class ArticleFragment
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        if (context instanceof OnArticleSelectedListener) {
-            _listener = (OnArticleSelectedListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement OnArticleSelectedListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        _listener = null;
-    }
-
-    @Override
     public void onItemClick(Article article) {
         if (_listener != null){
             _listener.onArticleSelected(presenter.getSelectedSource(), article);
@@ -186,6 +169,23 @@ public class ArticleFragment
     @Override
     public void onRefresh() {
         presenter.refresh();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof OnArticleSelectedListener) {
+            _listener = (OnArticleSelectedListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnArticleSelectedListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        _listener = null;
     }
 
     public interface OnArticleSelectedListener{
