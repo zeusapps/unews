@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.widget.FrameLayout;
 
+import com.google.android.gms.ads.MobileAds;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -59,6 +61,8 @@ public class MainActivity
                 .beginTransaction()
                 .add(R.id.activity_main_content, new ArticleFragment(), ArticleFragment.TAG)
                 .commit();
+
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-5823688689397702~2489213275");
     }
 
     @Override
