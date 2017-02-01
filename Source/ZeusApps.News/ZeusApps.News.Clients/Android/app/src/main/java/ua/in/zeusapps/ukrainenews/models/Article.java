@@ -3,15 +3,20 @@ package ua.in.zeusapps.ukrainenews.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
+@DatabaseTable
 public class Article {
+
+    public static final String PUBLISHED_FIELD_NAME = "published";
+    public static final String SOURCE_ID_FIELD_NAME = "sourceId";
 
     @DatabaseField(useGetSet = true)
     @SerializedName("id")
     @Expose
     private String id;
 
-    @DatabaseField(foreign = true, useGetSet = true)
+    @DatabaseField(useGetSet = true)
     @SerializedName("sourceId")
     @Expose
     private String sourceId;
