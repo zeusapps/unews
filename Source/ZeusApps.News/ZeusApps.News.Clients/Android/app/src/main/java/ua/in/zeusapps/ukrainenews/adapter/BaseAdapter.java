@@ -14,6 +14,9 @@ public abstract class BaseAdapter<THolder extends BaseViewHolder, TItem>
         extends RecyclerView.Adapter<THolder>
         implements View.OnClickListener {
 
+    public final static int CONTENT_TYPE = 1;
+    public final static int AD_TYPE = 2;
+
     private final List<TItem> _items;
     private final Activity _activity;
     private final LayoutInflater _layoutInflater;
@@ -74,6 +77,18 @@ public abstract class BaseAdapter<THolder extends BaseViewHolder, TItem>
     @Override
     public int getItemCount() {
         return _items.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        if (position == 3){
+            return AD_TYPE;
+        }
+
+        return CONTENT_TYPE;
+
+        //return super.getItemViewType(position);
     }
 
     public abstract THolder onCreateViewHolder(ViewGroup parent, int viewType);
