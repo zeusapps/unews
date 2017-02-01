@@ -3,6 +3,7 @@ package ua.in.zeusapps.ukrainenews.modules.articles;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import rx.Observable;
@@ -23,7 +24,7 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
     private final ISourceService _sourcesService;
     private final IRepository _repository;
     private final Subscriber<List<Article>> _cacheSubscriber;
-    private long _last_updated_timestamp;
+    private final HashMap<String, Long> _lastUpdatedTimestamps;
 
     ArticleModel(
             IRepository repository,
@@ -32,6 +33,8 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
         _articleService = articleService;
         _sourcesService = sourceService;
         _repository = repository;
+
+        _lastUpdatedTimestamps = new HashMap<>();
 
         _cacheSubscriber = new Subscriber<List<Article>>() {
             @Override
@@ -57,11 +60,16 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
         if (tempArticles.size() > 0){
 
             long timestamp = System.currentTimeMillis();
-            if (timestamp < _last_updated_timestamp + UPDATE_PERIOD){
+            if (!_lastUpdatedTimestamps.containsKey(sourceId)){
+                _lastUpdatedTimestamps.put(sourceId, 0L);
+            }
+
+            long updateTimestamp = _lastUpdatedTimestamps.get(sourceId);
+            if (timestamp < updateTimestamp + UPDATE_PERIOD){
                 return Observable.just(tempArticles);
             }
 
-            _last_updated_timestamp = timestamp;
+            _lastUpdatedTimestamps.put(sourceId, timestamp);
             return getUpdatedArticlesList(sourceId, tempArticles);
         }
 
