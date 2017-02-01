@@ -97,6 +97,7 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
             return;
         }
 
+        _view.loadStarted();
         _model
                 .getArticles(_selectedSource.getKey())
                 .subscribe(new CustomSubscriber<List<Article>>() {
@@ -120,6 +121,7 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
             return;
         }
 
+        _view.loadStarted();
         Article firstArticle = _articles.get(0);
         _model
                 .getNewerArticles(_selectedSource.getKey(), firstArticle)
@@ -142,11 +144,11 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
         }
 
         Source source = _selectedSource;
-        if (source == null || !articles.get(0).getSourceId().equals(source.getKey())){
+        if (source == null){
             return false;
         }
 
-        return true;
+        return articles.get(0).getSourceId().equals(source.getKey());
     }
 
     private void showNetworkError(){
@@ -162,6 +164,7 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
         @Override
         public void onError(Throwable e) {
             showNetworkError();
+            _view.loadComplete();
         }
     }
 }
