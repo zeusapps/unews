@@ -22,11 +22,17 @@ public interface ArticleMVP {
     interface IPresenter extends BaseMVP.IPresenter<ArticleMVP.IView>{
         void setSelectedSource(Source source);
         Source getSelectedSource();
-        void refresh();
-        void loadMore();
+        void loadOlder(Article lastArticle);
+        void loadNewer(Article firstArticle);
+
+        void initLoad();
+        void showArticle();
     }
 
     interface IModel extends BaseMVP.IModel {
+        List<Article> getLocalArticles(String sourceId);
+
+
         Observable<List<Article>> getArticles(String sourceId);
         Observable<List<Article>> getNewerArticles(String sourceId, Article firstArticle);
         Observable<List<Article>> getOlderArticles(String sourceId, Article lastArticle);
