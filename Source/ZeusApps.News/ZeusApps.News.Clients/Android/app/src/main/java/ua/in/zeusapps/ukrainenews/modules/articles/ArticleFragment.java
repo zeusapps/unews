@@ -76,7 +76,7 @@ public class ArticleFragment
         final EndlessRecyclerViewScrollListener listener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                presenter.loadMore();
+                presenter.loadOlder(_articleAdapter.getLast());
             }
         };
         _articleAdapter = new ArticleAdapter(getActivity(), formatter);
@@ -90,7 +90,7 @@ public class ArticleFragment
 
         refreshLayout.setOnRefreshListener(this);
 
-        presenter.refresh();
+        presenter.initLoad();
     }
 
     @Override
@@ -148,9 +148,12 @@ public class ArticleFragment
 
     @Override
     public void onItemClick(Article article) {
-        if (_listener != null){
-            _listener.onArticleSelected(presenter.getSelectedSource(), article);
+        if (_listener == null){
+            return;
         }
+
+        presenter.showArticle();
+        _listener.onArticleSelected(presenter.getSelectedSource(), article);
     }
 
     @Override
@@ -162,13 +165,14 @@ public class ArticleFragment
 
         Source source = _sources.get(index);
         presenter.setSelectedSource(source);
+        articlesRecycleView.scrollTo(0,0);
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public void onRefresh() {
-        presenter.refresh();
+        presenter.loadNewer(_articleAdapter.getFirst());
     }
 
     @Override

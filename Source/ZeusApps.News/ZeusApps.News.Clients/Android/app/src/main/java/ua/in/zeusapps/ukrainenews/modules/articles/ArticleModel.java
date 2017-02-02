@@ -1,9 +1,6 @@
 package ua.in.zeusapps.ukrainenews.modules.articles;
 
-import android.support.annotation.NonNull;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import rx.Observable;
@@ -18,13 +15,13 @@ import ua.in.zeusapps.ukrainenews.services.ISourceService;
 class ArticleModel extends BaseModel implements ArticleMVP.IModel {
 
     private static final int PAGE_SIZE = 20;
-    private static final int UPDATE_PERIOD = 15 * 60 * 1000;
+
 
     private final IArticleService _articleService;
     private final ISourceService _sourcesService;
     private final IRepository _repository;
     private final Subscriber<List<Article>> _cacheSubscriber;
-    private final HashMap<String, Long> _lastUpdatedTimestamps;
+    private List<Source> _cachedSources;
 
     ArticleModel(
             IRepository repository,
@@ -33,8 +30,6 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
         _articleService = articleService;
         _sourcesService = sourceService;
         _repository = repository;
-
-        _lastUpdatedTimestamps = new HashMap<>();
 
         _cacheSubscriber = new Subscriber<List<Article>>() {
             @Override
@@ -55,25 +50,17 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
     }
 
     @Override
+    public List<Article> getLocalArticles(String sourceId) {
+        return _repository.getAllArticles(sourceId);
+    }
+
+    @Override
     public Observable<List<Article>> getArticles(String sourceId) {
-        final List<Article> tempArticles = _repository.getAllArticles(sourceId);
-        if (tempArticles.size() > 0){
+        Observable<List<Article>> observable = _articleService
+                .getArticles(sourceId, PAGE_SIZE)
+                .doOnEach(_cacheSubscriber);
 
-            long timestamp = System.currentTimeMillis();
-            if (!_lastUpdatedTimestamps.containsKey(sourceId)){
-                _lastUpdatedTimestamps.put(sourceId, 0L);
-            }
-
-            long updateTimestamp = _lastUpdatedTimestamps.get(sourceId);
-            if (timestamp < updateTimestamp + UPDATE_PERIOD){
-                return Observable.just(tempArticles);
-            }
-
-            _lastUpdatedTimestamps.put(sourceId, timestamp);
-            return getUpdatedArticlesList(sourceId, tempArticles);
-        }
-
-        return getFreshArticlesList(sourceId);
+        return wrapObservable(observable);
     }
 
     @Override
@@ -88,6 +75,12 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
 
     @Override
     public Observable<List<Source>> getSources() {
+        if (_cachedSources != null){
+            return Observable.just(_cachedSources);
+        }
+
+
+
         final List<Source> tempSources = _repository.getAllSources();
 
         Observable<List<Source>> observable = _sourcesService
@@ -115,6 +108,14 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
 
         }
 
+        observable = observable.map(new Func1<List<Source>, List<Source>>() {
+            @Override
+            public List<Source> call(List<Source> sources) {
+                _cachedSources = sources;
+                return sources;
+            }
+        });
+
         return wrapObservable(observable);
     }
 
@@ -122,34 +123,6 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
             String sourceId, Article article, boolean isAfter){
         Observable<List<Article>> observable = _articleService
                 .getNewerArticles(sourceId, PAGE_SIZE, article.getPublished(), isAfter)
-                .doOnEach(_cacheSubscriber);
-
-        return wrapObservable(observable);
-    }
-
-    @NonNull
-    private Observable<List<Article>> getUpdatedArticlesList(
-            String sourceId, final List<Article> tempArticles){
-        final Article article = tempArticles.get(0);
-        return getNewerArticles(sourceId, article)
-                .map(new Func1<List<Article>, List<Article>>() {
-                    @Override
-                    public List<Article> call(List<Article> articles) {
-                        articles.addAll(tempArticles);
-                        return articles;
-                    }
-                })
-                .onErrorResumeNext(new Func1<Throwable, Observable<? extends List<Article>>>() {
-                    @Override
-                    public Observable<? extends List<Article>> call(Throwable throwable) {
-                        return Observable.just(tempArticles);
-                    }
-                });
-    }
-
-    private Observable<List<Article>> getFreshArticlesList(String sourceId){
-        Observable<List<Article>> observable = _articleService
-                .getArticles(sourceId, PAGE_SIZE)
                 .doOnEach(_cacheSubscriber);
 
         return wrapObservable(observable);
