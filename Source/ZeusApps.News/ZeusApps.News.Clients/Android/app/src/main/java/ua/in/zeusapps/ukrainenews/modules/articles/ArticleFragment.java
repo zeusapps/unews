@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class ArticleFragment
     private OnArticleSelectedListener _listener;
     private ArticleAdapter _articleAdapter;
     private List<Source> _sources;
+    private SubMenu _subMenu;
 
     @Inject
     ArticleMVP.IPresenter presenter;
@@ -86,6 +88,11 @@ public class ArticleFragment
                 presenter.loadOlder(_articleAdapter.getLast());
             }
         };
+        _subMenu = navigationView
+                .getMenu()
+                .addSubMenu(getResources().getString(R.string.sources));
+        _subMenu.setGroupCheckable(0, true, true);
+
         _articleAdapter = new ArticleAdapter(getActivity(), formatter);
         _articleAdapter.setOnItemClickListener(this);
 
@@ -120,12 +127,22 @@ public class ArticleFragment
     @Override
     public void updateSources(List<Source> sources) {
         _sources = sources;
-        Menu menu = navigationView.getMenu();
 
-        for (int i = 0; i < sources.size(); i++){
-            if (menu.findItem(i) == null){
-                menu.add(R.id.fragment_article_menu_sources, i, Menu.FIRST, sources.get(i).getTitle());
+        Source source = presenter.getSelectedSource();
+        if (source == null && sources.size() > 0){
+            source = sources.get(0);
+        }
+
+        _subMenu.clear();
+
+        int index = 0;
+        for (Source src: sources){
+            MenuItem item = _subMenu.add(0, index, 0, src.getTitle());
+            if (src.equals(source)){
+                item.setChecked(true);
+                toolbar.setTitle(src.getTitle());
             }
+            index++;
         }
     }
 
@@ -171,6 +188,12 @@ public class ArticleFragment
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        for (int i = 0; i < _subMenu.size(); i++){
+            _subMenu.getItem(i).setChecked(false);
+        }
+
+        item.setChecked(true);
+
         int index = item.getItemId();
         if (index >= _sources.size()){
             return false;
@@ -180,6 +203,7 @@ public class ArticleFragment
         presenter.setSelectedSource(source);
         articlesRecycleView.scrollTo(0,0);
         drawerLayout.closeDrawer(GravityCompat.START);
+        toolbar.setTitle(source.getTitle());
         return true;
     }
 
