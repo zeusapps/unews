@@ -1,5 +1,7 @@
 package ua.in.zeusapps.ukrainenews.modules.articles;
 
+import android.support.design.widget.Snackbar;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,7 +100,9 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
                     public Observable<List<Article>> call(List<Source> sources) {
                         _view.updateSources(sources);
                         if (sources.size() > 0){
-                            _selectedSource = sources.get(0);
+                            if (_selectedSource == null || !sources.contains(_selectedSource)){
+                                _selectedSource = sources.get(0);
+                            }
                             String sourceId = _selectedSource.getKey();
                             return getLocalAndUpdateArticles(sourceId);
                         }
