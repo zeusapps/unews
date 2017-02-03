@@ -13,8 +13,7 @@ public interface ArticleMVP {
         void addNewerArticles(List<Article> articles);
         void addOlderArticles(List<Article> articles);
         void updateSources(List<Source> sources);
-        void setChecked(String id);
-        void showError(String message);
+        void showError();
         void loadStarted();
         void loadComplete();
     }

@@ -147,20 +147,9 @@ public class ArticleFragment
     }
 
     @Override
-    public void setChecked(String id) {
-        for(int i = 0; i < _sources.size(); i++){
-            boolean flag = _sources.get(i).getId().equals(id);
-            navigationView
-                    .getMenu()
-                    .getItem(i)
-                    .setChecked(flag);
-        }
-    }
-
-    @Override
-    public void showError(String message) {
+    public void showError() {
         Snackbar snackbar = Snackbar
-                .make(refreshLayout, message, Snackbar.LENGTH_LONG);
+                .make(refreshLayout, getResources().getText(R.string.network_error), Snackbar.LENGTH_LONG);
         snackbar.getView().setBackgroundColor(
                 ContextCompat.getColor(getActivity(), android.R.color.holo_red_dark));
         snackbar.show();

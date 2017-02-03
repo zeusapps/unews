@@ -1,7 +1,5 @@
 package ua.in.zeusapps.ukrainenews.modules.articles;
 
-import android.support.design.widget.Snackbar;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +9,7 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
+import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
@@ -151,7 +150,7 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
     }
 
     private void showNetworkError(){
-        _view.showError("Network error");
+        _view.showError();
     }
 
     private void addLastUpdate(String sourceId){
