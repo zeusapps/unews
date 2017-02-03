@@ -2,6 +2,8 @@ package ua.in.zeusapps.ukrainenews.common;
 
 import android.app.Application;
 
+import com.google.android.gms.ads.MobileAds;
+
 import butterknife.ButterKnife;
 import ua.in.zeusapps.ukrainenews.components.DaggerApplicationComponent;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
@@ -24,5 +26,8 @@ public class App extends Application {
                 .build();
 
         ButterKnife.setDebug(true);
+
+
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-5823688689397702~2489213275");
     }
 }
