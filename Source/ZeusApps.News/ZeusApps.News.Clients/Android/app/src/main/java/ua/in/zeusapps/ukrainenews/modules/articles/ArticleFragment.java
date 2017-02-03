@@ -8,8 +8,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,6 +56,8 @@ public class ArticleFragment
     NavigationView navigationView;
     @BindView(R.id.fragment_article_swipeRefreshLayout)
     SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.include_toolbar)
+    Toolbar toolbar;
 
     @BindView(R.id.fragment_article_drawerLayout)
     DrawerLayout drawerLayout;
@@ -90,6 +96,8 @@ public class ArticleFragment
         navigationView.setNavigationItemSelectedListener(this);
 
         refreshLayout.setOnRefreshListener(this);
+
+        addToolBar();
 
         presenter.initLoad();
     }
@@ -195,6 +203,27 @@ public class ArticleFragment
     public void onDetach() {
         super.onDetach();
         _listener = null;
+    }
+
+    private void addToolBar(){
+        AppCompatActivity activity = getCompatActivity();
+        activity.setSupportActionBar(toolbar);
+
+        final ActionBar actionBar = getCompatActivity().getSupportActionBar();
+
+        if (actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    getActivity(),
+                    drawerLayout,
+                    toolbar,
+                    R.string.app_name,
+                    R.string.app_name);
+            toggle.setDrawerIndicatorEnabled(true);
+            drawerLayout.addDrawerListener(toggle);
+            toggle.syncState();
+        }
     }
 
     public interface OnArticleSelectedListener{
