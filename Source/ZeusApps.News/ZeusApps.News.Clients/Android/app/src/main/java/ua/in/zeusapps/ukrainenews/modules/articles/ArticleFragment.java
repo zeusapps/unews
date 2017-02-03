@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -133,7 +134,11 @@ public class ArticleFragment
 
     @Override
     public void showError(String message) {
-        Snackbar.make(refreshLayout, message, Snackbar.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar
+                .make(refreshLayout, message, Snackbar.LENGTH_LONG);
+        snackbar.getView().setBackgroundColor(
+                ContextCompat.getColor(getActivity(), android.R.color.holo_red_dark));
+        snackbar.show();
     }
 
     @Override
