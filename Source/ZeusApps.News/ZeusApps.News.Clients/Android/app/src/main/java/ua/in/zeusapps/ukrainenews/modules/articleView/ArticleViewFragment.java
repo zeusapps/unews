@@ -2,10 +2,16 @@ package ua.in.zeusapps.ukrainenews.modules.articleView;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -20,12 +26,14 @@ import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 public class ArticleViewFragment
         extends BaseFragment
-        implements ArticleViewMVP.IView {
+        implements ArticleViewMVP.IView, AppBarLayout.OnOffsetChangedListener {
 
     public static final String TAG = ArticleViewFragment.class.getSimpleName();
 
     private static final String MIME_TYPE = "text/html";
 
+    private boolean _isVisible;
+    private int _scrollRange = -1;
     private Article _article;
     private Source _source;
 
@@ -35,8 +43,18 @@ public class ArticleViewFragment
     TextView publishedTextView;
     @BindView(R.id.fragment_article_view_source)
     TextView sourceTextView;
-    @BindView(R.id.fragment_article_view_webBrowser)
-    WebView webView;
+
+    @BindView(R.id.fragment_article_view_image)
+    ImageView articleImage;
+    @BindView(R.id.fragment_article_view_toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.fragment_article_view_collapsingToolbar)
+    CollapsingToolbarLayout toolbarLayout;
+    @BindView(R.id.fragment_article_view_appBar)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.fragment_article_view_articleWebView)
+    WebView articleWebView;
+
 
     @Inject
     ArticleViewMVP.IPresenter presenter;
@@ -59,17 +77,26 @@ public class ArticleViewFragment
             return;
         }
 
+        appBarLayout.addOnOffsetChangedListener(this);
+        toolbarLayout.setTitleEnabled(false);
+
+        Picasso
+                .with(getContext())
+                .load(_article.getImageUrl())
+                .into(articleImage);
+
+
         titleTextView.setText(_article.getTitle());
         publishedTextView.setText(formatter.formatDate(_article.getPublished()));
         sourceTextView.setText(_source.getTitle());
 
         String html = formatter.formatHtml(_article.getHtml());
 
-        webView.setWebChromeClient(new Client());
-        webView.clearCache(true);
-        webView.clearHistory();
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadDataWithBaseURL(_source.getBaseUrl(), html, MIME_TYPE, _source.getEncoding(), null);
+        articleWebView.setWebChromeClient(new Client());
+        articleWebView.clearCache(true);
+        articleWebView.clearHistory();
+        articleWebView.getSettings().setJavaScriptEnabled(true);
+        articleWebView.loadDataWithBaseURL(_source.getBaseUrl(), html, MIME_TYPE, _source.getEncoding(), null);
     }
 
     @Override
@@ -89,8 +116,23 @@ public class ArticleViewFragment
 
     @Override
     public void onDetach() {
-        webView.destroy();
+        //webView.destroy();
+        articleWebView.destroy();
         super.onDetach();
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        if (_scrollRange == -1) {
+            _scrollRange = appBarLayout.getTotalScrollRange();
+        }
+        if (_scrollRange + verticalOffset == 0) {
+            toolbar.setTitle(_article.getTitle());
+            _isVisible = true;
+        } else if(_isVisible) {
+            toolbar.setTitle("");
+            _isVisible = false;
+        }
     }
 
     // fix of bug http://stackoverflow.com/questions/32050784/chromium-webview-does-not-seems-to-work-with-android-applyoverrideconfiguration
