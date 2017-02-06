@@ -1,10 +1,16 @@
 package ua.in.zeusapps.ukrainenews.modules.articleView;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -31,6 +37,9 @@ public class ArticleViewFragment
     public static final String TAG = ArticleViewFragment.class.getSimpleName();
 
     private static final String MIME_TYPE = "text/html";
+    private static final String BLANK_TITLE = " ";
+    private static final String HTTP_PREFIX = "http://";
+    private static final String HTTPS_PREFIX = "https://";
 
     private boolean _isVisible;
     private int _scrollRange = -1;
@@ -63,6 +72,7 @@ public class ArticleViewFragment
     Formatter formatter;
 
     public ArticleViewFragment() {
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -76,6 +86,8 @@ public class ArticleViewFragment
         if (_article == null){
             return;
         }
+
+        setSupportActionBar();
 
         appBarLayout.addOnOffsetChangedListener(this);
         toolbarLayout.setTitleEnabled(false);
@@ -116,7 +128,6 @@ public class ArticleViewFragment
 
     @Override
     public void onDetach() {
-        //webView.destroy();
         articleWebView.destroy();
         super.onDetach();
     }
@@ -130,8 +141,43 @@ public class ArticleViewFragment
             toolbar.setTitle(_article.getTitle());
             _isVisible = true;
         } else if(_isVisible) {
-            toolbar.setTitle("");
+            toolbar.setTitle(BLANK_TITLE);
             _isVisible = false;
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_article_view_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.fragment_article_view_viewOnSite:
+                String url = _article.getUrl();
+                if (!url.startsWith(HTTP_PREFIX) && !url.startsWith(HTTPS_PREFIX)){
+                    url = HTTP_PREFIX + url;
+                }
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+                return true;
+            case android.R.id.home:
+                getCompatActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setSupportActionBar(){
+        toolbar.setTitle(BLANK_TITLE);
+        getCompatActivity().setSupportActionBar(toolbar);
+        ActionBar actionBar = getCompatActivity().getSupportActionBar();
+        if (actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
