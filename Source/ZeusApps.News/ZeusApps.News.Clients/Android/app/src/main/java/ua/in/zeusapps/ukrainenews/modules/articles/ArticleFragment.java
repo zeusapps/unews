@@ -177,7 +177,7 @@ public class ArticleFragment
         }
 
         presenter.showArticle();
-        _listener.onArticleSelected(presenter.getSelectedSource(), article);
+        _listener.onArticleSelected(article);
     }
 
     @Override
@@ -245,7 +245,7 @@ public class ArticleFragment
     }
 
     public interface OnArticleSelectedListener{
-        void onArticleSelected(Source source, Article article);
+        void onArticleSelected(Article article);
     }
 
     private class ArticleAdsProvider implements BaseAdsAdapter.AdsProvider{
