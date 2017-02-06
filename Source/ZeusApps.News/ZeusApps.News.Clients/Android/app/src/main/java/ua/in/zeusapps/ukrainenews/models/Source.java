@@ -6,6 +6,8 @@ import com.j256.ormlite.field.DatabaseField;
 
 public class Source {
 
+    public static final String KEY_FIELD = "key";
+
     @DatabaseField(useGetSet = true)
     @SerializedName("id")
     @Expose
