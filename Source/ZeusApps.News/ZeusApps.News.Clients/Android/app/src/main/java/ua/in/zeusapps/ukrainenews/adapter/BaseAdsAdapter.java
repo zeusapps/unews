@@ -10,11 +10,8 @@ public abstract class BaseAdsAdapter<TItem> extends BaseAdapter<TItem> {
     private final static int CONTENT_TYPE = -1;
 
     BaseAdsAdapter(
-            Activity activity,
-            AdsProvider adsProvider) {
+            Activity activity) {
         super(activity);
-
-        _adsProvider = adsProvider;
     }
 
     @Override
@@ -37,7 +34,13 @@ public abstract class BaseAdsAdapter<TItem> extends BaseAdapter<TItem> {
 
     @Override
     public final void onBindViewHolder(BaseViewHolder holder, int position) {
+        if (_adsProvider == null){
+            super.onBindViewHolder(holder, position);
+            return;
+        }
+
         if (isAdPosition(position)){
+            position = (position - _adsProvider.getAdsOffset()) / _adsProvider.getAdsPeriod();
             _adsProvider.bindAdAtPosition(holder, position);
         } else {
             int offset = _adsProvider.getAdsOffset();
@@ -60,6 +63,8 @@ public abstract class BaseAdsAdapter<TItem> extends BaseAdapter<TItem> {
         int count = super.getItemCount();
         if (count == 0){
             return 0;
+        } else if (_adsProvider == null){
+            return count;
         }
 
 
@@ -74,7 +79,15 @@ public abstract class BaseAdsAdapter<TItem> extends BaseAdapter<TItem> {
         return count + additional;
     }
 
+    public void addAdsProvider(AdsProvider provider){
+        _adsProvider = provider;
+    }
+
     private boolean isAdPosition(int position){
+        if (_adsProvider == null){
+            return false;
+        }
+
         int offset = _adsProvider.getAdsOffset();
 
         if (position < offset){

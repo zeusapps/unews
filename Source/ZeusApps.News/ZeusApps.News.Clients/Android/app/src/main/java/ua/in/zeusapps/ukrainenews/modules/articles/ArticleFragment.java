@@ -14,10 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -25,8 +26,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
+import ua.in.zeusapps.ukrainenews.adapter.AdHolder;
 import ua.in.zeusapps.ukrainenews.adapter.ArticleAdapter;
 import ua.in.zeusapps.ukrainenews.adapter.BaseAdapter;
+import ua.in.zeusapps.ukrainenews.adapter.BaseAdsAdapter;
+import ua.in.zeusapps.ukrainenews.adapter.BaseViewHolder;
 import ua.in.zeusapps.ukrainenews.adapter.EndlessRecyclerViewScrollListener;
 import ua.in.zeusapps.ukrainenews.common.BaseFragment;
 import ua.in.zeusapps.ukrainenews.common.BaseMVP;
@@ -95,6 +99,7 @@ public class ArticleFragment
 
         _articleAdapter = new ArticleAdapter(getActivity(), formatter);
         _articleAdapter.setOnItemClickListener(this);
+        _articleAdapter.addAdsProvider(new ArticleAdsProvider());
 
         articlesRecycleView.setLayoutManager(layoutManager);
         articlesRecycleView.addOnScrollListener(listener);
@@ -241,5 +246,33 @@ public class ArticleFragment
 
     public interface OnArticleSelectedListener{
         void onArticleSelected(Source source, Article article);
+    }
+
+    private class ArticleAdsProvider implements BaseAdsAdapter.AdsProvider{
+        @Override
+        public int getAdsOffset() {
+            return 3;
+        }
+
+        @Override
+        public int getAdsPeriod() {
+            return 5;
+        }
+
+        @Override
+        public int getAdTypeAtPosition(int position) {
+            return 0;
+        }
+
+        @Override
+        public BaseViewHolder getViewHolder(LayoutInflater inflater, ViewGroup parent, int adType) {
+            View view = inflater.inflate(R.layout.fragment_article_ads_template, parent, false);
+            return new AdHolder(view);
+        }
+
+        @Override
+        public void bindAdAtPosition(BaseViewHolder holder, int position) {
+            holder.update(getContext(), null);
+        }
     }
 }

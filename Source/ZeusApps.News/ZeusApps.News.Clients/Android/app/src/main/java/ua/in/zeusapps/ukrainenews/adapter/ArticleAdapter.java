@@ -2,7 +2,6 @@ package ua.in.zeusapps.ukrainenews.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,44 +14,12 @@ import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
-public class ArticleAdapter
-        //extends BaseAdapter<Article>{
-        extends BaseAdsAdapter<Article>{
+public class ArticleAdapter extends BaseAdsAdapter<Article>{
 
     private Formatter _formatter;
 
     public ArticleAdapter(Activity activity, Formatter formatter) {
-        super(activity
-                , new AdsProvider() {
-
-
-            @Override
-            public int getAdsOffset() {
-                return 3;
-            }
-
-            @Override
-            public int getAdsPeriod() {
-                return 5;
-            }
-
-            @Override
-            public int getAdTypeAtPosition(int position) {
-                return 0;
-            }
-
-            @Override
-            public BaseViewHolder getViewHolder(LayoutInflater inflater, ViewGroup parent, int adType) {
-                View view = inflater.inflate(R.layout.fragment_article_ads_template, parent, false);
-                return new AdHolder(view);
-            }
-
-            @Override
-            public void bindAdAtPosition(BaseViewHolder holder, int position) {
-                holder.update(null, null);
-            }
-        }
-        );
+        super(activity);
 
         _formatter = formatter;
     }
@@ -62,13 +29,8 @@ public class ArticleAdapter
         View view = getSimpleView(R.layout.fragment_article_item_template, parent);
         return new ArticleHolder(view);
     }
-//    @Override
-//    public ArticleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        View view = getSimpleView(R.layout.fragment_article_item_template, parent);
-//        return new ArticleHolder(view);
-//    }
 
-    public class ArticleHolder extends BaseViewHolder<Article> {
+    class ArticleHolder extends BaseViewHolder<Article> {
         @BindView(R.id.fragment_article_item_template_published)
         TextView publishedTextView;
         @BindView(R.id.fragment_article_item_template_title)
@@ -76,7 +38,7 @@ public class ArticleAdapter
         @BindView(R.id.fragment_article_item_template_image)
         ImageView articleImageView;
 
-        public ArticleHolder(View itemView) {
+        ArticleHolder(View itemView) {
             super(itemView);
         }
 
