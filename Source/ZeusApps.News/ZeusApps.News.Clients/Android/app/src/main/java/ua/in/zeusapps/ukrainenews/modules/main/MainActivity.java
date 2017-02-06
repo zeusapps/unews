@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 
 import javax.inject.Inject;
@@ -15,7 +14,6 @@ import ua.in.zeusapps.ukrainenews.common.BaseActivity;
 import ua.in.zeusapps.ukrainenews.common.BaseMVP;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Article;
-import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.modules.articleView.ArticleViewFragment;
 import ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment;
 
@@ -62,8 +60,8 @@ public class MainActivity
     }
 
     @Override
-    public void onArticleSelected(Source source, Article article) {
-        presenter.updateArticle(source, article);
+    public void onArticleSelected(Article article) {
+        presenter.showArticle(article);
     }
 
     @Override

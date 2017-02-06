@@ -19,12 +19,12 @@ class MainActivityPresenter implements MainActivityMVP.Presenter {
     }
 
     @Override
-    public void updateArticle(Source source, Article article) {
-        if (article == null || source == null){
+    public void showArticle(Article article) {
+        if (article == null){
             return;
         }
 
-        _articleViewPresenter.showArticle(article, source);
+        _articleViewPresenter.showArticle(article);
         _view.switchToArticleView();
     }
 }
