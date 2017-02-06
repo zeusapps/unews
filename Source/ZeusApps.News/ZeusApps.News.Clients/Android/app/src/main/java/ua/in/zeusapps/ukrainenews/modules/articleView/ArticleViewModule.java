@@ -4,14 +4,15 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import ua.in.zeusapps.ukrainenews.modules.articles.IRepository;
 
 @Module
 public class ArticleViewModule {
 
     @Provides
     @Singleton
-    public ArticleViewMVP.IPresenter providesPresenter(){
-        return new ArticleViewPresenter();
+    public ArticleViewMVP.IPresenter providesPresenter(IRepository repository){
+        return new ArticleViewPresenter(repository);
     }
 
 }

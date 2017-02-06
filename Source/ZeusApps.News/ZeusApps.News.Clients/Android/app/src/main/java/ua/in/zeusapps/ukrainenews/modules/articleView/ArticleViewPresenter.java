@@ -2,17 +2,21 @@ package ua.in.zeusapps.ukrainenews.modules.articleView;
 
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
+import ua.in.zeusapps.ukrainenews.modules.articles.IRepository;
 
 public class ArticleViewPresenter implements ArticleViewMVP.IPresenter {
 
+    private IRepository _repository;
     private ArticleViewMVP.IView _view;
     private Article _article;
-    private Source _source;
+
+    public ArticleViewPresenter(IRepository repository){
+        _repository = repository;
+    }
 
     @Override
-    public void showArticle(Article article, Source source) {
+    public void showArticle(Article article) {
         _article = article;
-        _source = source;
         show();
     }
 
@@ -23,8 +27,13 @@ public class ArticleViewPresenter implements ArticleViewMVP.IPresenter {
     }
 
     private void show(){
-        if (_view != null && _article != null){
-            _view.showArticle(_article, _source);
+        if (_view == null || _article == null){
+            return;
+        }
+
+        Source source = _repository.getSourceByKey(_article.getSourceId());
+        if (source != null){
+            _view.showArticle(_article, source);
         }
     }
 }

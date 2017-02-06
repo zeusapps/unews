@@ -11,6 +11,6 @@ public interface ArticleViewMVP {
     }
 
     interface IPresenter extends BaseMVP.IPresenter<IView>{
-        void showArticle(Article article, Source source);
+        void showArticle(Article article);
     }
 }
