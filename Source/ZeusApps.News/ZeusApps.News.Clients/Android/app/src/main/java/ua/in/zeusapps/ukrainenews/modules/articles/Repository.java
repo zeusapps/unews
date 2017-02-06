@@ -72,6 +72,21 @@ class Repository implements IRepository {
     }
 
     @Override
+    public Source getSourceByKey(String sourceId) {
+        try {
+            Source source = _daoSources
+                    .queryBuilder()
+                    .where()
+                    .eq(Source.KEY_FIELD, sourceId)
+                    .queryForFirst();
+            return source;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public void deleteAllSources(List<Source> sources) {
         for (Source source: sources){
             try {

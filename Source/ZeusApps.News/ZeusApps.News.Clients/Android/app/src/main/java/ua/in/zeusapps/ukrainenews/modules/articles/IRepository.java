@@ -16,5 +16,7 @@ public interface IRepository {
 
     List<Source> getAllSources();
 
+    Source getSourceByKey(String sourceId);
+
     void deleteAllSources(List<Source> sources);
 }
