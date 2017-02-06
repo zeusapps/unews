@@ -17,6 +17,8 @@ import ua.in.zeusapps.ukrainenews.models.Source;
 
 
 class Repository implements IRepository {
+    private static final int ARTICLES_CACHE_COUNT = 50;
+
     private RuntimeExceptionDao<Article, String> _daoArticles;
     private RuntimeExceptionDao<Source, String> _daoSources;
 
@@ -36,6 +38,10 @@ class Repository implements IRepository {
     public void addAllArticles(List<Article> articles){
         for (Article article: articles){
             addArticle(article);
+        }
+
+        if (articles.size() > 0){
+            deleteArticles(articles.get(0).getSourceId());
         }
     }
 
@@ -79,6 +85,17 @@ class Repository implements IRepository {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void deleteArticles(String sourceId){
+        List<Article> articles = getAllArticles(sourceId);
+
+        for (int i = 0; i < articles.size(); i++){
+            if (i >= ARTICLES_CACHE_COUNT){
+                _daoArticles.delete(articles.get(i));
+            }
+        }
+
     }
 
     private class Helper extends OrmLiteSqliteOpenHelper{
