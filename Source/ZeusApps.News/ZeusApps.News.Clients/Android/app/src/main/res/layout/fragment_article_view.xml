@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="4dp"
-                android:background="#60202020"
+                android:background="@color/articleTitleBackground"
                 android:layout_gravity="bottom">
 
                 <TextView
