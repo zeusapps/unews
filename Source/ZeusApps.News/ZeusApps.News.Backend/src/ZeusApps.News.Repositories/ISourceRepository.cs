@@ -14,5 +14,7 @@ namespace ZeusApps.News.Repositories
         Task<Source> GetSource(string id);
 
         Task<bool> AddSource(Source source);
+
+        void EnsureData();
     }
 }

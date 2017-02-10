@@ -69,5 +69,39 @@ namespace ZeusApps.News.Repository.Mongo
             await Collection.InsertOneAsync(source);
             return true;
         }
+
+        public void EnsureData()
+        {
+            var count = Collection.Count(s => true);
+            if (count > 0)
+            {
+                return;
+            }
+
+
+            var korrSource = new Source
+            {
+                Key = "korr",
+                ImageUrl = "http://news.img.com.ua/img/smalllogo.gif",
+                Title = "Korrespondent.Net",
+                SourceUrl = "http://k.img.com.ua/rss/ru/all_news2.0.xml",
+                BaseUrl = "http://korrespondent.net/",
+                Encoding = "utf-8",
+                IsDownloadable = true,
+                IsReadable = true
+            };
+            var channel5Source = new Source
+            {
+                Key = "channel5",
+                Title = "Channel 5",
+                SourceUrl = "http://www.5.ua/novyny/rss/",
+                BaseUrl = "http://www.5.ua/",
+                Encoding = "utf-8",
+                IsDownloadable = true,
+                IsReadable = true
+            };
+
+            Collection.InsertMany(new [] { korrSource, channel5Source });
+        }
     }
 }
