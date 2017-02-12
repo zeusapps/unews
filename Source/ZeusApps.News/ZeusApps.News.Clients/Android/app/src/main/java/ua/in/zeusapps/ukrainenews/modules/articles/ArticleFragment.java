@@ -1,6 +1,7 @@
 package ua.in.zeusapps.ukrainenews.modules.articles;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -37,6 +38,7 @@ import ua.in.zeusapps.ukrainenews.common.BaseMVP;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
+import ua.in.zeusapps.ukrainenews.modules.settings.SettingsActivity;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 public class ArticleFragment
@@ -182,6 +184,13 @@ public class ArticleFragment
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.fragment_article_menu_settings){
+            Intent intent = new Intent(getContext(), SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+
         for (int i = 0; i < _subMenu.size(); i++){
             _subMenu.getItem(i).setChecked(false);
         }

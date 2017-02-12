@@ -19,4 +19,6 @@ public interface IRepository {
     Source getSourceByKey(String sourceId);
 
     void deleteAllSources(List<Source> sources);
+
+    void clear();
 }

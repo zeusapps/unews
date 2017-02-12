@@ -10,6 +10,7 @@ public class Article {
 
     public static final String PUBLISHED_FIELD_NAME = "published";
     public static final String SOURCE_ID_FIELD_NAME = "sourceId";
+    public static final String ID_FIELD_NAME = "id";
 
     @DatabaseField(useGetSet = true)
     @SerializedName("id")

@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -31,6 +32,19 @@ class Repository implements IRepository {
 
     @Override
     public void addArticle(Article article){
+        try {
+            Article tempArticle = _daoArticles.queryBuilder()
+                    .where()
+                    .eq(Article.ID_FIELD_NAME, article.getId())
+                    .queryForFirst();
+            if (tempArticle != null){
+                return;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+
         _daoArticles.create(article);
     }
 
@@ -99,6 +113,16 @@ class Repository implements IRepository {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void clear() {
+        try {
+            _daoArticles.deleteBuilder().delete();
+            _daoSources.deleteBuilder().delete();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
