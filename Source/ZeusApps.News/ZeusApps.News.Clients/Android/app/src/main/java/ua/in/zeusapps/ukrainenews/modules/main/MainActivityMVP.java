@@ -7,6 +7,7 @@ import ua.in.zeusapps.ukrainenews.models.Source;
 public interface MainActivityMVP {
     interface View extends BaseMVP.IView {
         void switchToArticleView();
+        void switchToSettingsView();
     }
 
     interface Presenter extends BaseMVP.IPresenter<View> {
