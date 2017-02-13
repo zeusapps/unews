@@ -20,7 +20,7 @@
         </activity>
 
         <activity android:name=".modules.main.MainActivity"/>
-        <activity android:name=".modules.settings.SettingsActivity"/>
+        <activity android:name=".modules.settings.SettingsFragment"/>
     </application>
 
 </manifest>

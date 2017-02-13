@@ -120,7 +120,6 @@ class Repository implements IRepository {
     public void clear() {
         try {
             _daoArticles.deleteBuilder().delete();
-            _daoSources.deleteBuilder().delete();
         } catch (SQLException e) {
             e.printStackTrace();
         }

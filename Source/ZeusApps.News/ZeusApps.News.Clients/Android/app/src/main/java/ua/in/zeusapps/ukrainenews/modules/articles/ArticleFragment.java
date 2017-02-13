@@ -38,7 +38,8 @@ import ua.in.zeusapps.ukrainenews.common.BaseMVP;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.modules.settings.SettingsActivity;
+import ua.in.zeusapps.ukrainenews.modules.main.MainActivityMVP;
+import ua.in.zeusapps.ukrainenews.modules.settings.SettingsFragment;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 public class ArticleFragment
@@ -185,8 +186,12 @@ public class ArticleFragment
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.fragment_article_menu_settings){
-            Intent intent = new Intent(getContext(), SettingsActivity.class);
-            startActivity(intent);
+            MainActivityMVP.View view = (MainActivityMVP.View) getActivity();
+            if (view == null){
+                return false;
+            }
+
+            view.switchToSettingsView();
             return true;
         }
 
