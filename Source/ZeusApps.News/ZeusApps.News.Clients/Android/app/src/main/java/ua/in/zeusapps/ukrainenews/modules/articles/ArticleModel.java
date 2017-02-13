@@ -18,17 +18,13 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
 
 
     private final IArticleService _articleService;
-    private final ISourceService _sourcesService;
     private final IRepository _repository;
     private final Subscriber<List<Article>> _cacheSubscriber;
-    private List<Source> _cachedSources;
 
     ArticleModel(
             IRepository repository,
-            ISourceService sourceService,
             IArticleService articleService) {
         _articleService = articleService;
-        _sourcesService = sourceService;
         _repository = repository;
 
         _cacheSubscriber = new Subscriber<List<Article>>() {
@@ -51,7 +47,8 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
 
     @Override
     public List<Article> getLocalArticles(String sourceId) {
-        return _repository.getAllArticles(sourceId);
+        return _repository
+                .getAllArticles(sourceId);
     }
 
     @Override
@@ -74,49 +71,8 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
     }
 
     @Override
-    public Observable<List<Source>> getSources() {
-        if (_cachedSources != null){
-            return Observable.just(_cachedSources);
-        }
-
-
-
-        final List<Source> tempSources = _repository.getAllSources();
-
-        Observable<List<Source>> observable = _sourcesService
-                .getSources()
-                .map(new Func1<List<Source>, List<Source>>() {
-                    @Override
-                    public List<Source> call(List<Source> sources) {
-                        List<Source> deleteSources = subtract(tempSources, sources);
-                        List<Source> addSources = subtract(sources, tempSources);
-
-                        _repository.deleteAllSources(deleteSources);
-                        _repository.addAllSources(addSources);
-
-                        return sources;
-                    }
-                });
-
-        if (tempSources.size() > 0){
-            observable = observable.onErrorResumeNext(new Func1<Throwable, Observable<? extends List<Source>>>() {
-                @Override
-                public Observable<? extends List<Source>> call(Throwable throwable) {
-                    return Observable.just(tempSources);
-                }
-            });
-
-        }
-
-        observable = observable.map(new Func1<List<Source>, List<Source>>() {
-            @Override
-            public List<Source> call(List<Source> sources) {
-                _cachedSources = sources;
-                return sources;
-            }
-        });
-
-        return wrapObservable(observable);
+    public List<Source> getSources() {
+        return _repository.getAllSources();
     }
 
     private Observable<List<Article>> getArticlePage(
@@ -128,22 +84,5 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
         return wrapObservable(observable);
     }
 
-    private List<Source> subtract(List<Source> first, List<Source> second){
-        List<Source> result = new ArrayList<>();
 
-        for (Source firstSource: first) {
-            boolean found = false;
-            for (Source secondSource: second){
-                if (firstSource.equals(secondSource)){
-                    found = true;
-                    break;
-                }
-            }
-            if (!found){
-                result.add(firstSource);
-            }
-        }
-
-        return result;
-    }
 }

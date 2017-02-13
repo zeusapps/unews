@@ -28,19 +28,13 @@ public class ArticleModule {
             IRepository repository,
             ISourceService sourceService,
             IArticleService articleService){
-        return new ArticleModel(repository, sourceService, articleService);
+        return new ArticleModel(repository, articleService);
     }
 
     @Provides
     @Singleton
     public IRepository provideRepository(Context context){
         return new Repository(context);
-    }
-
-    @Provides
-    @Singleton
-    public ISourceService providesSourceService(Retrofit retrofit){
-        return retrofit.create(ISourceService.class);
     }
 
     @Provides
