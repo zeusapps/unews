@@ -6,10 +6,14 @@ import javax.inject.Inject;
 
 import butterknife.OnClick;
 import ua.in.zeusapps.ukrainenews.R;
-import ua.in.zeusapps.ukrainenews.common.BaseActivity;
+import ua.in.zeusapps.ukrainenews.common.BaseFragment;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 
-public class SettingsActivity extends BaseActivity implements SettingsMVP.View{
+public class SettingsFragment
+        extends BaseFragment
+        implements SettingsMVP.View{
+
+    public static final String TAG = SettingsFragment.class.getSimpleName();
 
     @Inject
     SettingsMVP.Presenter presenter;
@@ -21,7 +25,7 @@ public class SettingsActivity extends BaseActivity implements SettingsMVP.View{
 
     @Override
     protected int getContentResourceId() {
-        return R.layout.activity_settings;
+        return R.layout.fragment_settings;
     }
 
     @Override
