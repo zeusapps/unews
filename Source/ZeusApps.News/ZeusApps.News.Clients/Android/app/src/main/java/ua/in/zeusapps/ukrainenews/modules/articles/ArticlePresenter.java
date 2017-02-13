@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
-import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
@@ -45,16 +42,10 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
         }
 
         _compositeSubscription.clear();
-
         _selectedSource = source;
         _view.updateArticles(new ArrayList<Article>());
         _view.loadStarted();
-        Subscription subscription = getLocalAndUpdateArticles(_selectedSource.getKey())
-                .subscribe(new CustomSubscriber<List<Article>>() {
-                    @Override
-                    public void onNext(List<Article> articles) { }
-                });
-        _compositeSubscription.add(subscription);
+        updateArticles(source.getKey());
     }
 
     @Override
@@ -92,26 +83,20 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
     @Override
     public void initLoad() {
         _view.loadStarted();
-        Subscription subscription = _model
-                .getSources()
-                .flatMap(new Func1<List<Source>, Observable<List<Article>>>() {
-                    @Override
-                    public Observable<List<Article>> call(List<Source> sources) {
-                        _view.updateSources(sources);
-                        if (sources.size() > 0){
-                            if (_selectedSource == null || !sources.contains(_selectedSource)){
-                                _selectedSource = sources.get(0);
-                            }
-                            String sourceId = _selectedSource.getKey();
-                            return getLocalAndUpdateArticles(sourceId);
-                        }
-                        return Observable.just(null);
-                    }
-                }).subscribe(new CustomSubscriber<List<Article>>() {
-                    @Override
-                    public void onNext(List<Article> articles) {  }
-                });
-        _compositeSubscription.add(subscription);
+
+        List<Source> sources = _model.getSources();
+        if (sources.size() == 0){
+            _view.loadComplete();
+            return;
+        }
+
+
+        if (_selectedSource == null || !sources.contains(_selectedSource)){
+            _selectedSource = sources.get(0);
+        }
+
+        _view.updateSources(sources);
+        updateArticles(_selectedSource.getKey());
     }
 
     @Override
@@ -119,34 +104,36 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
         _compositeSubscription.clear();
     }
 
-    private Observable<List<Article>> getLocalAndUpdateArticles(String sourceId){
+    private void updateArticles(String sourceId){
         List<Article> articles = _model.getLocalArticles(sourceId);
-        if (articles.size() == 0){
-            return _model.getArticles(sourceId);
-        } else {
+        if (articles.size() > 0){
             _view.updateArticles(articles);
-
-            if (!_lastUpdatedTimestamps.containsKey(sourceId)){
-                _lastUpdatedTimestamps.put(sourceId, 0L);
+            if (articleUpdateNeeded(sourceId)){
+                loadNewer(articles.get(0));
+            } else {
+                _view.loadComplete();
             }
-
-            long timestamp = System.currentTimeMillis();
-            long updateTimestamp = _lastUpdatedTimestamps.get(sourceId);
-            if (timestamp < updateTimestamp + UPDATE_PERIOD){
-                return Observable.just(null);
-            }
-
-            _lastUpdatedTimestamps.put(sourceId, timestamp);
-            return _model
-                    .getNewerArticles(_selectedSource.getKey(), articles.get(0))
-                    .map(new Func1<List<Article>, List<Article>>() {
+        } else {
+            Subscription subscription = _model.getArticles(sourceId)
+                    .subscribe(new CustomSubscriber<List<Article>>() {
                         @Override
-                        public List<Article> call(List<Article> articles) {
-                            _view.addNewerArticles(articles);
-                            return articles;
+                        public void onNext(List<Article> articles) {
+                            _view.updateArticles(articles);
                         }
                     });
+            _compositeSubscription.add(subscription);
         }
+    }
+
+    private boolean articleUpdateNeeded(String sourceId){
+        if (!_lastUpdatedTimestamps.containsKey(sourceId)){
+            _lastUpdatedTimestamps.put(sourceId, 0L);
+            return true;
+        }
+
+        long timestamp = System.currentTimeMillis();
+        long updateTimestamp = _lastUpdatedTimestamps.get(sourceId);
+        return timestamp >= updateTimestamp + UPDATE_PERIOD;
     }
 
     private void showNetworkError(){

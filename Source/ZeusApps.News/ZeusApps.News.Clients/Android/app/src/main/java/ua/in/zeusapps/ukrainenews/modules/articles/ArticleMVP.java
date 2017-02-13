@@ -31,10 +31,9 @@ public interface ArticleMVP {
     interface IModel extends BaseMVP.IModel {
         List<Article> getLocalArticles(String sourceId);
 
-
         Observable<List<Article>> getArticles(String sourceId);
         Observable<List<Article>> getNewerArticles(String sourceId, Article firstArticle);
         Observable<List<Article>> getOlderArticles(String sourceId, Article lastArticle);
-        Observable<List<Source>> getSources();
+        List<Source> getSources();
     }
 }
