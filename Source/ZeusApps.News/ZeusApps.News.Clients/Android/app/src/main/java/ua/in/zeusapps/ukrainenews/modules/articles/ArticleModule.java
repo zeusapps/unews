@@ -10,6 +10,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ua.in.zeusapps.ukrainenews.common.Constants;
+import ua.in.zeusapps.ukrainenews.services.Formatter;
 import ua.in.zeusapps.ukrainenews.services.IArticleService;
 import ua.in.zeusapps.ukrainenews.services.ISourceService;
 
@@ -33,8 +34,8 @@ public class ArticleModule {
 
     @Provides
     @Singleton
-    public IRepository provideRepository(Context context){
-        return new Repository(context);
+    public IRepository provideRepository(Context context, Formatter formatter){
+        return new Repository(context, formatter);
     }
 
     @Provides

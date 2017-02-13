@@ -38,6 +38,14 @@ public class Formatter {
         }
     }
 
+    public long getMils(String dateTime){
+        try {
+            return _formatterUTC.parse(dateTime).getTime();
+        } catch (ParseException e) {
+            return 0;
+        }
+    }
+
     public String formatHtml(String html){
         return String.format(_htmlTemplate, html);
     }

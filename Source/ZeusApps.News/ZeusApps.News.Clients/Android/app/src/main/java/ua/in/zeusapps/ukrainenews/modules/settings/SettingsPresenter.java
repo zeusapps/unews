@@ -13,7 +13,7 @@ public class SettingsPresenter implements SettingsMVP.Presenter{
 
     @Override
     public void clearStorage() {
-        _repository.clear();
+        _repository.deleteAlArticles();
     }
 
     @Override

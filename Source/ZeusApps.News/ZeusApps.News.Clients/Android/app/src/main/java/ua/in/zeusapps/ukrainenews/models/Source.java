@@ -6,7 +6,7 @@ import com.j256.ormlite.field.DatabaseField;
 
 public class Source {
 
-    public static final String KEY_FIELD = "key";
+    public static final String KEY_FIELD_NAME = "key";
 
     @DatabaseField(useGetSet = true)
     @SerializedName("id")
@@ -33,7 +33,7 @@ public class Source {
     @Expose
     private String imageUrl;
 
-    @DatabaseField(useGetSet = true)
+    @DatabaseField(useGetSet = true, columnName = KEY_FIELD_NAME)
     @SerializedName("key")
     @Expose
     private String key;

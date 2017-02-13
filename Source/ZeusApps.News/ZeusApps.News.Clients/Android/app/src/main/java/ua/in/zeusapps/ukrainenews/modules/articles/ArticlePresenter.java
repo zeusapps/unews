@@ -68,6 +68,11 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
 
     @Override
     public void loadNewer(Article firstArticle) {
+        if (firstArticle == null){
+            initLoad();
+            return;
+        }
+
         addLastUpdate(firstArticle.getSourceId());
         Subscription subscription = _model
                 .getNewerArticles(firstArticle.getSourceId(), firstArticle)
@@ -152,6 +157,8 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
 
         @Override
         public void onError(Throwable e) {
+            e.printStackTrace();
+
             showNetworkError();
             _view.loadComplete();
         }

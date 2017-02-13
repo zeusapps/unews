@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
-import com.j256.ormlite.stmt.PreparedDelete;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -15,19 +15,24 @@ import java.util.List;
 
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
+import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 
 class Repository implements IRepository {
     private static final int ARTICLES_CACHE_COUNT = 50;
 
-    private RuntimeExceptionDao<Article, String> _daoArticles;
-    private RuntimeExceptionDao<Source, String> _daoSources;
+    private final RuntimeExceptionDao<Article, String> _daoArticles;
+    private final RuntimeExceptionDao<Source, String> _daoSources;
+    private final Formatter _formatter;
 
-    Repository(Context context) {
+    Repository(
+            Context context,
+            Formatter formatter) {
         Helper helper = new Helper(context);
 
         _daoArticles = helper.getRuntimeExceptionDao(Article.class);
         _daoSources = helper.getRuntimeExceptionDao(Source.class);
+        _formatter = formatter;
     }
 
     @Override
@@ -74,6 +79,26 @@ class Repository implements IRepository {
     }
 
     @Override
+    public List<Article> getArticlesPage(String sourceId, Article fromArticle, int count) {
+        List<Article> articles = getAllArticles(sourceId);
+
+        long timestamp = fromArticle == null
+                ? -1
+                : _formatter.getMils(fromArticle.getPublished());
+
+
+
+        List<Article> result = new ArrayList<>();
+        for (Article article: articles){
+            if (result.size() < count && timestamp > _formatter.getMils(article.getPublished())){
+                result.add(article);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
     public void addAllSources(List<Source> sources) {
         for (Source source: sources){
             _daoSources.create(source);
@@ -91,7 +116,7 @@ class Repository implements IRepository {
             Source source = _daoSources
                     .queryBuilder()
                     .where()
-                    .eq(Source.KEY_FIELD, sourceId)
+                    .eq(Source.KEY_FIELD_NAME, sourceId)
                     .queryForFirst();
             return source;
         } catch (SQLException e) {
@@ -117,7 +142,7 @@ class Repository implements IRepository {
     }
 
     @Override
-    public void clear() {
+    public void deleteAlArticles() {
         try {
             _daoArticles.deleteBuilder().delete();
         } catch (SQLException e) {
@@ -130,7 +155,14 @@ class Repository implements IRepository {
 
         for (int i = 0; i < articles.size(); i++){
             if (i >= ARTICLES_CACHE_COUNT){
-                _daoArticles.delete(articles.get(i));
+                try {
+                    DeleteBuilder builder = _daoArticles.deleteBuilder();
+                    builder.where().eq(Article.ID_FIELD_NAME, articles.get(i).getId());
+                    builder.delete();
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -138,7 +170,7 @@ class Repository implements IRepository {
 
     private class Helper extends OrmLiteSqliteOpenHelper{
         private final static String DATABASE_NAME = "news.db";
-        private final static int DATABASE_VERSION = 2;
+        private final static int DATABASE_VERSION = 3;
 
         Helper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -147,6 +179,9 @@ class Repository implements IRepository {
         @Override
         public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
             try {
+                TableUtils.dropTable(connectionSource, Source.class, true);
+                TableUtils.dropTable(connectionSource, Article.class, true);
+
                 TableUtils.createTable(connectionSource, Article.class);
                 TableUtils.createTable(connectionSource, Source.class);
             } catch (SQLException e) {

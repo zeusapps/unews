@@ -12,12 +12,12 @@ public class Article {
     public static final String SOURCE_ID_FIELD_NAME = "sourceId";
     public static final String ID_FIELD_NAME = "id";
 
-    @DatabaseField(useGetSet = true)
+    @DatabaseField(useGetSet = true, columnName = ID_FIELD_NAME)
     @SerializedName("id")
     @Expose
     private String id;
 
-    @DatabaseField(useGetSet = true)
+    @DatabaseField(useGetSet = true, columnName = SOURCE_ID_FIELD_NAME)
     @SerializedName("sourceId")
     @Expose
     private String sourceId;
@@ -42,7 +42,7 @@ public class Article {
     @Expose
     private String imageUrl;
 
-    @DatabaseField(useGetSet = true)
+    @DatabaseField(useGetSet = true, columnName = PUBLISHED_FIELD_NAME)
     @SerializedName("published")
     @Expose
     private String published;

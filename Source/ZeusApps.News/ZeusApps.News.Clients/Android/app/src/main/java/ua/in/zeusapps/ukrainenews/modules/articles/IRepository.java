@@ -12,6 +12,10 @@ public interface IRepository {
 
     List<Article> getAllArticles(String sourceId);
 
+    List<Article> getArticlesPage(String sourceId, Article fromArticle, int count);
+
+    void deleteAlArticles();
+
     void addAllSources(List<Source> sources);
 
     List<Source> getAllSources();
@@ -19,6 +23,4 @@ public interface IRepository {
     Source getSourceByKey(String sourceId);
 
     void deleteAllSources(List<Source> sources);
-
-    void clear();
 }

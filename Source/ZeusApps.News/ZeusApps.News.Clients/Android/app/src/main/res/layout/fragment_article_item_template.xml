@@ -20,8 +20,7 @@
             android:id="@+id/fragment_article_item_template_published"/>
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="240dp"
+            android:layout_height="256dp"
             android:id="@+id/fragment_article_item_template_image"
             android:contentDescription="@string/fragment_article_item_template_image_description"
             android:scaleType="centerCrop" />

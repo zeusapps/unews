@@ -48,7 +48,7 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
     @Override
     public List<Article> getLocalArticles(String sourceId) {
         return _repository
-                .getAllArticles(sourceId);
+                .getArticlesPage(sourceId, null, PAGE_SIZE);
     }
 
     @Override
@@ -67,6 +67,11 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
 
     @Override
     public Observable<List<Article>> getOlderArticles(String sourceId, Article lastArticle) {
+        List<Article> articles = _repository.getArticlesPage(sourceId, lastArticle, PAGE_SIZE);
+        if (articles.size() > 0){
+            return Observable.just(articles);
+        }
+
         return getArticlePage(sourceId, lastArticle, true);
     }
 
