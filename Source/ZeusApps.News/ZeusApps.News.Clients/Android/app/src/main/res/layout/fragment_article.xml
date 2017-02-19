@@ -30,6 +30,7 @@
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
             app:menu="@menu/fragment_article_menu"
+            app:headerLayout="@layout/nav_drawer_header"
             android:id="@+id/fragment_article_navigationView"/>
     </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

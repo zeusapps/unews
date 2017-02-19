@@ -67,13 +67,13 @@ public class FragmentHelper {
     public static void add(FragmentManager fragmentManager, Fragment fragment, int container) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(null).replace(container,
-                fragment).commitAllowingStateLoss();
+                fragment).commit();
     }
 
     public static void add(FragmentManager fragmentManager, Fragment fragment, int container, String tag) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(null).replace(container,
-                fragment, tag).commitAllowingStateLoss();
+                fragment, tag).commit();
     }
 
     public static void replace(FragmentManager fragmentManager, Fragment fragment, int container) {

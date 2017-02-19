@@ -185,6 +185,7 @@ public class ArticleFragment
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        drawerLayout.closeDrawer(GravityCompat.START);
         if (item.getItemId() == R.id.fragment_article_menu_settings){
             MainActivityMVP.View view = (MainActivityMVP.View) getActivity();
             if (view == null){
@@ -209,8 +210,6 @@ public class ArticleFragment
 
         Source source = _sources.get(index);
         presenter.setSelectedSource(source);
-        articlesRecycleView.scrollTo(0,0);
-        drawerLayout.closeDrawer(GravityCompat.START);
         toolbar.setTitle(source.getTitle());
         return true;
     }
