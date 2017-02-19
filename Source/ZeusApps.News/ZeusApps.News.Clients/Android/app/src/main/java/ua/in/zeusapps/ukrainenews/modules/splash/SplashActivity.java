@@ -66,6 +66,7 @@ public class SplashActivity
                         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
+                        finish();
                     }
                 });
     }
