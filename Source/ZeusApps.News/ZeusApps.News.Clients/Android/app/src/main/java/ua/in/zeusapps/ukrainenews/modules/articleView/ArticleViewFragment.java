@@ -25,6 +25,7 @@ import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.BaseFragment;
 import ua.in.zeusapps.ukrainenews.common.BaseMVP;
+import ua.in.zeusapps.ukrainenews.common.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
@@ -165,7 +166,8 @@ public class ArticleViewFragment
                 startActivity(intent);
                 return true;
             case android.R.id.home:
-                getCompatActivity().onBackPressed();
+                //getCompatActivity().onBackPressed();
+                FragmentHelper.pop(getFragmentManager());
                 return true;
         }
         return super.onOptionsItemSelected(item);
