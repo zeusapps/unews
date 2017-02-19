@@ -83,7 +83,7 @@ class Repository implements IRepository {
         List<Article> articles = getAllArticles(sourceId);
 
         long timestamp = fromArticle == null
-                ? -1
+                ? Long.MAX_VALUE
                 : _formatter.getMils(fromArticle.getPublished());
 
 
