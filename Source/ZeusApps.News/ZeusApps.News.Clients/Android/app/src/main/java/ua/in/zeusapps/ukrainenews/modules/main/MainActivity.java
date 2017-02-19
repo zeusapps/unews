@@ -1,9 +1,11 @@
 package ua.in.zeusapps.ukrainenews.modules.main;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -22,6 +24,9 @@ public class MainActivity
         extends BaseActivity
         implements MainActivityMVP.View,
             ArticleFragment.OnArticleSelectedListener {
+
+    private final int PERIOD_TO_CLOSE = 2000;
+    private long _lastPressedTimestamp;
 
     @BindView(R.id.activity_main_content)
     FrameLayout contentLayout;
@@ -76,5 +81,23 @@ public class MainActivity
                 new SettingsFragment(),
                 R.id.activity_main_content,
                 SettingsFragment.TAG);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (FragmentHelper.getStackCount(getSupportFragmentManager()) == 1){
+            super.onBackPressed();
+            return;
+        }
+
+        long timestamp = System.currentTimeMillis();
+        if (timestamp - _lastPressedTimestamp < PERIOD_TO_CLOSE){
+            finish();
+            System.exit(0);
+            return;
+        }
+
+        _lastPressedTimestamp = timestamp;
+        Toast.makeText(this, R.string.main_activity_close_notification, Toast.LENGTH_SHORT).show();
     }
 }
