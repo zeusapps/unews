@@ -30,6 +30,8 @@ public abstract class BaseFragment extends Fragment implements BaseMVP.IView{
     public void onAttach(Context context) {
         super.onAttach(context);
 
+        setRetainInstance(true);
+
         application = (App) getActivity().getApplication();
         inject(application.getComponent());
         getPresenter().setView(this);

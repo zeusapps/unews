@@ -53,6 +53,10 @@ public class MainActivity
 
     @Override
     protected void onCreateOverride(@Nullable Bundle savedInstanceState) {
+        if (FragmentHelper.getStackCount(getSupportFragmentManager()) > 0){
+            return;
+        }
+
         FragmentHelper.replace(
                 getSupportFragmentManager(),
                 new ArticleFragment(),

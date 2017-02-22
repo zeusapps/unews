@@ -59,6 +59,7 @@ public class ArticleAdapter extends BaseAdsAdapter<Article>{
                 Picasso
                         .with(context)
                         .load(url)
+                        .error(R.drawable.un)
                         .into(articleImageView);
             }
         }

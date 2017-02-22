@@ -55,6 +55,7 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
 
     @Override
     public void loadOlder(Article lastArticle) {
+        _view.loadStarted();
         Subscription subscription = _model
                 .getOlderArticles(lastArticle.getSourceId(), lastArticle)
                 .subscribe(new CustomSubscriber<List<Article>>() {
