@@ -22,7 +22,7 @@ public abstract class BaseFragment extends Fragment implements BaseMVP.IView{
     public final View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getContentResourceId(), container, false);
         ButterKnife.bind(this, view);
-        onCreateViewOverride(view);
+        onCreateViewOverride(view, savedInstanceState);
         return view;
     }
 
@@ -41,7 +41,7 @@ public abstract class BaseFragment extends Fragment implements BaseMVP.IView{
         return (AppCompatActivity) getActivity();
     }
 
-    protected void onCreateViewOverride(View view){
+    protected void onCreateViewOverride(View view, @Nullable Bundle savedInstanceState){
 
     }
 

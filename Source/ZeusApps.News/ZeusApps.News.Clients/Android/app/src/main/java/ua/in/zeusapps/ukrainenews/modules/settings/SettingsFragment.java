@@ -2,7 +2,9 @@ package ua.in.zeusapps.ukrainenews.modules.settings;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -38,7 +40,7 @@ public class SettingsFragment
     }
 
     @Override
-    protected void onCreateViewOverride(View view) {
+    protected void onCreateViewOverride(View view, @Nullable Bundle savedInstanceState) {
         setSupportActionBar();
         setHasOptionsMenu(true);
     }
