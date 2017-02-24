@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Ukraine News</string>
+    <string name="fragment_article_item_template_image_description">Зображення новини</string>
+    <string name="settings">Налаштування</string>
+    <string name="sources">Джерела</string>
+    <string name="banner_ad_unit_id">ca-app-pub-5823688689397702/3965946474</string>
+    <string name="network_error">Неможливо здійснити оновлення</string>
+    <string name="view_on_site">Переглянути на сайті</string>
+    <string name="fragment_settings_clear_storage_button">Очистити кеш</string>
+    <string name="main_activity_close_notification">Натисніть ще раз, щоб вийти</string>
+    <string name="fragment_settings_clear_cache_text">Ви можете очистити кеш, якщо щось іде не так</string>
+    <string name="fragment_settings_email_us">Якщо у Вас є зауваження, або пропозиції — напишіть нам support@zeusapps.in.ua</string>
+</resources>
