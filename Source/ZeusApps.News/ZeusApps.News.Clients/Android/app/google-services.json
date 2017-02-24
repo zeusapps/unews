@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "451715968174",
+    "firebase_url": "https://ukraine-news.firebaseio.com",
+    "project_id": "ukraine-news",
+    "storage_bucket": "ukraine-news.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451715968174:android:16c76b203788d31b",
+        "android_client_info": {
+          "package_name": "ua.in.zeusapps.ukrainenews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "451715968174-1shkdi85lpp9p7r0mmu25qfc2n3akukp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG2kASwKwEL71f67OyRjj2u0cDnJv41Lk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
