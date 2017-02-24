@@ -7,11 +7,6 @@ import ua.in.zeusapps.ukrainenews.modules.articleView.ArticleViewMVP;
 class MainActivityPresenter implements MainActivityMVP.Presenter {
 
     private MainActivityMVP.View _view;
-    private ArticleViewMVP.IPresenter _articleViewPresenter;
-
-    MainActivityPresenter(ArticleViewMVP.IPresenter articleViewPresenter) {
-        _articleViewPresenter = articleViewPresenter;
-    }
 
     @Override
     public void setView(MainActivityMVP.View view) {
@@ -20,11 +15,8 @@ class MainActivityPresenter implements MainActivityMVP.Presenter {
 
     @Override
     public void showArticle(Article article) {
-        if (article == null){
-            return;
+        if (article != null){
+            _view.switchToArticleView(article);
         }
-
-        _articleViewPresenter.showArticle(article);
-        _view.switchToArticleView();
     }
 }
