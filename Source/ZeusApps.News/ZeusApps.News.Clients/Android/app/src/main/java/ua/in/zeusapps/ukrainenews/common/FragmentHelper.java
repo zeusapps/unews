@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentTransaction;
 
 import java.util.List;
 
+import ua.in.zeusapps.ukrainenews.R;
+
 public class FragmentHelper {
 
     private FragmentManager fragmentManager;
@@ -72,6 +74,9 @@ public class FragmentHelper {
 
     public static void add(FragmentManager fragmentManager, Fragment fragment, int container, String tag) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+
         fragmentTransaction.addToBackStack(null).replace(container,
                 fragment, tag).commit();
     }
