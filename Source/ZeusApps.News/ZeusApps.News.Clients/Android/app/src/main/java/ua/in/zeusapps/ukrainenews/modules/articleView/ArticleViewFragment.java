@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,6 +27,7 @@ import com.squareup.picasso.Picasso;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.BaseFragment;
 import ua.in.zeusapps.ukrainenews.common.BaseMVP;
@@ -49,7 +52,6 @@ public class ArticleViewFragment
     private boolean _isVisible;
     private int _scrollRange = -1;
     private Article _article;
-    private Source _source;
 
     @BindView(R.id.fragment_article_view_title)
     TextView titleTextView;
@@ -92,7 +94,6 @@ public class ArticleViewFragment
     @Override
     public void showArticle(Article article, Source source) {
         _article = article;
-        _source = source;
 
         Picasso
                 .with(getContext())
@@ -102,7 +103,7 @@ public class ArticleViewFragment
 
         titleTextView.setText(_article.getTitle());
         publishedTextView.setText(formatter.formatDate(_article.getPublished()));
-        sourceTextView.setText(_source.getTitle());
+        sourceTextView.setText(source.getTitle());
 
         String html = formatter.formatHtml(_article.getHtml());
 
@@ -110,7 +111,7 @@ public class ArticleViewFragment
         articleWebView.clearCache(true);
         articleWebView.clearHistory();
         articleWebView.getSettings().setJavaScriptEnabled(true);
-        articleWebView.loadDataWithBaseURL(_source.getBaseUrl(), html, MIME_TYPE, _source.getEncoding(), null);
+        articleWebView.loadDataWithBaseURL(source.getBaseUrl(), html, MIME_TYPE, source.getEncoding(), null);
     }
 
     @Override
@@ -197,11 +198,32 @@ public class ArticleViewFragment
                 startActivity(intent);
                 return true;
             case android.R.id.home:
-                //getCompatActivity().onBackPressed();
                 FragmentHelper.pop(getFragmentManager());
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.fragment_article_view_shareButton)
+    public void onShare(){
+        Intent share = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        share
+                .putExtra(Intent.EXTRA_TITLE, _article.getTitle())
+                .putExtra(Intent.EXTRA_TEXT, _article.getTitle() + " " + _article.getUrl())
+                .putExtra(Intent.EXTRA_SUBJECT, _article.getTitle());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            share.putExtra(Intent.EXTRA_HTML_TEXT, Html.fromHtml(_article.getHtml()));
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            share.putExtra(Intent.EXTRA_ORIGINATING_URI, _article.getUrl());
+        }
+
+        share.setType("text/plain");
+
+
+        startActivity(Intent.createChooser(share, _article.getTitle()));
     }
 
     private void setSupportActionBar(){
