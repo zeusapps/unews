@@ -70,10 +70,11 @@ public class MainActivity
     }
 
     @Override
-    public void switchToArticleView() {
+    public void switchToArticleView(Article article) {
+        ArticleViewFragment fragment = ArticleViewFragment.newInstance(article.getId());
         FragmentHelper.add(
                 getSupportFragmentManager(),
-                new ArticleViewFragment(),
+                fragment,
                 R.id.activity_main_content,
                 ArticleViewFragment.TAG);
     }

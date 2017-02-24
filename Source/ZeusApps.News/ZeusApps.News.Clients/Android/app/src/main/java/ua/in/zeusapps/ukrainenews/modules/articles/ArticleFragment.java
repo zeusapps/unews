@@ -1,8 +1,9 @@
 package ua.in.zeusapps.ukrainenews.modules.articles;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -39,7 +40,6 @@ import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.modules.main.MainActivityMVP;
-import ua.in.zeusapps.ukrainenews.modules.settings.SettingsFragment;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 public class ArticleFragment
@@ -87,7 +87,7 @@ public class ArticleFragment
     }
 
     @Override
-    protected void onCreateViewOverride(View view) {
+    protected void onCreateViewOverride(View view, @Nullable Bundle savedInstanceState) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         final EndlessRecyclerViewScrollListener listener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -208,6 +208,7 @@ public class ArticleFragment
             return false;
         }
 
+        articlesRecycleView.scrollToPosition(0);
         Source source = _sources.get(index);
         presenter.setSelectedSource(source);
         toolbar.setTitle(source.getTitle());

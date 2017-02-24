@@ -99,6 +99,20 @@ class Repository implements IRepository {
     }
 
     @Override
+    public Article getArticle(String articleId) {
+        try {
+            return _daoArticles
+                    .queryBuilder()
+                    .where()
+                    .eq(Article.ID_FIELD_NAME, articleId)
+                    .queryForFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public void addAllSources(List<Source> sources) {
         for (Source source: sources){
             _daoSources.create(source);

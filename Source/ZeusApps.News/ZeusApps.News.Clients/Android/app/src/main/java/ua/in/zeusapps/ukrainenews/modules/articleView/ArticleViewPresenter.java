@@ -8,32 +8,30 @@ public class ArticleViewPresenter implements ArticleViewMVP.IPresenter {
 
     private IRepository _repository;
     private ArticleViewMVP.IView _view;
-    private Article _article;
 
     public ArticleViewPresenter(IRepository repository){
         _repository = repository;
     }
 
     @Override
-    public void showArticle(Article article) {
-        _article = article;
-        show();
+    public void showArticle(String articleId) {
+        Article article = _repository.getArticle(articleId);
+        show(article);
     }
 
     @Override
     public void setView(ArticleViewMVP.IView view) {
         _view = view;
-        show();
     }
 
-    private void show(){
-        if (_view == null || _article == null){
+    private void show(Article article){
+        if (_view == null){
             return;
         }
 
-        Source source = _repository.getSourceByKey(_article.getSourceId());
+        Source source = _repository.getSourceByKey(article.getSourceId());
         if (source != null){
-            _view.showArticle(_article, source);
+            _view.showArticle(article, source);
         }
     }
 }

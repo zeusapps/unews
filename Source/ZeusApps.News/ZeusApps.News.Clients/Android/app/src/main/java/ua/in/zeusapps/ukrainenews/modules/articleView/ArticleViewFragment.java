@@ -1,9 +1,12 @@
 package ua.in.zeusapps.ukrainenews.modules.articleView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
@@ -41,6 +44,7 @@ public class ArticleViewFragment
     private static final String BLANK_TITLE = " ";
     private static final String HTTP_PREFIX = "http://";
     private static final String HTTPS_PREFIX = "https://";
+    private static final String ARTICLE_ID = "article_id";
 
     private boolean _isVisible;
     private int _scrollRange = -1;
@@ -72,26 +76,23 @@ public class ArticleViewFragment
     @Inject
     Formatter formatter;
 
+    public static ArticleViewFragment newInstance(String articleId) {
+        ArticleViewFragment fragment = new ArticleViewFragment();
+        Bundle args = new Bundle();
+        args.putString(ARTICLE_ID, articleId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public ArticleViewFragment() {
         setHasOptionsMenu(true);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void showArticle(Article article, Source source) {
         _article = article;
         _source = source;
-    }
-
-    @Override
-    protected void onCreateViewOverride(View view) {
-        if (_article == null){
-            return;
-        }
-
-        setSupportActionBar();
-
-        appBarLayout.addOnOffsetChangedListener(this);
-        toolbarLayout.setTitleEnabled(false);
 
         Picasso
                 .with(getContext())
@@ -110,6 +111,36 @@ public class ArticleViewFragment
         articleWebView.clearHistory();
         articleWebView.getSettings().setJavaScriptEnabled(true);
         articleWebView.loadDataWithBaseURL(_source.getBaseUrl(), html, MIME_TYPE, _source.getEncoding(), null);
+    }
+
+    @Override
+    protected void onCreateViewOverride(View view, @Nullable Bundle savedInstanceState) {
+        setSupportActionBar();
+
+        appBarLayout.addOnOffsetChangedListener(this);
+        toolbarLayout.setTitleEnabled(false);
+
+        String articleId = null;
+        if (savedInstanceState != null){
+            articleId = savedInstanceState.getString(ARTICLE_ID);
+        }
+
+        if (getArguments() != null){
+            articleId = getArguments().getString(ARTICLE_ID);
+        }
+
+        if (articleId != null){
+            presenter.showArticle(articleId);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (_article != null) {
+            outState.putString(ARTICLE_ID, _article.getId());
+        }
     }
 
     @Override
@@ -191,7 +222,7 @@ public class ArticleViewFragment
             if (bmp != null){
                 return bmp;
             }
-            return BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.ic_media_video_poster);
+            return BitmapFactory.decodeResource(getContext().getResources(), R.drawable.un);
         }
     }
 }
