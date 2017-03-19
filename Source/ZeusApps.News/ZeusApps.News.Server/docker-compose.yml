@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  server:
+    image: server
+    build:
+      context: ./ZeusApps.News.Server
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - 27017:27017
+
+volumes:
+  mongo_data:

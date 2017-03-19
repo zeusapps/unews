@@ -1,0 +1,22 @@
+﻿[
+  {
+    "key": "korr",
+    "imageUrl": "http://news.img.com.ua/img/smalllogo.gif",
+    "title": "Korrespondent.Net",
+    "sourceUrl": "http://k.img.com.ua/rss/ru/all_news2.0.xml",
+    "baseUrl": "http://korrespondent.net/",
+    "encoding": "utf-8",
+    "isDownloadable": true,
+    "isReadable": true
+  },
+  {
+    "key": "channel5",
+    "imageUrl": "http://www.5.ua/img/logo/original.png",
+    "title": "Channel 5",
+    "sourceUrl": "http://www.5.ua/novyny/rss/",
+    "baseUrl": "http://www.5.ua/",
+    "encoding": "utf-8",
+    "isDownloadable": true,
+    "isReadable": true
+  }
+]
