@@ -1,8 +1,8 @@
 version: '2'
 
 services:
-  server:
-    image: server
+  unews-server:
+    image: unews-server
     build:
       context: ./ZeusApps.News.Server
       dockerfile: Dockerfile
@@ -12,8 +12,13 @@ services:
     image: mongo
     volumes:
       - mongo_data:/data/db
-    ports:
-      - 27017:27017
+  unews-parser:
+    image: unews-parser
+    build:
+      context: ./ZeusApps.News.Parser
+      dockerfile: Dockerfile
+    depends_on:
+      - unews-server
 
 volumes:
   mongo_data:

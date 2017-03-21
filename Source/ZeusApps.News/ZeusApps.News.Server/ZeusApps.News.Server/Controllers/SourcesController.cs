@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ZeusApps.News.Core.DTOs;
 using ZeusApps.News.Server.DTOs;
 using ZeusApps.News.Server.Repositories.Abstraction;
 using ZeusApps.News.Server.Services.Abstraction;

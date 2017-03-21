@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-  server:
+  unews-server:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:

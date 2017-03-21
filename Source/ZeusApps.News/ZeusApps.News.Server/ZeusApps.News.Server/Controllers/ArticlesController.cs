@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ZeusApps.News.Core.DTOs;
 using ZeusApps.News.Server.DTOs;
+using ZeusApps.News.Server.Models;
 using ZeusApps.News.Server.Repositories.Abstraction;
 using ZeusApps.News.Server.Services.Abstraction;
 
@@ -38,6 +41,31 @@ namespace ZeusApps.News.Server.Controllers
             _logger.LogInformation($"Articles: {articles.Length}");
             return Ok(_mapperService.Map<ArticleDto>(articles));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(string sourceId, [FromBody] ArticleDownloadableDto dto)
+        {
+            if (dto == null)
+            {
+                return BadRequest();
+            }
+            
+            var article = _mapperService.Map<Article>(dto);
+            article.IsClean = ValidateArtile(article);
+
+            await _repository.AddArticle(article);
+
+            //TODO add Created 
+            return NoContent();
+        }
+
+        [HttpPost("contains")]
+        public async Task<IActionResult> ContainsArticle(string sourceId, [FromBody] ArticleContainsDto article)
+        {
+            var result = await _repository.ContainsGuid(sourceId, article.Guid);
+            return Ok(result);
+        }
+
 
         [HttpGet("{articleId}/votes")]
         public async Task<IActionResult> GetVotes(string articleId)
@@ -81,6 +109,22 @@ namespace ZeusApps.News.Server.Controllers
 
             _logger.LogInformation($"Article {articleId} not found");
             return BadRequest();
+        }
+
+        private static bool ValidateArtile(Article article)
+        {
+            if (string.IsNullOrEmpty(article.Html) || article.Html.Length < 75)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(article.Title))
+            {
+                return false;
+            }
+
+            var constraints = new[] {"Інтерфакс", "Интерфакс"};
+            return !constraints.Any(x => article.Html.Contains(x));
         }
     }
 

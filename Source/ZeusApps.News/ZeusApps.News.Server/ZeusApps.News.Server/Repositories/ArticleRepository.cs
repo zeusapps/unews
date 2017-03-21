@@ -82,11 +82,11 @@ namespace ZeusApps.News.Server.Repositories
             return result != null;
         }
 
-        public async Task<bool> ContainsUrl(string url)
+        public async Task<bool> ContainsGuid(string sourceId, string guid)
         {
             var article = await Collection
                 .Aggregate()
-                .Match(x => x.Url == url)
+                .Match(x => x.SourceId == sourceId && x.Guid == guid)
                 .FirstOrDefaultAsync();
 
             return article != null;

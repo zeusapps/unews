@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using ZeusApps.News.Core.DTOs;
 using ZeusApps.News.Server.DTOs;
 using ZeusApps.News.Server.Models;
 using ZeusApps.News.Server.Services.Abstraction;
@@ -19,6 +21,8 @@ namespace ZeusApps.News.Server.Services
                     config.CreateMap<Article, ArticleDto>();
                     config.CreateMap<Article, ArticleVoteDto>();
                     config.CreateMap<Source, SourceDownloadableDto>();
+                    config.CreateMap<ArticleDownloadableDto, Article>()
+                        .AfterMap((dto, article) => article.Downloaded = DateTime.UtcNow);
                 });
         }
 

@@ -20,7 +20,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ZeusApps.News.Core\ZeusApps.News.Core.csproj" />
+    <ProjectReference Include="..\ZeusApps.News.Core\ZeusApps.News.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="Seed\sources.json">

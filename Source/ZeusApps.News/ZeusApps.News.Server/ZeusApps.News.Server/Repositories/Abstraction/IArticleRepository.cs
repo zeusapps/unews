@@ -14,7 +14,7 @@ namespace ZeusApps.News.Server.Repositories.Abstraction
 
         Task<bool> DeleteArticle(string id);
 
-        Task<bool> ContainsUrl(string url);
+        Task<bool> ContainsGuid(string sourceId, string guid);
 
         Task<bool> Upvote(string id);
 

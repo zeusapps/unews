@@ -6,10 +6,15 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeusApps.News.Server", "ZeusApps.News.Server\ZeusApps.News.Server.csproj", "{9666C883-1D4A-4F31-A94A-F07FEF8B450F}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F0192DE7-1E31-477A-9F16-66619BE17085}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A0FC640E-2B6E-434E-BEC3-4551A0A1DB33} = {A0FC640E-2B6E-434E-BEC3-4551A0A1DB33}
+		{0B5C747A-3059-4EA0-850B-0D0899B8E126} = {0B5C747A-3059-4EA0-850B-0D0899B8E126}
+		{9666C883-1D4A-4F31-A94A-F07FEF8B450F} = {9666C883-1D4A-4F31-A94A-F07FEF8B450F}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeusApps.News.Parser", "..\ZeusApps.News.Parser\ZeusApps.News.Parser.csproj", "{0B5C747A-3059-4EA0-850B-0D0899B8E126}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeusApps.News.Parser", "ZeusApps.News.Parser\ZeusApps.News.Parser.csproj", "{0B5C747A-3059-4EA0-850B-0D0899B8E126}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeusApps.News.Core", "..\ZeusApps.News.Core\ZeusApps.News.Core.csproj", "{A0FC640E-2B6E-434E-BEC3-4551A0A1DB33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeusApps.News.Core", "ZeusApps.News.Core\ZeusApps.News.Core.csproj", "{A0FC640E-2B6E-434E-BEC3-4551A0A1DB33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
