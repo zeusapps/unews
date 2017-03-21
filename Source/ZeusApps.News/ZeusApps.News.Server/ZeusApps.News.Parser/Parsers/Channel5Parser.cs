@@ -65,7 +65,7 @@ namespace ZeusApps.News.Parser.Parsers
 
                 article.FullText = rssItem.Node.SelectSingleNode("//yandex:full-text", manager)?.InnerText;
             }
-            catch (Exception e)
+            catch
             {
                 //
             }
