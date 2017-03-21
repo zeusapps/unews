@@ -3,8 +3,8 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>f0192de7-1e31-477a-9f16-66619be17085</ProjectGuid>
     <DockerLaunchBrowser>True</DockerLaunchBrowser>
-    <DockerServiceUrl>http://localhost:{ServicePort}/api/values</DockerServiceUrl>
-    <DockerServiceName>server</DockerServiceName>
+    <DockerServiceUrl>http://localhost:{ServicePort}/api/sources</DockerServiceUrl>
+    <DockerServiceName>unews-server</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.ci.build.yml" />
