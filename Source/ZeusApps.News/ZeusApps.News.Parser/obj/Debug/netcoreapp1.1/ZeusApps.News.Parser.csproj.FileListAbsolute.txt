@@ -1,6 +1,0 @@
-D:\Projects\UNews\Source\ZeusApps.News\ZeusApps.News.Parser\bin\Debug\netcoreapp1.1\ZeusApps.News.Parser.deps.json
-D:\Projects\UNews\Source\ZeusApps.News\ZeusApps.News.Parser\bin\Debug\netcoreapp1.1\ZeusApps.News.Parser.runtimeconfig.json
-D:\Projects\UNews\Source\ZeusApps.News\ZeusApps.News.Parser\bin\Debug\netcoreapp1.1\ZeusApps.News.Parser.runtimeconfig.dev.json
-D:\Projects\UNews\Source\ZeusApps.News\ZeusApps.News.Parser\obj\Debug\netcoreapp1.1\ZeusApps.News.Parser.csprojResolveAssemblyReference.cache
-D:\Projects\UNews\Source\ZeusApps.News\ZeusApps.News.Parser\obj\Debug\netcoreapp1.1\ZeusApps.News.Parser.AssemblyInfo.cs
-D:\Projects\UNews\Source\ZeusApps.News\ZeusApps.News.Parser\bin\Debug\netcoreapp1.1\ZeusApps.News.Parser.dll

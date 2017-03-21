@@ -1,4 +1,0 @@
-D:\Projects\UNews\Source\ZeusApps.News\ZeusApps.News.Core\bin\Debug\netcoreapp1.1\ZeusApps.News.Core.deps.json
-D:\Projects\UNews\Source\ZeusApps.News\ZeusApps.News.Core\bin\Debug\netcoreapp1.1\ZeusApps.News.Core.dll
-D:\Projects\UNews\Source\ZeusApps.News\ZeusApps.News.Core\obj\Debug\netcoreapp1.1\ZeusApps.News.Core.csprojResolveAssemblyReference.cache
-D:\Projects\UNews\Source\ZeusApps.News\ZeusApps.News.Core\obj\Debug\netcoreapp1.1\ZeusApps.News.Core.AssemblyInfo.cs
