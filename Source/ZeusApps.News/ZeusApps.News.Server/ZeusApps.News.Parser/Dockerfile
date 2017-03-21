@@ -1,0 +1,5 @@
+﻿FROM microsoft/aspnetcore:1.1
+ARG source
+WORKDIR /app
+COPY ${source:-obj/Docker/publish} .
+ENTRYPOINT ["dotnet", "ZeusApps.News.Parser.dll"]
