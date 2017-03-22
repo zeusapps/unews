@@ -1,0 +1,15 @@
+services:
+  unews-server:
+    restart: always
+  unews-parser:
+    restart: always
+  unews-nginx:
+    image: nginx
+    build:
+      context: ./Nginx
+      dockerfile: Dockerfile
+    depends_on:
+      - unews-server
+    restart: always
+  mongo:
+    restart: always

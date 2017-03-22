@@ -8,10 +8,6 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - mongo
-  mongo:
-    image: mongo
-    volumes:
-      - mongo_data:/data/db
   unews-parser:
     image: unews-parser
     build:
@@ -19,6 +15,10 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - unews-server
+  mongo:
+    image: mongo
+    volumes:
+      - mongo_data:/data/db
 
 volumes:
   mongo_data:
