@@ -2,14 +2,14 @@ version: '2'
 
 services:
   unews-server:
-    image: unews-server
+    image: zeusapps/unews
     build:
       context: ./ZeusApps.News.Server
       dockerfile: Dockerfile
     depends_on:
       - mongo
   unews-parser:
-    image: unews-parser
+    image: zesuapps/unews-parser
     build:
       context: ./ZeusApps.News.Parser
       dockerfile: Dockerfile
