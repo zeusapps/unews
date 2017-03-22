@@ -16,6 +16,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeusApps.News.Parser", "Zeu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeusApps.News.Core", "ZeusApps.News.Core\ZeusApps.News.Core.csproj", "{A0FC640E-2B6E-434E-BEC3-4551A0A1DB33}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nginx", "Nginx", "{8D5AF7C2-A553-4B43-993B-A77E0B8AE0BA}"
+	ProjectSection(SolutionItems) = preProject
+		Nginx\Dockerfile.txt = Nginx\Dockerfile.txt
+		Nginx\nginx.conf = Nginx\nginx.conf
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
