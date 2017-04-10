@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -35,6 +38,8 @@ namespace ZeusApps.News.Server
                 .AddSingleton<IArticleRepository, ArticleRepository>()
                 .AddSingleton<ISourceRepository, SourceRepository>()
                 .AddSingleton<IMapperService, MapperService>()
+                .AddSingleton<IActionContextAccessor, ActionContextAccessor>()
+                .AddTransient<IUrlHelper, UrlHelper>(x => new UrlHelper(x.GetService<IActionContextAccessor>().ActionContext))
                 .AddOptions();
 
             services.ConfigureOptions<ConnectionStringsOptions>(Configuration);

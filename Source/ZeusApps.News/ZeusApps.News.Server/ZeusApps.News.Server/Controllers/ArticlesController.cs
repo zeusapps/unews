@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ZeusApps.News.Core.DTOs;
 using ZeusApps.News.Server.DTOs;
 using ZeusApps.News.Server.Models;
+using ZeusApps.News.Server.Parameters;
 using ZeusApps.News.Server.Repositories.Abstraction;
 using ZeusApps.News.Server.Services.Abstraction;
 
@@ -17,33 +17,51 @@ namespace ZeusApps.News.Server.Controllers
         private readonly ILogger<ArticlesController> _logger;
         private readonly IArticleRepository _repository;
         private readonly IMapperService _mapperService;
+        private readonly IUrlHelper _urlHelper;
 
         public ArticlesController(
             ILoggerFactory loggerFactory,
             IArticleRepository repository,
-            IMapperService mapperService)
+            IMapperService mapperService,
+            IUrlHelper urlHelper)
         {
             _logger = loggerFactory.CreateLogger<ArticlesController>();
             _repository = repository;
             _mapperService = mapperService;
+            _urlHelper = urlHelper;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string sourceId, int count = 20, int offset = 0, DateTime? published = null, bool isAfter = false)
+        public async Task<IActionResult> Get(ArticlesParameters parameters)
         {
-            if (string.IsNullOrEmpty(sourceId))
+            if (string.IsNullOrEmpty(parameters.SourceId))
             {
                 _logger.LogInformation("sourceId is empty");
                 return BadRequest("sourceId couldn't be null or empty");
             }
 
-            var articles = await _repository.GetArticles(sourceId, count, offset, published, isAfter);
+            var articles = await _repository.GetArticles(parameters);
             _logger.LogInformation($"Articles: {articles.Length}");
             return Ok(_mapperService.Map<ArticleDto>(articles));
         }
 
+        public const string GET_ARTICLE = "GET_ARTICLE";
+        [HttpGet("{id}", Name = GET_ARTICLE)]
+        public async Task<IActionResult> Get(string id)
+        {
+            var article = await _repository.GetArticle(id);
+
+            if (article == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapperService.Map<ArticleDto>(article));
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Create(string sourceId, [FromBody] ArticleDownloadableDto dto)
+        public async Task<IActionResult> Create(string sourceId, 
+            [FromBody] ArticleDownloadableDto dto)
         {
             if (dto == null)
             {
@@ -55,12 +73,15 @@ namespace ZeusApps.News.Server.Controllers
 
             await _repository.AddArticle(article);
 
-            //TODO add Created 
-            return NoContent();
+
+            var articleToShow = _mapperService.Map<ArticleDto>(article);
+            return Created(
+                _urlHelper.Link(GET_ARTICLE, new {id = article.Id}), articleToShow);
         }
 
         [HttpPost("contains")]
-        public async Task<IActionResult> ContainsArticle(string sourceId, [FromBody] ArticleContainsDto article)
+        public async Task<IActionResult> ContainsArticle(string sourceId, 
+            [FromBody] ArticleContainsDto article)
         {
             var result = await _repository.ContainsGuid(sourceId, article.Guid);
             return Ok(result);
