@@ -2,7 +2,7 @@ version: '2'
 
 services:
   unews-server:
-    image: unews-server:dev
+    image: zeusapps/unews:dev
     build:
       args:
         source: ${DOCKER_BUILD_SOURCE}
@@ -16,7 +16,7 @@ services:
     labels:
       - "com.microsoft.visualstudio.targetoperatingsystem=linux"
   unews-parser:
-    image: unews-parser:dev
+    image: zeusapps/unews-parser:dev
     build:
       args:
         source: ${DOCKER_BUILD_SOURCE}
