@@ -9,6 +9,7 @@ using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using ZeusApps.News.Server.Models;
 using ZeusApps.News.Server.Options;
+using ZeusApps.News.Server.Parameters;
 using ZeusApps.News.Server.Repositories.Abstraction;
 
 namespace ZeusApps.News.Server.Repositories
@@ -35,26 +36,26 @@ namespace ZeusApps.News.Server.Repositories
                 });
         }
 
-        public async Task<Article[]> GetArticles(string sourceId, int count, int offset, DateTime? dateTime, bool isAfter)
+        public async Task<Article[]> GetArticles(ArticlesParameters parameters)
         {
             var aggr = Collection
                 .Aggregate()
-                .Match(x => x.SourceId == sourceId)
+                .Match(x => x.SourceId == parameters.SourceId)
                 .Match(x => x.IsClean);
 
-            if (dateTime != null)
+            if (parameters.Published.HasValue)
             {
-                var filter = isAfter
-                    ? Builders<Article>.Filter.Lt(x => x.Published, dateTime.Value)
-                    : Builders<Article>.Filter.Gt(x => x.Published, dateTime.Value);
+                var published = parameters.Published.Value;
+                var filter = parameters.IsAfter
+                    ? Builders<Article>.Filter.Lt(x => x.Published, published)
+                    : Builders<Article>.Filter.Gt(x => x.Published, published);
 
                 aggr = aggr.Match(filter);
             }
 
             var articles = await aggr
                 .Sort(Builders<Article>.Sort.Descending(x => x.Published))
-                .Skip(offset)
-                .Limit(count)
+                .Limit(parameters.Count)
                 .ToListAsync();
 
             return articles.ToArray();

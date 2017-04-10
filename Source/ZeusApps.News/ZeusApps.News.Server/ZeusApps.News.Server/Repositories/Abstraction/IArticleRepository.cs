@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ZeusApps.News.Server.Models;
+using ZeusApps.News.Server.Parameters;
 
 namespace ZeusApps.News.Server.Repositories.Abstraction
 {
     public interface IArticleRepository
     {
-        Task<Article[]> GetArticles(string sourceId, int count, int offset, DateTime? dateTime, bool isAfter);
+        Task<Article[]> GetArticles(ArticlesParameters parameters);
 
         Task<Article> GetArticle(string id);
 
