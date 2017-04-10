@@ -36,26 +36,27 @@ namespace ZeusApps.News.Parser.Parsers
                 {
                     var sources = await _communicationService
                         .Get<SourceDownloadableDto[]>(_downloadUri);
-
-                    foreach (var source in sources)
+                    if (sources != null)
                     {
-                        var parser = _dependencyResolverService.ResolveService<IParser>(source.Key);
-                        if (parser == null)
+                        foreach (var source in sources)
                         {
-                            _logger.LogError($"Could not resolve parser for \'{source.Title}\'");
-                        }
-                        else
-                        {
-                            await parser.Parse(source);
+                            var parser = _dependencyResolverService.ResolveService<IParser>(source.Key);
+                            if (parser == null)
+                            {
+                                _logger.LogError($"Could not resolve parser for \'{source.Title}\'");
+                            }
+                            else
+                            {
+                                await parser.Parse(source);
+                            }
                         }
                     }
-
                     await Task.Delay(_options.TaskDelay);
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(1, e, e.Message);
-                }         
+                }
             }
         }
     }
