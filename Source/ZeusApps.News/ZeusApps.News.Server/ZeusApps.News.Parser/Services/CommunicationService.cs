@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using ZeusApps.News.Parser.Options;
+using System.Runtime.CompilerServices;
 
 namespace ZeusApps.News.Parser.Services
 {
@@ -40,7 +41,7 @@ namespace ZeusApps.News.Parser.Services
             }
             catch (Exception e)
             {
-                _logger.LogError(1, e, e.Message);
+                LogError(e, uri);
                 return default(T);
             }
         }
@@ -59,21 +60,40 @@ namespace ZeusApps.News.Parser.Services
             }
             catch (Exception e)
             {
-                _logger.LogError(1, e, e.Message);
+                LogError(e, uri);
                 return default(T);
             }
         }
 
         public async Task<string> GetString(Uri uri, Encoding encoding = null)
         {
-            if (encoding == null)
+            try
             {
-                return await _httpClient.GetStringAsync(uri);
+                if (encoding == null)
+                {
+                    return await _httpClient.GetStringAsync(uri);
+                }
+
+                var data = await _httpClient.GetByteArrayAsync(uri);
+                var text = encoding.GetString(data);
+                return text;
             }
-            
-            var data = await _httpClient.GetByteArrayAsync(uri);
-            var text = encoding.GetString(data);
-            return text;
+            catch (Exception e)
+            {
+                LogError(e, uri);
+            }
+
+
+            return null;
+        }
+
+        private void LogError(
+            Exception exception, 
+            Uri uri, 
+            [CallerMemberName] string caller = null)
+        {
+            var message = $"{caller.ToUpper()}. FAILED TO GET DATA FROM {uri}.";
+            _logger.LogError(1, exception, message);
         }
     }
 }
