@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - unews
+      - mongo
+    restart: always
+  unews-parser:
+    image: zeusapps/unews-parser
+    depends_on:
+      - unews
+      - mongo
+      - nginx
+    restart: always
+  unews:
+    image: zeusapps/unews
+    depends_on:
+      - mongo
+    restart: always
+  mongo:
+    image: mongo
+    volumes:
+      - mongo:/data/db
+    restart: always
+volumes:
+  mongo: { }
