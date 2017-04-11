@@ -4,7 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import ua.in.zeusapps.ukrainenews.modules.articles.IRepository;
+import ua.in.zeusapps.ukrainenews.services.IRepository;
 
 @Module
 public class SettingsModule {

@@ -2,7 +2,7 @@ package ua.in.zeusapps.ukrainenews.modules.articleView;
 
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.modules.articles.IRepository;
+import ua.in.zeusapps.ukrainenews.services.IRepository;
 
 public class ArticleViewPresenter implements ArticleViewMVP.IPresenter {
 

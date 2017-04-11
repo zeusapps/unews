@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.articles;
+package ua.in.zeusapps.ukrainenews.services;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,17 +15,16 @@ import java.util.List;
 
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 
-class Repository implements IRepository {
+public class Repository implements IRepository {
     private static final int ARTICLES_CACHE_COUNT = 50;
 
     private final RuntimeExceptionDao<Article, String> _daoArticles;
     private final RuntimeExceptionDao<Source, String> _daoSources;
     private final Formatter _formatter;
 
-    Repository(
+    public Repository(
             Context context,
             Formatter formatter) {
         Helper helper = new Helper(context);
@@ -127,12 +126,11 @@ class Repository implements IRepository {
     @Override
     public Source getSourceByKey(String sourceId) {
         try {
-            Source source = _daoSources
+            return _daoSources
                     .queryBuilder()
                     .where()
                     .eq(Source.KEY_FIELD_NAME, sourceId)
                     .queryForFirst();
-            return source;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

@@ -7,27 +7,27 @@ import rx.Observable;
 import rx.functions.Func1;
 import ua.in.zeusapps.ukrainenews.common.BaseModel;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.modules.articles.IRepository;
-import ua.in.zeusapps.ukrainenews.services.ISourceService;
+import ua.in.zeusapps.ukrainenews.services.IRepository;
+import ua.in.zeusapps.ukrainenews.services.IDataService;
 
 public class SplashModel
         extends BaseModel
         implements SplashMVP.IModel {
 
     private final IRepository _repository;
-    private final ISourceService _sourceService;
+    private final IDataService _dataService;
 
     public SplashModel(
             IRepository repository,
-            ISourceService sourceService){
+            IDataService dataService){
         _repository = repository;
-        _sourceService = sourceService;
+        _dataService = dataService;
     }
 
     public Observable<List<Source>> ensureSources(){
         final List<Source> tempSources = _repository.getAllSources();
 
-        Observable<List<Source>> observable = _sourceService
+        Observable<List<Source>> observable = _dataService
                 .getSources()
                 .map(new Func1<List<Source>, List<Source>>() {
                     @Override

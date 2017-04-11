@@ -1,6 +1,6 @@
 package ua.in.zeusapps.ukrainenews.modules.settings;
 
-import ua.in.zeusapps.ukrainenews.modules.articles.IRepository;
+import ua.in.zeusapps.ukrainenews.services.IRepository;
 
 public class SettingsPresenter implements SettingsMVP.Presenter{
 

@@ -7,17 +7,21 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 import ua.in.zeusapps.ukrainenews.models.Article;
+import ua.in.zeusapps.ukrainenews.models.Source;
 
-public interface IArticleService {
-    @GET("api/article/{sourceId}")
+public interface IDataService {
+    @GET("api/sources/{sourceId}/articles")
     Observable<List<Article>> getArticles(
             @Path("sourceId") String sourceId,
             @Query("count") int count);
 
-    @GET("api/article/{sourceId}")
+    @GET("api/sources/{sourceId}/articles")
     Observable<List<Article>> getNewerArticles(
             @Path("sourceId") String sourceId,
             @Query("count") int count,
             @Query("published") String published,
             @Query("isAfter") boolean isAfter);
+
+    @GET("api/sources")
+    Observable<List<Source>> getSources();
 }

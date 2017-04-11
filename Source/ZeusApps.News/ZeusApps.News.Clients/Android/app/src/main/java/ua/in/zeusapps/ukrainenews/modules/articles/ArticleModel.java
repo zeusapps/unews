@@ -1,29 +1,27 @@
 package ua.in.zeusapps.ukrainenews.modules.articles;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.functions.Func1;
 import ua.in.zeusapps.ukrainenews.common.BaseModel;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.services.IArticleService;
-import ua.in.zeusapps.ukrainenews.services.ISourceService;
+import ua.in.zeusapps.ukrainenews.services.IDataService;
+import ua.in.zeusapps.ukrainenews.services.IRepository;
 
 class ArticleModel extends BaseModel implements ArticleMVP.IModel {
 
     private static final int PAGE_SIZE = 20;
 
 
-    private final IArticleService _articleService;
+    private final IDataService _articleService;
     private final IRepository _repository;
     private final Subscriber<List<Article>> _cacheSubscriber;
 
     ArticleModel(
             IRepository repository,
-            IArticleService articleService) {
+            IDataService articleService) {
         _articleService = articleService;
         _repository = repository;
 
