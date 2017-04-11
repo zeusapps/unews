@@ -9,7 +9,7 @@ services:
     depends_on:
       - mongo
   unews-parser:
-    image: zesuapps/unews-parser
+    image: zeusapps/unews-parser
     build:
       context: ./ZeusApps.News.Parser
       dockerfile: Dockerfile
