@@ -12,9 +12,8 @@ public interface IRepository {
 
     List<Article> getAllArticles(String sourceId);
 
-    List<Article> getArticlesPage(String sourceId, Article fromArticle, int count);
-
     Article getArticle(String articleId);
+
     void deleteAlArticles();
 
     void addAllSources(List<Source> sources);

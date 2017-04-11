@@ -115,6 +115,11 @@ public class ArticleViewFragment
     }
 
     @Override
+    public String GetTag() {
+        return TAG;
+    }
+
+    @Override
     protected void onCreateViewOverride(View view, @Nullable Bundle savedInstanceState) {
         setSupportActionBar();
 

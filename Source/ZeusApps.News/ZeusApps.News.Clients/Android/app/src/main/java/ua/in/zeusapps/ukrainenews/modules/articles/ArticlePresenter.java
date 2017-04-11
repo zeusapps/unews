@@ -57,7 +57,7 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
     public void loadOlder(Article lastArticle) {
         _view.loadStarted();
         Subscription subscription = _model
-                .getOlderArticles(lastArticle.getSourceId(), lastArticle)
+                .getOlderArticles(lastArticle)
                 .subscribe(new CustomSubscriber<List<Article>>() {
                     @Override
                     public void onNext(List<Article> articles) {
@@ -76,7 +76,7 @@ class ArticlePresenter implements ArticleMVP.IPresenter {
 
         addLastUpdate(firstArticle.getSourceId());
         Subscription subscription = _model
-                .getNewerArticles(firstArticle.getSourceId(), firstArticle)
+                .getNewerArticles(firstArticle)
                 .subscribe(new CustomSubscriber<List<Article>>() {
                     @Override
                     public void onNext(List<Article> articles) {

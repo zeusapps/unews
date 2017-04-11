@@ -221,6 +221,11 @@ public class ArticleFragment
     }
 
     @Override
+    public String GetTag() {
+        return TAG;
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 

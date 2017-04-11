@@ -1,7 +1,6 @@
 package ua.in.zeusapps.ukrainenews.modules.main;
 
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.FrameLayout;
@@ -12,6 +11,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.BaseActivity;
+import ua.in.zeusapps.ukrainenews.common.BaseFragment;
 import ua.in.zeusapps.ukrainenews.common.BaseMVP;
 import ua.in.zeusapps.ukrainenews.common.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
@@ -25,7 +25,7 @@ public class MainActivity
         implements MainActivityMVP.View,
             ArticleFragment.OnArticleSelectedListener {
 
-    private final int PERIOD_TO_CLOSE = 2000;
+    private final static int PERIOD_TO_CLOSE = 2000;
     private long _lastPressedTimestamp;
 
     @BindView(R.id.activity_main_content)
@@ -53,15 +53,9 @@ public class MainActivity
 
     @Override
     protected void onCreateOverride(@Nullable Bundle savedInstanceState) {
-        if (FragmentHelper.getStackCount(getSupportFragmentManager()) > 0){
-            return;
+        if (FragmentHelper.getStackCount(getSupportFragmentManager()) == 0){
+            showFragment(new ArticleFragment());
         }
-
-        FragmentHelper.replace(
-                getSupportFragmentManager(),
-                new ArticleFragment(),
-                R.id.activity_main_content,
-                ArticleFragment.TAG);
     }
 
     @Override
@@ -71,26 +65,20 @@ public class MainActivity
 
     @Override
     public void switchToArticleView(Article article) {
-        ArticleViewFragment fragment = ArticleViewFragment.newInstance(article.getId());
-        FragmentHelper.add(
-                getSupportFragmentManager(),
-                fragment,
-                R.id.activity_main_content,
-                ArticleViewFragment.TAG);
+        showFragment(ArticleViewFragment.newInstance(article.getId()));
     }
 
     @Override
     public void switchToSettingsView() {
-        FragmentHelper.add(
-                getSupportFragmentManager(),
-                new SettingsFragment(),
-                R.id.activity_main_content,
-                SettingsFragment.TAG);
+        showFragment(new SettingsFragment());
     }
 
     @Override
     public void onBackPressed() {
-        if (FragmentHelper.getStackCount(getSupportFragmentManager()) == 1){
+        BaseFragment frg =  (BaseFragment) FragmentHelper
+                .getVisibleFragment(getSupportFragmentManager());
+
+        if (!frg.getTag().equals(ArticleFragment.TAG)){
             super.onBackPressed();
             return;
         }
@@ -104,5 +92,13 @@ public class MainActivity
 
         _lastPressedTimestamp = timestamp;
         Toast.makeText(this, R.string.main_activity_close_notification, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showFragment(BaseFragment fragment){
+        FragmentHelper.add(
+                getSupportFragmentManager(),
+                fragment,
+                R.id.activity_main_content,
+                fragment.getTag());
     }
 }

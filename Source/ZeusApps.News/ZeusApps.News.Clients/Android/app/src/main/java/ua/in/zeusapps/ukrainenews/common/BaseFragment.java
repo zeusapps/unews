@@ -26,6 +26,8 @@ public abstract class BaseFragment extends Fragment implements BaseMVP.IView{
         return view;
     }
 
+    public abstract String GetTag();
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

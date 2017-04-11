@@ -22,16 +22,12 @@ public class Repository implements IRepository {
 
     private final RuntimeExceptionDao<Article, String> _daoArticles;
     private final RuntimeExceptionDao<Source, String> _daoSources;
-    private final Formatter _formatter;
 
-    public Repository(
-            Context context,
-            Formatter formatter) {
+    public Repository(Context context) {
         Helper helper = new Helper(context);
 
         _daoArticles = helper.getRuntimeExceptionDao(Article.class);
         _daoSources = helper.getRuntimeExceptionDao(Source.class);
-        _formatter = formatter;
     }
 
     @Override
@@ -75,26 +71,6 @@ public class Repository implements IRepository {
             e.printStackTrace();
             return new ArrayList<>();
         }
-    }
-
-    @Override
-    public List<Article> getArticlesPage(String sourceId, Article fromArticle, int count) {
-        List<Article> articles = getAllArticles(sourceId);
-
-        long timestamp = fromArticle == null
-                ? Long.MAX_VALUE
-                : _formatter.getMils(fromArticle.getPublished());
-
-
-
-        List<Article> result = new ArrayList<>();
-        for (Article article: articles){
-            if (result.size() < count && timestamp > _formatter.getMils(article.getPublished())){
-                result.add(article);
-            }
-        }
-
-        return result;
     }
 
     @Override

@@ -40,6 +40,11 @@ public class SettingsFragment
     }
 
     @Override
+    public String GetTag() {
+        return TAG;
+    }
+
+    @Override
     protected void onCreateViewOverride(View view, @Nullable Bundle savedInstanceState) {
         setSupportActionBar();
         setHasOptionsMenu(true);

@@ -4,6 +4,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Action1;
 import ua.in.zeusapps.ukrainenews.common.BaseModel;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
@@ -46,7 +47,7 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
     @Override
     public List<Article> getLocalArticles(String sourceId) {
         return _repository
-                .getArticlesPage(sourceId, null, PAGE_SIZE);
+                .getAllArticles(sourceId);
     }
 
     @Override
@@ -59,18 +60,13 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
     }
 
     @Override
-    public Observable<List<Article>> getNewerArticles(String sourceId, Article firstArticle) {
-        return getArticlePage(sourceId, firstArticle, false);
+    public Observable<List<Article>> getNewerArticles(Article firstArticle) {
+        return getArticlePage(firstArticle, false);
     }
 
     @Override
-    public Observable<List<Article>> getOlderArticles(String sourceId, Article lastArticle) {
-        List<Article> articles = _repository.getArticlesPage(sourceId, lastArticle, PAGE_SIZE);
-        if (articles.size() > 0){
-            return Observable.just(articles);
-        }
-
-        return getArticlePage(sourceId, lastArticle, true);
+    public Observable<List<Article>> getOlderArticles(Article lastArticle) {
+        return getArticlePage(lastArticle, true);
     }
 
     @Override
@@ -79,9 +75,9 @@ class ArticleModel extends BaseModel implements ArticleMVP.IModel {
     }
 
     private Observable<List<Article>> getArticlePage(
-            String sourceId, Article article, boolean isAfter){
+            final Article article, final boolean isAfter){
         Observable<List<Article>> observable = _articleService
-                .getNewerArticles(sourceId, PAGE_SIZE, article.getPublished(), isAfter)
+                .getNewerArticles(article.getSourceId(), PAGE_SIZE, article.getPublished(), isAfter)
                 .doOnEach(_cacheSubscriber);
 
         return wrapObservable(observable);

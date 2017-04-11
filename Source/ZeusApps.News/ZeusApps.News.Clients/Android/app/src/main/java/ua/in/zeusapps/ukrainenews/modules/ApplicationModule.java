@@ -55,8 +55,8 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public IRepository provideRepository(Context context, Formatter formatter){
+    public IRepository provideRepository(Context context){
         //return new Repository(context, formatter);
-        return new Repository(context, formatter);
+        return new Repository(context);
     }
 }
