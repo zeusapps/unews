@@ -1,17 +1,22 @@
 package ua.in.zeusapps.ukrainenews.modules.root;
 
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.widget.FrameLayout;
 
-import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.FragmentHelper;
+import ua.in.zeusapps.ukrainenews.common.Layout;
+import ua.in.zeusapps.ukrainenews.common.MvpActivity;
 import ua.in.zeusapps.ukrainenews.modules.sources.SourcesFragment;
 
+@Layout(R.layout.activity_root)
 public class RootActivity
-        extends MvpAppCompatActivity
+        extends MvpActivity
         implements RootView {
 
     private final static int PERIOD_TO_CLOSE = 2000;
@@ -19,11 +24,12 @@ public class RootActivity
     @InjectPresenter
     RootPresenter presenter;
 
+    @BindView(R.id.activity_root_content)
+    FrameLayout rootView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_root);
-
         FragmentHelper.add(
                 getSupportFragmentManager(),
                 new SourcesFragment(),
@@ -32,7 +38,14 @@ public class RootActivity
 
     @Override
     public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Snackbar snackbar = Snackbar
+                .make(rootView, message, Snackbar.LENGTH_LONG);
+        int color = ContextCompat
+                .getColor(this, android.R.color.holo_green_dark);
+        snackbar.getView()
+                .setBackgroundColor(color);
+        snackbar.show();
     }
 
     @Override
