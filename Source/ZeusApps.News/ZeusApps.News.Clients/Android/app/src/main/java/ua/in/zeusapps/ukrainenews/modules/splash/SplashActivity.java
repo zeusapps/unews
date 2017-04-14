@@ -9,7 +9,7 @@ import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
-import ua.in.zeusapps.ukrainenews.modules.sources.RootActivity;
+import ua.in.zeusapps.ukrainenews.modules.root.RootActivity;
 
 @Layout(R.layout.activity_splash)
 public class SplashActivity

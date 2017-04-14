@@ -4,5 +4,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ua.in.zeusapps.ukrainenews.modules.sources.RootActivity"
+    tools:context="ua.in.zeusapps.ukrainenews.modules.root.RootActivity"
     android:id="@+id/activity_root_content"/>

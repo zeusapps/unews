@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.sources;
+package ua.in.zeusapps.ukrainenews.modules.root;
 
 import android.os.Bundle;
 import android.widget.Toast;
@@ -8,6 +8,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.FragmentHelper;
+import ua.in.zeusapps.ukrainenews.modules.sources.SourcesFragment;
 
 public class RootActivity
         extends MvpAppCompatActivity
