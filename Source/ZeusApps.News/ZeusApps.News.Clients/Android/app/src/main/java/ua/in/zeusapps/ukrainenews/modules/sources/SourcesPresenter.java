@@ -1,29 +1,43 @@
 package ua.in.zeusapps.ukrainenews.modules.sources;
 
 import com.arellomobile.mvp.InjectViewState;
-import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import rx.Subscriber;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
+import ua.in.zeusapps.ukrainenews.domain.GetLocalSourcesInteractor;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
 @InjectViewState
 public class SourcesPresenter extends MvpPresenterBase<SourcesView> {
 
     @Inject
-    SourcesModel model;
+    GetLocalSourcesInteractor interactor;
 
     @Override
     protected void onFirstViewAttach() {
-        List<Source> sources = model.getSources();
-        getViewState().showSources(sources);
+        interactor.execute(new Subscriber<List<Source>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getViewState().showError();
+            }
+
+            @Override
+            public void onNext(List<Source> sources) {
+                getViewState().showSources(sources);
+            }
+        });
     }
 
-    public SourcesPresenter() {
+    SourcesPresenter() {
         getComponent().inject(this);
-        getViewState().showMessage("Hello World!");
     }
 }
