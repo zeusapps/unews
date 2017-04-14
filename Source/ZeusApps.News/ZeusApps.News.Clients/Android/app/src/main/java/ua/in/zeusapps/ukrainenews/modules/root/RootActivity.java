@@ -9,9 +9,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
-import ua.in.zeusapps.ukrainenews.common.FragmentHelper;
+import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
+import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
 import ua.in.zeusapps.ukrainenews.modules.sources.SourcesFragment;
 
 @Layout(R.layout.activity_root)
@@ -38,14 +39,7 @@ public class RootActivity
 
     @Override
     public void showMessage(String message) {
-        //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        Snackbar snackbar = Snackbar
-                .make(rootView, message, Snackbar.LENGTH_LONG);
-        int color = ContextCompat
-                .getColor(this, android.R.color.holo_green_dark);
-        snackbar.getView()
-                .setBackgroundColor(color);
-        snackbar.show();
+        NotificationHelper.showSnackbarInfoMessage(rootView, message);
     }
 
     @Override

@@ -9,6 +9,7 @@ import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
+import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
 import ua.in.zeusapps.ukrainenews.modules.root.RootActivity;
 
 @Layout(R.layout.activity_splash)
@@ -30,6 +31,14 @@ public class SplashActivity
     @Override
     public void showChecking() {
         statusTextView.setText(R.string.splash_activity_checkingStatus);
+    }
+
+    @Override
+    public void showError() {
+        statusTextView.setText(R.string.splash_screen_oopsMessage);
+        NotificationHelper.showSnackbarErrorMessage(
+                statusTextView,
+                getString(R.string.splash_activity_errorMessage));
     }
 
     @Override

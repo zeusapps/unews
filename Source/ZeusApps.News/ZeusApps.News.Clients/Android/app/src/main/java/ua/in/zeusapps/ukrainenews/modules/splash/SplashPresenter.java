@@ -4,9 +4,13 @@ import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Action1;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
 import ua.in.zeusapps.ukrainenews.domain.EnsureSourcesInteractor;
 
@@ -41,10 +45,14 @@ public class SplashPresenter extends MvpPresenterBase<SplashView> {
     }
 
     private void showError(Throwable error){
-        // TODO Show error
         Log.e(SplashPresenter.class.getSimpleName(), error.getMessage(), error);
-
-        System.exit(0);
-
+        getViewState().showError();
+        Observable.interval(4000, TimeUnit.MILLISECONDS)
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        System.exit(0);
+                    }
+                });
     }
 }

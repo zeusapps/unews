@@ -12,4 +12,6 @@
     <string name="fragment_settings_email_us">Якщо у Вас є зауваження, або пропозиції — напишіть нам support@zeusapps.in.ua</string>
     <string name="splash_activity_loadingStatus">Завантаження каналів…</string>
     <string name="splash_activity_checkingStatus">Перевірка каналів...</string>
+    <string name="splash_activity_errorMessage">Не вдалось отримати данні з серверу. Спробуйте пізніше.</string>
+    <string name="splash_screen_oopsMessage">Невдача:(</string>
 </resources>
