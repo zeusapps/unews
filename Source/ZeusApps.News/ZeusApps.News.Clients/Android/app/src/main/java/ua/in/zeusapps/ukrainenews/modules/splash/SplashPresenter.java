@@ -1,34 +1,72 @@
 package ua.in.zeusapps.ukrainenews.modules.splash;
 
+import android.util.Log;
+
+import com.arellomobile.mvp.InjectViewState;
+
 import java.util.List;
 
-import rx.Observable;
-import rx.functions.Func1;
+import javax.inject.Inject;
+
+import rx.Subscriber;
+import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
+import ua.in.zeusapps.ukrainenews.domain.EnsureSourcesInteractor;
+import ua.in.zeusapps.ukrainenews.domain.GetSourcesInteractor;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
-public class SplashPresenter implements SplashMVP.IPresenter {
-    private SplashMVP.IView _view;
-    private SplashMVP.IModel _model;
+@InjectViewState
+public class SplashPresenter extends MvpPresenterBase<SplashView> {
 
-    public SplashPresenter(
-            SplashMVP.IModel model){
-        _model = model;
+    @Inject
+    GetSourcesInteractor sourcesInteractor;
+    @Inject
+    EnsureSourcesInteractor ensureSourcesInteractor;
+
+    public SplashPresenter() {
+        getComponent().inject(this);
+        getViewState().showLoading();
     }
 
     @Override
-    public Observable<Boolean> prepare() {
-        return _model
-                .ensureSources()
-                .map(new Func1<List<Source>, Boolean>() {
+    protected void onFirstViewAttach() {
+        // TODO concat getting new sources and check for existence
+        sourcesInteractor.execute(new Subscriber<List<Source>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                showError(e);
+            }
+
+            @Override
+            public void onNext(List<Source> sources) {
+                ensureSourcesInteractor.execute(sources, new Subscriber<Boolean>() {
                     @Override
-                    public Boolean call(List<Source> sources) {
-                        return sources != null && sources.size() > 0;
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        showError(e);
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        getViewState().startApp();
                     }
                 });
+            }
+        });
     }
 
-    @Override
-    public void setView(SplashMVP.IView view) {
-        _view = view;
+    private void showError(Throwable error){
+        // TODO Show error
+        Log.e(SplashPresenter.class.getSimpleName(), error.getMessage(), error);
+
+        System.exit(0);
+
     }
 }

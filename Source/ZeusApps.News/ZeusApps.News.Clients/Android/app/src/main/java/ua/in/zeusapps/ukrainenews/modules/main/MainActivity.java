@@ -19,6 +19,7 @@ import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.modules.articleView.ArticleViewFragment;
 import ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment;
 import ua.in.zeusapps.ukrainenews.modules.settings.SettingsFragment;
+import ua.in.zeusapps.ukrainenews.modules.sources.SourcesFragment;
 
 public class MainActivity
         extends BaseActivity
@@ -54,7 +55,8 @@ public class MainActivity
     @Override
     protected void onCreateOverride(@Nullable Bundle savedInstanceState) {
         if (FragmentHelper.getStackCount(getSupportFragmentManager()) == 0){
-            showFragment(new ArticleFragment());
+            //showFragment(new ArticleFragment());
+            FragmentHelper.add(getSupportFragmentManager(), new SourcesFragment(), R.id.activity_main_content);
         }
     }
 
