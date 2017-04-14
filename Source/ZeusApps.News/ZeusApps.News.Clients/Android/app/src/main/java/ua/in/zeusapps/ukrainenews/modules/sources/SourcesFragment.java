@@ -41,9 +41,10 @@ public class SourcesFragment
     }
 
     @Override
-    public void showMessage(String message) {
-        textView.setText(message);
+    public void showError() {
+        //TODO implement show error
     }
+
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -73,7 +74,7 @@ public class SourcesFragment
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater
                     .from(getContext())
-                    .inflate(R.layout.sources_fragment_item_template, null, false);
+                    .inflate(R.layout.fragment_sources_item_template, parent, false);
 
             return new ViewHolder(view);
         }
