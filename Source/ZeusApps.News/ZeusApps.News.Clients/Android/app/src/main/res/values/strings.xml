@@ -7,7 +7,7 @@
     <string name="network_error">Неможливо здійснити оновлення</string>
     <string name="view_on_site">Переглянути на сайті</string>
     <string name="fragment_settings_clear_storage_button">Очистити кеш</string>
-    <string name="main_activity_close_notification">Натисніть ще раз, щоб вийти</string>
+    <string name="root_activity_close_notification">Натисніть ще раз, щоб вийти</string>
     <string name="fragment_settings_clear_cache_text">Ви можете очистити кеш, якщо щось іде не так</string>
     <string name="fragment_settings_email_us">Якщо у Вас є зауваження, або пропозиції — напишіть нам support@zeusapps.in.ua</string>
     <string name="splash_activity_loadingStatus">Завантаження каналів…</string>

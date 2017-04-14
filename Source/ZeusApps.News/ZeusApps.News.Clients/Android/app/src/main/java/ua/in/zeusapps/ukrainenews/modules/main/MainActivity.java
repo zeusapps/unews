@@ -93,7 +93,7 @@ public class MainActivity
         }
 
         _lastPressedTimestamp = timestamp;
-        Toast.makeText(this, R.string.main_activity_close_notification, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.root_activity_close_notification, Toast.LENGTH_SHORT).show();
     }
 
     private void showFragment(BaseFragment fragment){
