@@ -12,7 +12,6 @@ import ua.in.zeusapps.ukrainenews.modules.main.MainActivity;
 import ua.in.zeusapps.ukrainenews.modules.main.MainModule;
 import ua.in.zeusapps.ukrainenews.modules.settings.SettingsFragment;
 import ua.in.zeusapps.ukrainenews.modules.settings.SettingsModule;
-import ua.in.zeusapps.ukrainenews.modules.sources.SourcesModule;
 import ua.in.zeusapps.ukrainenews.modules.sources.SourcesPresenter;
 import ua.in.zeusapps.ukrainenews.modules.splash.SplashActivity;
 import ua.in.zeusapps.ukrainenews.modules.splash.SplashPresenter;
@@ -23,9 +22,7 @@ import ua.in.zeusapps.ukrainenews.modules.splash.SplashPresenter;
         MainModule.class,
         ArticleModule.class,
         ArticleViewModule.class,
-        SettingsModule.class,
-
-        SourcesModule.class
+        SettingsModule.class
 })
 public interface ApplicationComponent {
     void inject(MainActivity target);
