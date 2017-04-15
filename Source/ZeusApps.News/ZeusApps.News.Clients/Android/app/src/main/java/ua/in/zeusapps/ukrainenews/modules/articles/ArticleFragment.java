@@ -1,5 +1,6 @@
 package ua.in.zeusapps.ukrainenews.modules.articles;
 
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +27,7 @@ public class ArticleFragment
         extends MvpFragment
         implements  ArticleView {
 
+    private static final String SOURCE_EXTRA = "source";
     private Source source;
     private RecyclerViewAdapter<Article> adapter;
     @InjectPresenter
@@ -38,6 +40,20 @@ public class ArticleFragment
     Formatter formatter;
     @Inject
     RecyclerViewAdapter.AdsProvider adsProvider;
+
+    public static ArticleFragment newInstance(Source source) {
+        ArticleFragment fragment = new ArticleFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(SOURCE_EXTRA, source);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        source = getArguments().getParcelable(SOURCE_EXTRA);
+    }
 
     @Override
     protected void inject(ApplicationComponent component) {
