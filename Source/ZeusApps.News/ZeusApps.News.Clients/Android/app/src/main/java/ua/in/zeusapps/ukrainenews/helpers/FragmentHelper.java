@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.common;
+package ua.in.zeusapps.ukrainenews.helpers;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

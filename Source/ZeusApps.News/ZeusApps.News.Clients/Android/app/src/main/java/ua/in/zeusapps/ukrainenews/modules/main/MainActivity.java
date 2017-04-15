@@ -13,12 +13,13 @@ import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.BaseActivity;
 import ua.in.zeusapps.ukrainenews.common.BaseFragment;
 import ua.in.zeusapps.ukrainenews.common.BaseMVP;
-import ua.in.zeusapps.ukrainenews.common.FragmentHelper;
+import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.modules.articleView.ArticleViewFragment;
 import ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment;
 import ua.in.zeusapps.ukrainenews.modules.settings.SettingsFragment;
+import ua.in.zeusapps.ukrainenews.modules.sources.SourcesFragment;
 
 public class MainActivity
         extends BaseActivity
@@ -54,7 +55,8 @@ public class MainActivity
     @Override
     protected void onCreateOverride(@Nullable Bundle savedInstanceState) {
         if (FragmentHelper.getStackCount(getSupportFragmentManager()) == 0){
-            showFragment(new ArticleFragment());
+            //showFragment(new ArticleFragment());
+            FragmentHelper.add(getSupportFragmentManager(), new SourcesFragment(), R.id.activity_main_content);
         }
     }
 
@@ -91,7 +93,7 @@ public class MainActivity
         }
 
         _lastPressedTimestamp = timestamp;
-        Toast.makeText(this, R.string.main_activity_close_notification, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.root_activity_close_notification, Toast.LENGTH_SHORT).show();
     }
 
     private void showFragment(BaseFragment fragment){

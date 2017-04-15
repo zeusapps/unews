@@ -1,73 +1,51 @@
 package ua.in.zeusapps.ukrainenews.modules.splash;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.widget.TextView;
 
-import javax.inject.Inject;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 
-import rx.Subscriber;
+import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
-import ua.in.zeusapps.ukrainenews.common.BaseActivity;
-import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
-import ua.in.zeusapps.ukrainenews.modules.main.MainActivity;
+import ua.in.zeusapps.ukrainenews.common.Layout;
+import ua.in.zeusapps.ukrainenews.common.MvpActivity;
+import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
+import ua.in.zeusapps.ukrainenews.modules.root.RootActivity;
 
+@Layout(R.layout.activity_splash)
 public class SplashActivity
-        extends BaseActivity
-        implements SplashMVP.IView {
+        extends MvpActivity
+        implements SplashView {
 
-    @Inject
-    SplashMVP.IPresenter presenter;
+    @InjectPresenter
+    SplashPresenter presenter;
+
+    @BindView(R.id.activity_splash_status)
+    TextView statusTextView;
 
     @Override
-    protected int getContentResourceId() {
-        return R.layout.activity_splash;
+    public void showLoading() {
+        statusTextView.setText(getString(R.string.splash_activity_loadingStatus));
     }
 
     @Override
-    protected void inject(ApplicationComponent component) {
-        component.inject(this);
-    }
-
-    @NonNull
-    @Override
-    protected SplashMVP.IPresenter getPresenter() {
-        return presenter;
+    public void showChecking() {
+        statusTextView.setText(R.string.splash_activity_checkingStatus);
     }
 
     @Override
-    public void forceClose() {
-        System.exit(0);
+    public void showError() {
+        statusTextView.setText(R.string.splash_screen_oopsMessage);
+        NotificationHelper.showSnackbarErrorMessage(
+                statusTextView,
+                getString(R.string.splash_activity_errorMessage));
     }
 
     @Override
-    protected void onCreateOverride(@Nullable Bundle savedInstanceState) {
-        getPresenter()
-                .prepare()
-                .subscribe(new Subscriber<Boolean>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        forceClose();
-                    }
-
-                    @Override
-                    public void onNext(Boolean result) {
-                        if (!result){
-                            forceClose();
-                            return;
-                        }
-
-                        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
+    public void startApp() {
+        Intent intent = new Intent(SplashActivity.this, RootActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }
