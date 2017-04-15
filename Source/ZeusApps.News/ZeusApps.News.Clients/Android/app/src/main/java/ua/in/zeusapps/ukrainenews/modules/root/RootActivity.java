@@ -9,10 +9,13 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
+import ua.in.zeusapps.ukrainenews.common.MvpFragment;
 import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
 import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
+import ua.in.zeusapps.ukrainenews.models.Source;
+import ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment;
 import ua.in.zeusapps.ukrainenews.modules.sources.SourcesFragment;
 
 @Layout(R.layout.activity_root)
@@ -29,17 +32,18 @@ public class RootActivity
     FrameLayout rootView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        FragmentHelper.add(
-                getSupportFragmentManager(),
-                new SourcesFragment(),
-                R.id.activity_root_content);
+    public void showMessage(String message) {
+        NotificationHelper.showSnackbarInfoMessage(rootView, message);
     }
 
     @Override
-    public void showMessage(String message) {
-        NotificationHelper.showSnackbarInfoMessage(rootView, message);
+    public void showSources() {
+        showFragment(new SourcesFragment());
+    }
+
+    @Override
+    public void showArticles(Source source) {
+        showFragment(ArticleFragment.newInstance(source));
     }
 
     @Override
@@ -63,5 +67,12 @@ public class RootActivity
 
         _lastPressedTimestamp = timestamp;
         showMessage(getString(R.string.root_activity_close_notification));
+    }
+
+    private void showFragment(MvpFragment fragment){
+        FragmentHelper.replace(
+                getSupportFragmentManager(),
+                fragment,
+                R.id.activity_root_content);
     }
 }

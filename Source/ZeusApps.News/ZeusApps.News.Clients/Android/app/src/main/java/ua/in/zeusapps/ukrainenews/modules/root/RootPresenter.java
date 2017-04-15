@@ -8,4 +8,9 @@ public class RootPresenter extends MvpPresenter<RootView> {
     public RootPresenter() {
         getViewState().showMessage("Hello, Moxy!");
     }
+
+    @Override
+    protected void onFirstViewAttach() {
+        getViewState().showSources();
+    }
 }
