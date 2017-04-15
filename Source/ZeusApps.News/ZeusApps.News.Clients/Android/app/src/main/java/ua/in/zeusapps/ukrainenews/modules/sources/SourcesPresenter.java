@@ -10,10 +10,10 @@ import rx.Subscriber;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
 import ua.in.zeusapps.ukrainenews.domain.GetLocalSourcesInteractor;
 import ua.in.zeusapps.ukrainenews.models.Source;
+import ua.in.zeusapps.ukrainenews.modules.root.RootPresenter;
 
 @InjectViewState
 public class SourcesPresenter extends MvpPresenterBase<SourcesView> {
-
     @Inject
     GetLocalSourcesInteractor interactor;
 
@@ -39,5 +39,9 @@ public class SourcesPresenter extends MvpPresenterBase<SourcesView> {
 
     SourcesPresenter() {
         getComponent().inject(this);
+    }
+
+    void showArticles(Source source){
+        RootPresenter.getInstance().showArticles(source);
     }
 }

@@ -53,6 +53,10 @@ public class ArticleFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         source = getArguments().getParcelable(SOURCE_EXTRA);
+
+        if (!presenter.isInRestoreState(this)){
+            presenter.init(source);
+        }
     }
 
     @Override
@@ -85,7 +89,7 @@ public class ArticleFragment
     private void initAdapter(List<Article> articles){
         adapter = new ArticleAdapter(getActivity(), formatter);
         adapter.addAll(articles);
-        adapter.setAdsProvider(adsProvider);
+        //adapter.setAdsProvider(adsProvider);
     }
 
     private void initRecyclerView(){

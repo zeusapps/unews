@@ -23,24 +23,25 @@ public class ArticlePresenter extends MvpPresenterBase<ArticleView> {
         getComponent().inject(this);
     }
 
-    @Override
-    protected void onFirstViewAttach() {
-        initialArticlesInteractor.execute(new Subscriber<List<Article>>() {
-            @Override
-            public void onCompleted() {
+    public void init(Source source){
+        initialArticlesInteractor.execute(
+                source,
+                new Subscriber<List<Article>>() {
+                    @Override
+                    public void onCompleted() {
 
-            }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
+                    }
 
-            @Override
-            public void onNext(List<Article> articles) {
-                getViewState().init(articles);
-            }
-        });
+                    @Override
+                    public void onNext(List<Article> articles) {
+                        getViewState().init(articles);
+                    }
+                });
     }
 
     public void loadNewer(Source source, Article article) {
