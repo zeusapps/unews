@@ -73,7 +73,7 @@ public abstract class RecyclerViewAdapter<TItem>
         if (!isAdPosition(position)){
             int actualPosition = position - getAdditionalCount(position);
 
-            holder.update(_context, actualPosition);
+            holder.update(_context, _items.get(actualPosition));
             return;
         }
 

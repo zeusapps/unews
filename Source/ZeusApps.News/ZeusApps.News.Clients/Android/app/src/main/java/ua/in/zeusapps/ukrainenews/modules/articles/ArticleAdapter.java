@@ -25,7 +25,8 @@ public class ArticleAdapter extends RecyclerViewAdapter<Article>{
 
     @Override
     protected BaseViewHolder onCreateContentViewHolder(ViewGroup parent, int viewType) {
-        View view = getLayoutInflater().inflate(R.layout.fragment_article_item_template, parent);
+        View view = getLayoutInflater()
+                .inflate(R.layout.fragment_article_item_template, parent, false);
         return new ArticleHolder(view);
     }
 
