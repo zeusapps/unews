@@ -1,6 +1,5 @@
 package ua.in.zeusapps.ukrainenews.modules.articles;
 
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,13 +12,13 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
-import ua.in.zeusapps.ukrainenews.adapter.ArticleAdapter;
-import ua.in.zeusapps.ukrainenews.adapter.BaseAdsAdapter;
-import ua.in.zeusapps.ukrainenews.common.App;
+import ua.in.zeusapps.ukrainenews.adapter.EndlessRecyclerViewScrollListener;
+import ua.in.zeusapps.ukrainenews.adapter.RecyclerViewAdapter;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpFragment;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Article;
+import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 @Layout(R.layout.fragment_article)
@@ -27,9 +26,10 @@ public class ArticleFragment
         extends MvpFragment
         implements  ArticleView {
 
+    private Source source;
+    private RecyclerViewAdapter<Article> adapter;
     @InjectPresenter
     ArticlePresenter presenter;
-
     @BindView(R.id.fragment_article_swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.fragment_article_articlesRecyclerView)
@@ -37,7 +37,7 @@ public class ArticleFragment
     @Inject
     Formatter formatter;
     @Inject
-    BaseAdsAdapter.AdsProvider adsProvider;
+    RecyclerViewAdapter.AdsProvider adsProvider;
 
     @Override
     protected void inject(ApplicationComponent component) {
@@ -45,40 +45,57 @@ public class ArticleFragment
     }
 
     @Override
-    public void load(List<Article> articles) {
-        initRecyclerView(articles);
-
-
-
-
+    public void init(List<Article> articles) {
+        initAdapter(articles);
+        initRecyclerView();
+        initSwipeRefreshLayout();
     }
 
     @Override
     public void addNewer(List<Article> articles) {
-
+        // TODO add newer
     }
 
     @Override
     public void addOlder(List<Article> articles) {
-
+        // TODO add older
     }
 
     @Override
     public void showLoading(boolean state) {
-
+        swipeRefreshLayout.setRefreshing(state);
     }
 
-    private void initRecyclerView(List<Article> articles){
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        ArticleAdapter adapter = new ArticleAdapter(getActivity(), formatter);
+    private void initAdapter(List<Article> articles){
+        adapter = new ArticleAdapter(getActivity(), formatter);
         adapter.addAll(articles);
-
-        adapter.addAdsProvider(new ArticleAds);
-
-
+        adapter.setAdsProvider(adsProvider);
     }
 
+    private void initRecyclerView(){
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        final EndlessRecyclerViewScrollListener listener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                presenter.loadOlder(source, adapter.getLast());
+            }
+        };
 
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        // TODO implement View.OnScrollChangeListener
+        recyclerView.setOnScrollListener(listener);
+    }
+
+    private void initSwipeRefreshLayout(){
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Article article = adapter.getFirst();
+                presenter.loadNewer(source, article);
+            }
+        });
+    }
 //        extends BaseFragment
 //        implements ArticleMVP.IView,
 //            BaseAdapter.OnItemClickListener<Article>, NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {

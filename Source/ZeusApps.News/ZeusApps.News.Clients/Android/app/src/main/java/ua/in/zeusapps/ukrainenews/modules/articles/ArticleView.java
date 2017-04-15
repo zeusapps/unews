@@ -7,7 +7,7 @@ import java.util.List;
 import ua.in.zeusapps.ukrainenews.models.Article;
 
 public interface ArticleView extends MvpView {
-    void load(List<Article> articles);
+    void init(List<Article> articles);
     void addNewer(List<Article> articles);
     void addOlder(List<Article> articles);
     void showLoading(boolean state);

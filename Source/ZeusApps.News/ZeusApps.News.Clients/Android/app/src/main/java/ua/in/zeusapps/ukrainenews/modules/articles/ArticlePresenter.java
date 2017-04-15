@@ -2,7 +2,6 @@ package ua.in.zeusapps.ukrainenews.modules.articles;
 
 
 import com.arellomobile.mvp.InjectViewState;
-import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.List;
 
@@ -39,17 +38,17 @@ public class ArticlePresenter extends MvpPresenterBase<ArticleView> {
 
             @Override
             public void onNext(List<Article> articles) {
-                getViewState().load(articles);
+                getViewState().init(articles);
             }
         });
     }
 
-    public void loadNewer(Source source) {
+    public void loadNewer(Source source, Article article) {
         getViewState().showLoading(true);
         getViewState().addNewer(null);
     }
 
-    public void loadOlder(Source source) {
+    public void loadOlder(Source source, Article lastArticle) {
         getViewState().showLoading(true);
         getViewState().addOlder(null);
     }
