@@ -2,20 +2,46 @@ package ua.in.zeusapps.ukrainenews.modules.articles;
 
 
 import com.arellomobile.mvp.InjectViewState;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import java.util.List;
+
+import javax.inject.Inject;
+
+import rx.Subscriber;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
+import ua.in.zeusapps.ukrainenews.domain.GetInitialArticlesInteractor;
+import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
 @InjectViewState
 public class ArticlePresenter extends MvpPresenterBase<ArticleView> {
 
+    @Inject
+    GetInitialArticlesInteractor initialArticlesInteractor;
+
     public ArticlePresenter() {
         getComponent().inject(this);
     }
 
-    public void load(Source source) {
-        getViewState().showLoading(true);
-        getViewState().load(null);
+    @Override
+    protected void onFirstViewAttach() {
+        initialArticlesInteractor.execute(new Subscriber<List<Article>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(List<Article> articles) {
+                getViewState().load(articles);
+            }
+        });
     }
 
     public void loadNewer(Source source) {

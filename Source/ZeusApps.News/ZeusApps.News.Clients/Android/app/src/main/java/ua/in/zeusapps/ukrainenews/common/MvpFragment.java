@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 
 import butterknife.ButterKnife;
+import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 
 public abstract class MvpFragment
         extends MvpAppCompatFragment {
@@ -29,6 +30,11 @@ public abstract class MvpFragment
         Layout layout = (Layout) cls.getAnnotation(Layout.class);
         View view = inflater.inflate(layout.value(), null);
         ButterKnife.bind(this, view);
+        inject(App.getInstance().getComponent());
         return view;
+    }
+
+    protected void inject(ApplicationComponent component){
+
     }
 }

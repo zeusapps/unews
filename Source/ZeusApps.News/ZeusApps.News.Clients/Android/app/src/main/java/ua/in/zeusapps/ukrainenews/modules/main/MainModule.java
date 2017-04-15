@@ -14,9 +14,4 @@ public class MainModule {
     public MainActivityMVP.Presenter provideMainActivityPresenter(){
         return new MainActivityPresenter();
     }
-
-    @Provides
-    public ISourceRepository providesSourceRepository(Context context){
-        return new SourceRepository(context);
-    }
 }

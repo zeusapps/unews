@@ -3,6 +3,7 @@ package ua.in.zeusapps.ukrainenews.components;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import ua.in.zeusapps.ukrainenews.data.DataModule;
 import ua.in.zeusapps.ukrainenews.modules.ApplicationModule;
 import ua.in.zeusapps.ukrainenews.modules.articleView.ArticleViewFragment;
 import ua.in.zeusapps.ukrainenews.modules.articleView.ArticleViewModule;
@@ -21,7 +22,9 @@ import ua.in.zeusapps.ukrainenews.modules.splash.SplashPresenter;
         ApplicationModule.class,
         MainModule.class,
         ArticleViewModule.class,
-        SettingsModule.class
+        SettingsModule.class,
+
+        DataModule.class
 })
 public interface ApplicationComponent {
     void inject(MainActivity target);

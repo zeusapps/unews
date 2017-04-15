@@ -23,8 +23,7 @@ import ua.in.zeusapps.ukrainenews.modules.sources.SourcesFragment;
 
 public class MainActivity
         extends BaseActivity
-        implements MainActivityMVP.View,
-            ArticleFragment.OnArticleSelectedListener {
+        implements MainActivityMVP.View {
 
     private final static int PERIOD_TO_CLOSE = 2000;
     private long _lastPressedTimestamp;
@@ -61,11 +60,6 @@ public class MainActivity
     }
 
     @Override
-    public void onArticleSelected(Article article) {
-        presenter.showArticle(article);
-    }
-
-    @Override
     public void switchToArticleView(Article article) {
         showFragment(ArticleViewFragment.newInstance(article.getId()));
     }
@@ -80,10 +74,10 @@ public class MainActivity
         BaseFragment frg =  (BaseFragment) FragmentHelper
                 .getVisibleFragment(getSupportFragmentManager());
 
-        if (!frg.getTag().equals(ArticleFragment.TAG)){
-            super.onBackPressed();
-            return;
-        }
+//        if (!frg.getTag().equals(ArticleFragment.TAG)){
+//            super.onBackPressed();
+//            return;
+//        }
 
         long timestamp = System.currentTimeMillis();
         if (timestamp - _lastPressedTimestamp < PERIOD_TO_CLOSE){

@@ -1,12 +1,28 @@
 package ua.in.zeusapps.ukrainenews.modules.articles;
 
+import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.List;
 
-import ua.in.zeusapps.ukrainenews.common.MvpFragment;
-import ua.in.zeusapps.ukrainenews.models.Article;
+import javax.inject.Inject;
 
+import butterknife.BindView;
+import ua.in.zeusapps.ukrainenews.R;
+import ua.in.zeusapps.ukrainenews.adapter.ArticleAdapter;
+import ua.in.zeusapps.ukrainenews.adapter.BaseAdsAdapter;
+import ua.in.zeusapps.ukrainenews.common.App;
+import ua.in.zeusapps.ukrainenews.common.Layout;
+import ua.in.zeusapps.ukrainenews.common.MvpFragment;
+import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
+import ua.in.zeusapps.ukrainenews.models.Article;
+import ua.in.zeusapps.ukrainenews.services.Formatter;
+
+@Layout(R.layout.fragment_article)
 public class ArticleFragment
         extends MvpFragment
         implements  ArticleView {
@@ -14,8 +30,26 @@ public class ArticleFragment
     @InjectPresenter
     ArticlePresenter presenter;
 
+    @BindView(R.id.fragment_article_swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.fragment_article_articlesRecyclerView)
+    RecyclerView recyclerView;
+    @Inject
+    Formatter formatter;
+    @Inject
+    BaseAdsAdapter.AdsProvider adsProvider;
+
+    @Override
+    protected void inject(ApplicationComponent component) {
+        component.inject(this);
+    }
+
     @Override
     public void load(List<Article> articles) {
+        initRecyclerView(articles);
+
+
+
 
     }
 
@@ -31,6 +65,16 @@ public class ArticleFragment
 
     @Override
     public void showLoading(boolean state) {
+
+    }
+
+    private void initRecyclerView(List<Article> articles){
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        ArticleAdapter adapter = new ArticleAdapter(getActivity(), formatter);
+        adapter.addAll(articles);
+
+        adapter.addAdsProvider(new ArticleAds);
+
 
     }
 
