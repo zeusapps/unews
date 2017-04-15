@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import rx.Observable;
 import ua.in.zeusapps.ukrainenews.common.Interactor;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.services.ISourceRepository;
+import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
 
 public class GetLocalSourcesInteractor extends Interactor<List<Source>, Void>{
 

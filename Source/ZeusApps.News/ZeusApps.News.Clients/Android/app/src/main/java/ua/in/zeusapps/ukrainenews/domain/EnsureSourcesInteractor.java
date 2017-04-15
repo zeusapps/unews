@@ -11,7 +11,7 @@ import rx.functions.Func1;
 import ua.in.zeusapps.ukrainenews.common.Interactor;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.IDataService;
-import ua.in.zeusapps.ukrainenews.services.ISourceRepository;
+import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
 
 public class EnsureSourcesInteractor extends Interactor<Boolean, List<Source>> {
 
