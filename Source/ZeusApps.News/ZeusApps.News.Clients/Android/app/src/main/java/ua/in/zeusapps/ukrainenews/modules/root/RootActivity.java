@@ -115,7 +115,7 @@ public class RootActivity
     }
 
     private void showFragment(BaseRootFragment fragment){
-        FragmentHelper.replace(
+        FragmentHelper.add(
                 getSupportFragmentManager(),
                 fragment,
                 R.id.activity_root_content);

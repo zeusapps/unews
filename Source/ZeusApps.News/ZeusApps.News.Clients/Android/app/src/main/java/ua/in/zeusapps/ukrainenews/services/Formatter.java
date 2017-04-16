@@ -28,14 +28,17 @@ public class Formatter {
         _htmlTemplate = readTemplate(context);
     }
 
-    public String formatDate(String dateTime){
-        try{
-            Date date = _formatterUTC.parse(dateTime);
-            return SimpleDateFormat.getDateTimeInstance().format(date);
-        }
-        catch (ParseException e){
-            return "";
-        }
+    public String toStringDate(Date date){
+        return _formatterUTC.format(date);
+    }
+
+    public String formatDate(Date dateTime){
+        //try{
+            return SimpleDateFormat.getDateTimeInstance().format(dateTime);
+//        }
+//        catch (ParseException e){
+//            return "";
+//        }
     }
 
     public long getMils(String dateTime){

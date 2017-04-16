@@ -2,6 +2,9 @@ package ua.in.zeusapps.ukrainenews.modules;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -46,9 +49,15 @@ public class ApplicationModule {
     @Provides
     @Singleton
     public Retrofit getRetrofit(){
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .create();
+
+        GsonConverterFactory factory = GsonConverterFactory.create(gson);
+
         return new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(factory)
                 .baseUrl(Constants.REMOTE_URL)
                 .build();
     }

@@ -10,20 +10,25 @@ import ua.in.zeusapps.ukrainenews.common.Interactor;
 import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
+import ua.in.zeusapps.ukrainenews.services.Formatter;
 import ua.in.zeusapps.ukrainenews.services.IDataService;
 
 public class GetInitialArticlesInteractor extends Interactor<List<Article>, Source> {
 
     private final IDataService _dataService;
     private final IArticleRepository _repository;
+    private final Formatter _formatter;
 
     private static final int PAGE_SIZE = 20;
 
     @Inject
     public GetInitialArticlesInteractor(
-            IDataService dataService, IArticleRepository repository) {
+            IDataService dataService,
+            IArticleRepository repository,
+            Formatter formatter) {
         _dataService = dataService;
         _repository = repository;
+        _formatter = formatter;
     }
 
     @Override
@@ -58,8 +63,10 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
         if (local.size() == 0) {
             return _dataService.getArticles(source.getKey(), PAGE_SIZE);
         }
+
+        String dateString = _formatter.toStringDate(local.get(0).getPublished());
         return _dataService.getNewerArticles(
-                source.getKey(), PAGE_SIZE, local.get(0).getPublished(), true);
+                source.getKey(), PAGE_SIZE, dateString, true);
     }
 
     private void saveNewArticles(List<Article> articles){

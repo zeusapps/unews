@@ -2,8 +2,11 @@ package ua.in.zeusapps.ukrainenews.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import java.util.Date;
 
 @DatabaseTable
 public class Article {
@@ -42,10 +45,10 @@ public class Article {
     @Expose
     private String imageUrl;
 
-    @DatabaseField(useGetSet = true, columnName = PUBLISHED_FIELD_NAME)
+    @DatabaseField(useGetSet = true, columnName = PUBLISHED_FIELD_NAME, dataType = DataType.DATE_STRING)
     @SerializedName("published")
     @Expose
-    private String published;
+    private Date published;
 
     @DatabaseField(useGetSet = true)
     @SerializedName("upvote")
@@ -105,11 +108,11 @@ public class Article {
         this.imageUrl = imageUrl;
     }
 
-    public String getPublished() {
+    public Date getPublished() {
         return published;
     }
 
-    public void setPublished(String published) {
+    public void setPublished(Date published) {
         this.published = published;
     }
 
