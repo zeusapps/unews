@@ -16,12 +16,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
-import ua.in.zeusapps.ukrainenews.common.MvpFragment;
+import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
 import ua.in.zeusapps.ukrainenews.models.Source;
+import ua.in.zeusapps.ukrainenews.modules.root.BaseRootFragment;
 
 @Layout(R.layout.fragment_sources)
 public class SourcesFragment
-    extends MvpFragment
+    extends BaseRootFragment
     implements SourcesView {
 
     @BindView(R.id.fragment_sources_items)
@@ -33,8 +34,8 @@ public class SourcesFragment
     SourcesPresenter presenter;
 
     @Override
-    public void showSources(List<Source> sources) {
-        SourcesAdapter adapter = new SourcesAdapter(sources);
+    public void showSources(final List<Source> sources) {
+        final SourcesAdapter adapter = new SourcesAdapter(sources);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
@@ -43,6 +44,26 @@ public class SourcesFragment
     @Override
     public void showError() {
         //TODO implement show error
+    }
+
+    @Override
+    public String getTitle() {
+        return getString(R.string.fragment_sources_title);
+    }
+
+    @Override
+    public int getFabButtonIcon() {
+        return 0;
+    }
+
+    @Override
+    public View.OnClickListener getFabButtonAction() {
+        return null;
+    }
+
+    @Override
+    public MvpPresenterBase getPresenter() {
+        return presenter;
     }
 
 

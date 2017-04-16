@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.services;
+package ua.in.zeusapps.ukrainenews.data;
 
 import java.util.List;
 

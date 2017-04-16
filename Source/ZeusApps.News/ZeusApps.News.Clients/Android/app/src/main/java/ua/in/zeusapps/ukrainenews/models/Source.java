@@ -1,10 +1,13 @@
 package ua.in.zeusapps.ukrainenews.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.j256.ormlite.field.DatabaseField;
 
-public class Source {
+public class Source implements Parcelable {
 
     public static final String KEY_FIELD_NAME = "key";
 
@@ -37,6 +40,33 @@ public class Source {
     @SerializedName("key")
     @Expose
     private String key;
+
+    @DatabaseField(useGetSet = true)
+    private int timestamp;
+
+    public Source(){ }
+
+    protected Source(Parcel in) {
+        id = in.readString();
+        title = in.readString();
+        encoding = in.readString();
+        baseUrl = in.readString();
+        imageUrl = in.readString();
+        key = in.readString();
+        timestamp = in.readInt();
+    }
+
+    public static final Creator<Source> CREATOR = new Creator<Source>() {
+        @Override
+        public Source createFromParcel(Parcel in) {
+            return new Source(in);
+        }
+
+        @Override
+        public Source[] newArray(int size) {
+            return new Source[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -86,6 +116,14 @@ public class Source {
         this.key = key;
     }
 
+    public int getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(int timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -100,5 +138,21 @@ public class Source {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(title);
+        dest.writeString(encoding);
+        dest.writeString(baseUrl);
+        dest.writeString(imageUrl);
+        dest.writeString(key);
+        dest.writeInt(timestamp);
     }
 }
