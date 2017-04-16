@@ -37,4 +37,6 @@ public abstract class MvpFragment
     protected void inject(ApplicationComponent component){
 
     }
+
+    public abstract MvpPresenterBase getPresenter();
 }
