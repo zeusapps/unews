@@ -79,23 +79,30 @@ public abstract class RecyclerViewAdapter<TItem>
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
-        if (!isAdPosition(position)){
-            int actualPosition = position - getAdditionalCount(position);
-            final TItem item = _items.get(actualPosition);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    itemClickedSubject.onNext(item);
-                }
-            });
-
-            //noinspection unchecked
-            holder.update(_context, item);
+        if (isAdPosition(position)){
+            int adPosition = getAdditionalCount(position);
+            _adsProvider.bindAdAtPosition(holder, adPosition);
             return;
         }
 
-        int adPosition = getAdditionalCount(position);
-        _adsProvider.bindAdAtPosition(holder, adPosition);
+        if (_adsProvider != null){
+            int offset = _adsProvider.getAdsOffset();
+            int period = _adsProvider.getAdsPeriod() + 1;
+
+            if (position >= offset) {
+                position -= Math.floor((position - offset) / period);
+            }
+        }
+
+        final TItem item = _items.get(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemClickedSubject.onNext(item);
+            }
+        });
+        //noinspection unchecked
+        holder.update(_context, item);
     }
 
     protected abstract BaseViewHolder onCreateContentViewHolder(ViewGroup parent, int viewType);
