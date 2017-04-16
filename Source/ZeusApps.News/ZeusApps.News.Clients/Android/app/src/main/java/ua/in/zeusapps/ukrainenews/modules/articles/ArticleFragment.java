@@ -68,7 +68,7 @@ public class ArticleFragment
 
     @Override
     public MvpPresenterBase getPresenter() {
-        return null;
+        return presenter;
     }
 
     @Override
