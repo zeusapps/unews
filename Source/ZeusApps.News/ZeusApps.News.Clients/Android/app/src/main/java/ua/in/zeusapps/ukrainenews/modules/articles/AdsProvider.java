@@ -39,6 +39,7 @@ public class AdsProvider implements RecyclerViewAdapter.AdsProvider {
         return new AdHolder(view);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void bindAdAtPosition(BaseViewHolder holder, int position) {
         holder.update(_context, null);

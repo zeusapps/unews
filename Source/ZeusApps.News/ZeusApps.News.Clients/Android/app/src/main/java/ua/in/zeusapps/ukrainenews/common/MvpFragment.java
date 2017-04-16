@@ -31,6 +31,10 @@ public abstract class MvpFragment
         View view = inflater.inflate(layout.value(), null);
         ButterKnife.bind(this, view);
         inject(App.getInstance().getComponent());
+
+        //noinspection unchecked
+        getPresenter().setRouter((RouterBase)getActivity());
+
         return view;
     }
 

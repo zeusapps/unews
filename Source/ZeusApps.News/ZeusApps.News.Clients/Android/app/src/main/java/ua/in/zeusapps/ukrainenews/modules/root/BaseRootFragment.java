@@ -12,17 +12,13 @@ public abstract class BaseRootFragment
         extends MvpFragment
         implements BaseRootView {
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         //setRetainInstance(true);
-
         RootActivity activity = (RootActivity) getActivity();
-
-        //noinspection unchecked
-        //TODO SET ROUTER
-        //getPresenter().setRouter(mainActivity);
         activity.resolveToolbar(this);
         activity.resolveFab(this);
     }

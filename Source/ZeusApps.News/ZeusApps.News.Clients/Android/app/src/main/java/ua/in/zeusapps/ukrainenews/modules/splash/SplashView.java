@@ -6,5 +6,4 @@ interface SplashView extends MvpView {
     void showLoading();
     void showChecking();
     void showError();
-    void startApp();
 }

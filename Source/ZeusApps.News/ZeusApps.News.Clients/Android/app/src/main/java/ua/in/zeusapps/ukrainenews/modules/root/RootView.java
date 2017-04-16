@@ -9,8 +9,4 @@ import ua.in.zeusapps.ukrainenews.models.Source;
 public interface RootView extends MvpView {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void showMessage(String message);
-
-    void showSources();
-
-    void showArticles(Source source);
 }

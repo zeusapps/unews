@@ -13,14 +13,17 @@ import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
+import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
 import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
 import ua.in.zeusapps.ukrainenews.models.Source;
+import ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment;
+import ua.in.zeusapps.ukrainenews.modules.sources.SourcesFragment;
 
 @Layout(R.layout.activity_root)
 public class RootActivity
         extends MvpActivity
-        implements RootView {
+        implements RootView, RootRouter {
 
     private final static int PERIOD_TO_CLOSE = 2000;
     private long _lastPressedTimestamp;
@@ -42,20 +45,23 @@ public class RootActivity
     }
 
     @Override
+    protected MvpPresenterBase getPresenter() {
+        return presenter;
+    }
+
+    @Override
     public void showMessage(String message) {
         NotificationHelper.showSnackbarInfoMessage(rootView, message);
     }
 
     @Override
     public void showSources() {
-        //TODO implement BaseRootFragment
-        //showFragment(new SourcesFragment());
+        showFragment(new SourcesFragment());
     }
 
     @Override
     public void showArticles(Source source) {
-        //TODO implement BaseRootFragment
-        //showFragment(ArticleFragment.newInstance(source));
+        showFragment(ArticleFragment.newInstance(source));
     }
 
     @Override

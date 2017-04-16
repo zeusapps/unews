@@ -15,12 +15,12 @@ import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
 import ua.in.zeusapps.ukrainenews.domain.EnsureSourcesInteractor;
 
 @InjectViewState
-public class SplashPresenter extends MvpPresenterBase<SplashView> {
+public class SplashPresenter extends MvpPresenterBase<SplashView, SplashRouter> {
 
     @Inject
     EnsureSourcesInteractor ensureSourcesInteractor;
 
-    public SplashPresenter() {
+    SplashPresenter() {
         getComponent().inject(this);
         getViewState().showLoading();
     }
@@ -39,7 +39,7 @@ public class SplashPresenter extends MvpPresenterBase<SplashView> {
 
             @Override
             public void onNext(Boolean aBoolean) {
-                getViewState().startApp();
+                getRouter().startApp();
             }
         });
     }

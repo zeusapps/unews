@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -16,15 +17,16 @@ import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.adapter.EndlessRecyclerViewScrollListener;
 import ua.in.zeusapps.ukrainenews.adapter.RecyclerViewAdapter;
 import ua.in.zeusapps.ukrainenews.common.Layout;
-import ua.in.zeusapps.ukrainenews.common.MvpFragment;
+import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
+import ua.in.zeusapps.ukrainenews.modules.root.BaseRootFragment;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 @Layout(R.layout.fragment_article)
 public class ArticleFragment
-        extends MvpFragment
+        extends BaseRootFragment
         implements  ArticleView {
 
     private static final String SOURCE_EXTRA = "source";
@@ -62,6 +64,11 @@ public class ArticleFragment
     @Override
     protected void inject(ApplicationComponent component) {
         component.inject(this);
+    }
+
+    @Override
+    public MvpPresenterBase getPresenter() {
+        return null;
     }
 
     @Override
@@ -115,6 +122,21 @@ public class ArticleFragment
                 presenter.loadNewer(source, article);
             }
         });
+    }
+
+    @Override
+    public String getTitle() {
+        return source.getTitle();
+    }
+
+    @Override
+    public int getFabButtonIcon() {
+        return 0;
+    }
+
+    @Override
+    public View.OnClickListener getFabButtonAction() {
+        return null;
     }
 //        extends BaseFragment
 //        implements ArticleMVP.IView,
