@@ -11,4 +11,5 @@ public interface IArticleRepository {
     Observable<List<Article>> getBySource(Source source);
 
     void create(Article article);
+    void removeBySource(Source source);
 }

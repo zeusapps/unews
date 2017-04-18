@@ -17,36 +17,30 @@ import java.util.TimeZone;
 import ua.in.zeusapps.ukrainenews.R;
 
 public class Formatter {
-    private final static String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public final static String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private final SimpleDateFormat _formatterUTC;
+    private final SimpleDateFormat _formatterLocal;
     private final String _htmlTemplate;
 
     public Formatter(Context context){
         _formatterUTC = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         _formatterUTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 
+        _formatterLocal = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault());
+        _formatterLocal.setTimeZone(TimeZone.getDefault());
+
         _htmlTemplate = readTemplate(context);
     }
 
     public String toStringDate(Date date){
+
+
+
         return _formatterUTC.format(date);
     }
 
     public String formatDate(Date dateTime){
-        //try{
-            return SimpleDateFormat.getDateTimeInstance().format(dateTime);
-//        }
-//        catch (ParseException e){
-//            return "";
-//        }
-    }
-
-    public long getMils(String dateTime){
-        try {
-            return _formatterUTC.parse(dateTime).getTime();
-        } catch (ParseException e) {
-            return 0;
-        }
+        return _formatterLocal.format(dateTime);
     }
 
     public String formatHtml(String html){

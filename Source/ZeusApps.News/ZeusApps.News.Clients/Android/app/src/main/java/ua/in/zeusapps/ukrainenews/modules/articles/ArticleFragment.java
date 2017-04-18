@@ -31,7 +31,7 @@ public class ArticleFragment
 
     private static final String SOURCE_EXTRA = "source";
     private Source source;
-    private RecyclerViewAdapter<Article> adapter;
+    private RecyclerViewAdapter<Article> _adapter;
     @InjectPresenter
     ArticlePresenter presenter;
     @BindView(R.id.fragment_article_swipeRefreshLayout)
@@ -79,13 +79,17 @@ public class ArticleFragment
     }
 
     @Override
-    public void addNewer(List<Article> articles) {
-        // TODO add newer
+    public void addNewer(List<Article> articles, boolean refresh) {
+        if (refresh){
+            _adapter.clear();
+        }
+
+        _adapter.addAll(0, articles);
     }
 
     @Override
     public void addOlder(List<Article> articles) {
-        // TODO add older
+        _adapter.addAll(_adapter.getAll().size(), articles);
     }
 
     @Override
@@ -99,9 +103,9 @@ public class ArticleFragment
     }
 
     private void initAdapter(List<Article> articles){
-        adapter = new ArticleAdapter(getActivity(), formatter);
-        adapter.addAll(articles);
-        //adapter.setAdsProvider(adsProvider);
+        _adapter = new ArticleAdapter(getActivity(), formatter);
+        _adapter.addAll(articles);
+        _adapter.setAdsProvider(adsProvider);
     }
 
     private void initRecyclerView(){
@@ -109,12 +113,12 @@ public class ArticleFragment
         final EndlessRecyclerViewScrollListener listener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                presenter.loadOlder(source, adapter.getLast());
+                presenter.loadOlder(source, _adapter.getLast());
             }
         };
 
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(_adapter);
         // TODO implement View.OnScrollChangeListener
         recyclerView.setOnScrollListener(listener);
     }
@@ -123,7 +127,7 @@ public class ArticleFragment
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Article article = adapter.getFirst();
+                Article article = _adapter.getFirst();
                 presenter.loadNewer(source, article);
             }
         });

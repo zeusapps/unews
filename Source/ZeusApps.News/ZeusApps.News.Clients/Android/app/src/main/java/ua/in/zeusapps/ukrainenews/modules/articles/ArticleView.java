@@ -10,7 +10,7 @@ import ua.in.zeusapps.ukrainenews.modules.root.BaseRootView;
 
 public interface ArticleView extends BaseRootView {
     void init(List<Article> articles);
-    void addNewer(List<Article> articles);
+    void addNewer(List<Article> articles, boolean refresh);
     void addOlder(List<Article> articles);
     void showLoading(boolean state);
     @StateStrategyType(SingleStateStrategy.class)

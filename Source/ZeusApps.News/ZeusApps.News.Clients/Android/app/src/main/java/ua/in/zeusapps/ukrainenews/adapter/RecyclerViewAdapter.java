@@ -35,18 +35,35 @@ public abstract class RecyclerViewAdapter<TItem>
 
     public void addAll(List<TItem> items){
         _items.addAll(items);
+        notifyDataSetChanged();
+    }
+
+    public void addAll(int index, List<TItem> items){
+        for (TItem item: items) {
+            _items.add(index, item);
+            index++;
+        }
+
+        notifyDataSetChanged();
     }
 
     public void add(TItem item){
         _items.add(item);
+        notifyDataSetChanged();
     }
 
     public void add(int position, TItem item){
         _items.add(position, item);
+        notifyDataSetChanged();
     }
 
     public List<TItem> getAll(){
         return _items;
+    }
+
+    public void clear(){
+        _items.clear();
+        notifyDataSetChanged();
     }
 
     public TItem getFirst(){
