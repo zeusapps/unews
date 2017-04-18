@@ -73,13 +73,14 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
         }
 
         // Check for last refresh, return empty result if has recent update
-        Date timestamp = new Date();
-        if (source.getTimestamp().getTime() + timeSkew > timestamp.getTime()){
+        Date nowTimestamp = new Date();
+        Date timestamp = source.getTimestamp();
+        if (timestamp != null  && timestamp.getTime() + timeSkew > nowTimestamp.getTime()){
             List<Article> emptyResult = new ArrayList<>();
             return Observable.just(emptyResult);
         }
 
-        source.setTimestamp(timestamp);
+        source.setTimestamp(nowTimestamp);
         _sourceRepository.update(source);
         String dateString = _formatter.toStringDate(local.get(0).getPublished());
         return _dataService.getNewerArticles(
