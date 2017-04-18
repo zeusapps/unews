@@ -9,13 +9,33 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 abstract class RepositoryBase<TItem, TKey> {
     private final RuntimeExceptionDao<TItem, TKey> _dao;
 
+    private static List<Class> _childClasses = new ArrayList<>();
+
+    private static int _databaseVersion = 2;
+
+    private static String _databaseName = "data.db";
+
     RepositoryBase(Context context, Class<TItem> clazz) {
-        Helper helper = new Helper(context, clazz);
+        Helper helper = new Helper(context);
         _dao = helper.getRuntimeExceptionDao(clazz);
+    }
+
+    public static void setDatebaseVersion(int databaseVersion){
+        _databaseVersion = databaseVersion;
+    }
+
+    public static void setDatabaseName(String name){
+        _databaseName = name;
+    }
+
+    public static void RegisterClass(Class clazz){
+        _childClasses.add(clazz);
     }
 
     RuntimeExceptionDao<TItem, TKey> getDao(){
@@ -23,20 +43,17 @@ abstract class RepositoryBase<TItem, TKey> {
     }
 
     private class Helper extends OrmLiteSqliteOpenHelper {
-        private final static String DATABASE_NAME = "news.db";
-        private final static int DATABASE_VERSION = 4;
-        private final Class<TItem> itemClass;
-
-        Helper(Context context, Class<TItem> cls) {
-            super(context, DATABASE_NAME, null, DATABASE_VERSION);
-            itemClass = cls;
+        Helper(Context context) {
+            super(context, _databaseName, null, _databaseVersion);
         }
 
         @Override
         public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
             try {
-                TableUtils.dropTable(connectionSource, itemClass, true);
-                TableUtils.createTable(connectionSource, itemClass);
+                for (Class cls: _childClasses) {
+                    TableUtils.dropTable(connectionSource, cls, true);
+                    TableUtils.createTable(connectionSource, cls);
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
