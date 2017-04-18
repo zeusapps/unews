@@ -13,7 +13,7 @@ public class Source implements Parcelable {
 
     public static final String KEY_FIELD_NAME = "key";
 
-    @DatabaseField(useGetSet = true)
+    @DatabaseField(useGetSet = true, id = true)
     @SerializedName("id")
     @Expose
     private String id;
