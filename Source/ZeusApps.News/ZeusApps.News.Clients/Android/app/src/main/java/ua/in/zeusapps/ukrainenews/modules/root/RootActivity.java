@@ -3,6 +3,7 @@ package ua.in.zeusapps.ukrainenews.modules.root;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -56,7 +57,11 @@ public class RootActivity
 
     @Override
     public void showSources() {
-        showFragment(new SourcesFragment());
+        //showFragment(new SourcesFragment());
+        FragmentHelper.replace(
+                getSupportFragmentManager(),
+                new SourcesFragment(),
+                R.id.activity_root_content);
     }
 
     @Override
@@ -68,7 +73,7 @@ public class RootActivity
     public void onBackPressed() {
         int count = FragmentHelper.getStackCount(getSupportFragmentManager());
 
-        if (count > 1){
+        if (count > 0){
             super.onBackPressed();
         } else {
             tryClose();
