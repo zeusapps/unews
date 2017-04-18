@@ -7,11 +7,13 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.j256.ormlite.field.DatabaseField;
 
+import java.util.Date;
+
 public class Source implements Parcelable {
 
     public static final String KEY_FIELD_NAME = "key";
 
-    @DatabaseField(useGetSet = true)
+    @DatabaseField(useGetSet = true, id = true)
     @SerializedName("id")
     @Expose
     private String id;
@@ -42,7 +44,7 @@ public class Source implements Parcelable {
     private String key;
 
     @DatabaseField(useGetSet = true)
-    private int timestamp;
+    private Date timestamp;
 
     public Source(){ }
 
@@ -53,7 +55,7 @@ public class Source implements Parcelable {
         baseUrl = in.readString();
         imageUrl = in.readString();
         key = in.readString();
-        timestamp = in.readInt();
+        timestamp = new Date(in.readLong());
     }
 
     public static final Creator<Source> CREATOR = new Creator<Source>() {
@@ -116,11 +118,11 @@ public class Source implements Parcelable {
         this.key = key;
     }
 
-    public int getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(int timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -153,6 +155,6 @@ public class Source implements Parcelable {
         dest.writeString(baseUrl);
         dest.writeString(imageUrl);
         dest.writeString(key);
-        dest.writeInt(timestamp);
+        dest.writeLong(timestamp.getTime());
     }
 }

@@ -2,6 +2,9 @@ package ua.in.zeusapps.ukrainenews.data;
 
 import android.content.Context;
 
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.QueryBuilder;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,19 +13,27 @@ import rx.Observable;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
-public class ArticleRepository
+class ArticleRepository
         extends RepositoryBase<Article, String>
         implements IArticleRepository {
 
-    public ArticleRepository(Context context) {
+    ArticleRepository(Context context) {
         super(context, Article.class);
     }
 
     @Override
     public Observable<List<Article>> getAll() {
-        List<Article> articles = getDao().queryForAll();
-
-        return Observable.just(articles);
+        try {
+            List<Article> articles = getDao()
+                    .queryBuilder()
+                    .orderBy(Article.PUBLISHED_FIELD_NAME, false)
+                    .query();
+            return Observable.just(articles);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        List<Article> empty = new ArrayList<>();
+        return Observable.just(empty);
     }
 
     @Override
@@ -30,11 +41,11 @@ public class ArticleRepository
         List<Article> articles;
 
         try {
-            articles = getDao()
-                    .queryBuilder()
+            QueryBuilder<Article, String> builder = getDao().queryBuilder();
+            builder.where().eq(Article.SOURCE_ID_FIELD_NAME, source.getKey());
+
+            articles = builder
                     .orderBy(Article.PUBLISHED_FIELD_NAME, false)
-                    .where()
-                    .eq(Article.SOURCE_ID_FIELD_NAME, source.getKey())
                     .query();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,6 +57,29 @@ public class ArticleRepository
 
     @Override
     public void create(Article article){
-        getDao().create(article);
+        try {
+            Article localArticle = getDao().queryBuilder()
+                    .where()
+                    .eq(Article.ID_FIELD_NAME, article.getId())
+                    .queryForFirst();
+
+            if (localArticle == null){
+                getDao().create(article);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void removeBySource(Source source) {
+        try {
+            DeleteBuilder<Article, String> builder = getDao()
+                    .deleteBuilder();
+            builder.where().eq(Article.SOURCE_ID_FIELD_NAME, source.getKey());
+            builder.delete();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

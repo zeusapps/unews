@@ -35,18 +35,35 @@ public abstract class RecyclerViewAdapter<TItem>
 
     public void addAll(List<TItem> items){
         _items.addAll(items);
+        notifyDataSetChanged();
+    }
+
+    public void addAll(int index, List<TItem> items){
+        for (TItem item: items) {
+            _items.add(index, item);
+            index++;
+        }
+
+        notifyDataSetChanged();
     }
 
     public void add(TItem item){
         _items.add(item);
+        notifyDataSetChanged();
     }
 
     public void add(int position, TItem item){
         _items.add(position, item);
+        notifyDataSetChanged();
     }
 
     public List<TItem> getAll(){
         return _items;
+    }
+
+    public void clear(){
+        _items.clear();
+        notifyDataSetChanged();
     }
 
     public TItem getFirst(){
@@ -79,23 +96,31 @@ public abstract class RecyclerViewAdapter<TItem>
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
-        if (!isAdPosition(position)){
-            int actualPosition = position - getAdditionalCount(position);
-            final TItem item = _items.get(actualPosition);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    itemClickedSubject.onNext(item);
-                }
-            });
-
-            //noinspection unchecked
-            holder.update(_context, item);
+        if (isAdPosition(position)){
+            int adPosition = getAdditionalCount(position);
+            _adsProvider.bindAdAtPosition(holder, adPosition);
             return;
         }
 
-        int adPosition = getAdditionalCount(position);
-        _adsProvider.bindAdAtPosition(holder, adPosition);
+        if (_adsProvider != null){
+            int offset = _adsProvider.getAdsOffset();
+            int period = _adsProvider.getAdsPeriod() + 1;
+
+            if (position >= offset) {
+                position -= ((position - offset) / period + 1);
+                        //Math.floor((position - offset) / period);
+            }
+        }
+
+        final TItem item = _items.get(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemClickedSubject.onNext(item);
+            }
+        });
+        //noinspection unchecked
+        holder.update(_context, item);
     }
 
     protected abstract BaseViewHolder onCreateContentViewHolder(ViewGroup parent, int viewType);

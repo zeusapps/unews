@@ -8,4 +8,5 @@ public interface ISourceRepository {
     List<Source> getAll();
     void create(Source source);
     void delete(Source source);
+    void update(Source source);
 }

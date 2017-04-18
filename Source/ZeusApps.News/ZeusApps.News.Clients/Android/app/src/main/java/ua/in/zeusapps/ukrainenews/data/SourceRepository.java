@@ -30,4 +30,9 @@ public class SourceRepository
     public void delete(Source source) {
         getDao().delete(source);
     }
+
+    @Override
+    public void update(Source source) {
+        getDao().update(source);
+    }
 }

@@ -2,6 +2,11 @@ package ua.in.zeusapps.ukrainenews.modules;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.Date;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -11,6 +16,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ua.in.zeusapps.ukrainenews.common.App;
 import ua.in.zeusapps.ukrainenews.common.Constants;
+import ua.in.zeusapps.ukrainenews.common.GsonUTCDateAdapter;
 import ua.in.zeusapps.ukrainenews.services.IRepository;
 import ua.in.zeusapps.ukrainenews.services.Repository;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
@@ -46,9 +52,15 @@ public class ApplicationModule {
     @Provides
     @Singleton
     public Retrofit getRetrofit(){
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Date.class, new GsonUTCDateAdapter())
+                .create();
+
+        GsonConverterFactory factory = GsonConverterFactory.create(gson);
+
         return new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(factory)
                 .baseUrl(Constants.REMOTE_URL)
                 .build();
     }

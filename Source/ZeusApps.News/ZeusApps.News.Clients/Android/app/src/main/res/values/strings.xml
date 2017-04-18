@@ -15,4 +15,5 @@
     <string name="splash_activity_errorMessage">Не вдалось отримати данні з серверу. Спробуйте пізніше.</string>
     <string name="splash_activity_oopsMessage">Невдача:(</string>
     <string name="fragment_sources_title">Джерела</string>
+    <string name="fragment_article_connection_error">Не вдалось отримати дані з сервера</string>
 </resources>
