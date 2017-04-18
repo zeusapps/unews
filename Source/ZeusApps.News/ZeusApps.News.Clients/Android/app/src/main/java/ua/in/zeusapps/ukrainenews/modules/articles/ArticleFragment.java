@@ -93,6 +93,11 @@ public class ArticleFragment
         swipeRefreshLayout.setRefreshing(state);
     }
 
+    @Override
+    public void showLoadingError() {
+        showError(getString(R.string.fragment_article_connection_error));
+    }
+
     private void initAdapter(List<Article> articles){
         adapter = new ArticleAdapter(getActivity(), formatter);
         adapter.addAll(articles);

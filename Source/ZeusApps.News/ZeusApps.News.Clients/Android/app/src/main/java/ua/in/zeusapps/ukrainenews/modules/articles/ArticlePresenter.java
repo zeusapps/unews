@@ -35,7 +35,7 @@ public class ArticlePresenter extends MvpPresenterBase<ArticleView, RootRouter> 
 
                     @Override
                     public void onError(Throwable e) {
-
+                        getViewState().showLoadingError();
                     }
 
                     @Override
