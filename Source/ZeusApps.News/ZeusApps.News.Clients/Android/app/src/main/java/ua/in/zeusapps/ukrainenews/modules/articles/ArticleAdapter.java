@@ -57,9 +57,16 @@ public class ArticleAdapter extends RecyclerViewAdapter<Article>{
             }
             else {
                 articleImageView.setVisibility(View.VISIBLE);
+
+                int width = 320;
+                int height = 256;
+
                 Picasso
                         .with(context)
                         .load(url)
+                        .resize(width, height)
+                        .centerCrop()
+                        .placeholder(R.drawable.un)
                         .error(R.drawable.un)
                         .into(articleImageView);
             }
