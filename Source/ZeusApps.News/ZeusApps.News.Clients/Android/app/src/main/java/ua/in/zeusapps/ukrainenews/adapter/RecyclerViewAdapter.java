@@ -107,7 +107,8 @@ public abstract class RecyclerViewAdapter<TItem>
             int period = _adsProvider.getAdsPeriod() + 1;
 
             if (position >= offset) {
-                position -= Math.floor((position - offset) / period);
+                position -= ((position - offset) / period + 1);
+                        //Math.floor((position - offset) / period);
             }
         }
 
