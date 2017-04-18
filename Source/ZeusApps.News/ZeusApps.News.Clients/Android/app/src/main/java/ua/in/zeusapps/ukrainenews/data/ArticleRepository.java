@@ -3,6 +3,7 @@ package ua.in.zeusapps.ukrainenews.data;
 import android.content.Context;
 
 import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,9 +23,17 @@ class ArticleRepository
 
     @Override
     public Observable<List<Article>> getAll() {
-        List<Article> articles = getDao().queryForAll();
-
-        return Observable.just(articles);
+        try {
+            List<Article> articles = getDao()
+                    .queryBuilder()
+                    .orderBy(Article.PUBLISHED_FIELD_NAME, false)
+                    .query();
+            return Observable.just(articles);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        List<Article> empty = new ArrayList<>();
+        return Observable.just(empty);
     }
 
     @Override
@@ -32,11 +41,11 @@ class ArticleRepository
         List<Article> articles;
 
         try {
-            articles = getDao()
-                    .queryBuilder()
+            QueryBuilder<Article, String> builder = getDao().queryBuilder();
+            builder.where().eq(Article.SOURCE_ID_FIELD_NAME, source.getKey());
+
+            articles = builder
                     .orderBy(Article.PUBLISHED_FIELD_NAME, false)
-                    .where()
-                    .eq(Article.SOURCE_ID_FIELD_NAME, source.getKey())
                     .query();
         } catch (SQLException e) {
             e.printStackTrace();
