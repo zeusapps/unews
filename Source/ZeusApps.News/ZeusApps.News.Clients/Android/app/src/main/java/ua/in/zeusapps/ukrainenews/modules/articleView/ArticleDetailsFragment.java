@@ -7,10 +7,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
@@ -22,6 +20,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -29,19 +28,19 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ua.in.zeusapps.ukrainenews.R;
-import ua.in.zeusapps.ukrainenews.common.BaseFragment;
-import ua.in.zeusapps.ukrainenews.common.BaseMVP;
-import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
+import ua.in.zeusapps.ukrainenews.common.Layout;
+import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
+import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
+import ua.in.zeusapps.ukrainenews.modules.root.BaseRootFragment;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
-public class ArticleViewFragment
-        extends BaseFragment
-        implements ArticleViewMVP.IView, AppBarLayout.OnOffsetChangedListener {
-
-    public static final String TAG = ArticleViewFragment.class.getSimpleName();
+@Layout(R.layout.fragment_article_details)
+public class ArticleDetailsFragment
+        extends BaseRootFragment
+        implements ArticleDetailsView, AppBarLayout.OnOffsetChangedListener {
 
     private static final String MIME_TYPE = "text/html";
     private static final String BLANK_TITLE = " ";
@@ -71,22 +70,20 @@ public class ArticleViewFragment
     @BindView(R.id.fragment_article_view_articleWebView)
     WebView articleWebView;
 
-
-    @Inject
-    ArticleViewMVP.IPresenter presenter;
-
     @Inject
     Formatter formatter;
+    @InjectPresenter
+    ArticleDetailsPresenter presenter;
 
-    public static ArticleViewFragment newInstance(String articleId) {
-        ArticleViewFragment fragment = new ArticleViewFragment();
+    public static ArticleDetailsFragment newInstance(String articleId) {
+        ArticleDetailsFragment fragment = new ArticleDetailsFragment();
         Bundle args = new Bundle();
         args.putString(ARTICLE_ID, articleId);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public ArticleViewFragment() {
+    public ArticleDetailsFragment() {
         setHasOptionsMenu(true);
     }
 
@@ -115,32 +112,6 @@ public class ArticleViewFragment
     }
 
     @Override
-    public String GetTag() {
-        return TAG;
-    }
-
-    @Override
-    protected void onCreateViewOverride(View view, @Nullable Bundle savedInstanceState) {
-        setSupportActionBar();
-
-        appBarLayout.addOnOffsetChangedListener(this);
-        toolbarLayout.setTitleEnabled(false);
-
-        String articleId = null;
-        if (savedInstanceState != null){
-            articleId = savedInstanceState.getString(ARTICLE_ID);
-        }
-
-        if (getArguments() != null){
-            articleId = getArguments().getString(ARTICLE_ID);
-        }
-
-        if (articleId != null){
-            presenter.showArticle(articleId);
-        }
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
@@ -150,18 +121,13 @@ public class ArticleViewFragment
     }
 
     @Override
-    protected BaseMVP.IPresenter getPresenter() {
-        return presenter;
-    }
-
-    @Override
-    protected int getContentResourceId() {
-        return R.layout.fragment_article_view;
-    }
-
-    @Override
     protected void inject(ApplicationComponent component) {
         component.inject(this);
+    }
+
+    @Override
+    public MvpPresenter getPresenter() {
+        return presenter;
     }
 
     @Override
@@ -231,14 +197,19 @@ public class ArticleViewFragment
         startActivity(Intent.createChooser(share, _article.getTitle()));
     }
 
-    private void setSupportActionBar(){
-        toolbar.setTitle(BLANK_TITLE);
-        getCompatActivity().setSupportActionBar(toolbar);
-        ActionBar actionBar = getCompatActivity().getSupportActionBar();
-        if (actionBar != null)
-        {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+    @Override
+    public String getTitle() {
+        return null;
+    }
+
+    @Override
+    public int getFabButtonIcon() {
+        return 0;
+    }
+
+    @Override
+    public View.OnClickListener getFabButtonAction() {
+        return null;
     }
 
     // fix of bug http://stackoverflow.com/questions/32050784/chromium-webview-does-not-seems-to-work-with-android-applyoverrideconfiguration
