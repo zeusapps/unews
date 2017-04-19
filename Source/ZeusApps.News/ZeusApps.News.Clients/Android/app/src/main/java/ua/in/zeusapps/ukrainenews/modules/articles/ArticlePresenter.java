@@ -30,19 +30,10 @@ public class ArticlePresenter extends MvpPresenterBase<ArticleView, RootRouter> 
     }
 
     void init(Source source){
+        getViewState().showLoading(true);
         initialArticlesInteractor.execute(
                 source,
-                new Subscriber<List<Article>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getViewState().showLoadingError();
-                    }
-
+                new LoaderSubscriber<List<Article>>() {
                     @Override
                     public void onNext(List<Article> articles) {
                         getViewState().init(articles);
@@ -53,17 +44,7 @@ public class ArticlePresenter extends MvpPresenterBase<ArticleView, RootRouter> 
     void loadNewer(Source source, Article article) {
         ArticleRequestBundle bundle = new ArticleRequestBundle(source, article, false);
 
-        articlesInteractor.execute(bundle, new Subscriber<ArticleResponse>() {
-            @Override
-            public void onCompleted() {
-                getViewState().showLoading(false);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getViewState().showLoadingError();
-            }
-
+        articlesInteractor.execute(bundle, new LoaderSubscriber<ArticleResponse>() {
             @Override
             public void onNext(ArticleResponse response) {
                 getViewState().addNewer(response.getArticles(), response.getIsRefresh());
@@ -75,21 +56,24 @@ public class ArticlePresenter extends MvpPresenterBase<ArticleView, RootRouter> 
         ArticleRequestBundle bundle = new ArticleRequestBundle(source, article, true);
 
         getViewState().showLoading(true);
-        articlesInteractor.execute(bundle, new Subscriber<ArticleResponse>() {
-            @Override
-            public void onCompleted() {
-                getViewState().showLoading(false);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getViewState().showLoadingError();
-            }
-
+        articlesInteractor.execute(bundle, new LoaderSubscriber<ArticleResponse>() {
             @Override
             public void onNext(ArticleResponse response) {
                 getViewState().addOlder(response.getArticles());
             }
         });
+    }
+
+    private abstract class LoaderSubscriber<T> extends Subscriber<T> {
+
+        @Override
+        public void onCompleted() {
+            getViewState().showLoading(false);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            getViewState().showLoadingError();
+        }
     }
 }
