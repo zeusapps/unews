@@ -22,13 +22,12 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
     private final IArticleRepository _articleRepository;
     private final ISourceRepository _sourceRepository;
     private final Formatter _formatter;
-    private final int timeSkew = 1000 * 60 * 15;
 
 
     private static final int PAGE_SIZE = 20;
 
     @Inject
-    public GetInitialArticlesInteractor(
+    GetInitialArticlesInteractor(
             IDataService dataService,
             IArticleRepository articleRepository,
             ISourceRepository sourceRepository,
@@ -51,7 +50,7 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
                 .flatMap(new Func1<List<Article>, Observable<List<Article>>>() {
                     @Override
                     public Observable<List<Article>> call(List<Article> articles) {
-                        saveNewArticles(articles);
+                        saveNewArticles(articles, source);
                         return getLocal(source);
                     }
                 })
@@ -72,24 +71,38 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
             return _dataService.getArticles(source.getKey(), PAGE_SIZE);
         }
 
-        // Check for last refresh, return empty result if has recent update
-        Date nowTimestamp = new Date();
-        Date timestamp = source.getTimestamp();
-        if (timestamp != null  && timestamp.getTime() + timeSkew > nowTimestamp.getTime()){
+        if (shouldNotUpdate(source)){
             List<Article> emptyResult = new ArrayList<>();
             return Observable.just(emptyResult);
         }
 
-        source.setTimestamp(nowTimestamp);
-        _sourceRepository.update(source);
-        String dateString = _formatter.toStringDate(local.get(0).getPublished());
-        return _dataService.getNewerArticles(
-                source.getKey(), PAGE_SIZE, dateString, true);
+        return getNewerArticles(source, local.get(0));
     }
 
-    private void saveNewArticles(List<Article> articles){
+    private void saveNewArticles(List<Article> articles, Source source){
+        if (articles.size() == PAGE_SIZE){
+            _articleRepository.removeBySource(source);
+        }
+
         for (Article article: articles) {
             _articleRepository.create(article);
         }
+    }
+
+    private boolean shouldNotUpdate(Source source){
+        Date nowTimestamp = new Date();
+        Date timestamp = source.getTimestamp();
+        int timeSkew = 1000 * 60 * 15;
+
+        return timestamp != null  &&
+                timestamp.getTime() + timeSkew > nowTimestamp.getTime();
+    }
+
+    private Observable<List<Article>> getNewerArticles(Source source, Article firstArticle){
+        source.setTimestamp(new Date());
+        _sourceRepository.update(source);
+        String dateString = _formatter.toStringDate(firstArticle.getPublished());
+        return _dataService.getNewerArticles(
+                source.getKey(), PAGE_SIZE, dateString, false);
     }
 }
