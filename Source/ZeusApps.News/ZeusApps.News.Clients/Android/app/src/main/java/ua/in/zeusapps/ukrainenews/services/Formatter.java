@@ -26,7 +26,7 @@ public class Formatter {
         _formatterUTC = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         _formatterUTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        _formatterLocal = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault());
+        _formatterLocal = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
         _formatterLocal.setTimeZone(TimeZone.getDefault());
 
         _htmlTemplate = readTemplate(context);
