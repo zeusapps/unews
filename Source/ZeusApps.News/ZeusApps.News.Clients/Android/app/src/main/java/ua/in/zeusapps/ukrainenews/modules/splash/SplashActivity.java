@@ -9,14 +9,14 @@ import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
-import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
+import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
 import ua.in.zeusapps.ukrainenews.modules.root.RootActivity;
 
 @Layout(R.layout.activity_splash)
 public class SplashActivity
         extends MvpActivity
-        implements SplashView,SplashRouter {
+        implements SplashView {
 
     @InjectPresenter
     SplashPresenter presenter;
@@ -25,7 +25,7 @@ public class SplashActivity
     TextView statusTextView;
 
     @Override
-    protected MvpPresenterBase getPresenter() {
+    protected MvpPresenter getPresenter() {
         return presenter;
     }
 
@@ -45,13 +45,5 @@ public class SplashActivity
         NotificationHelper.showSnackbarErrorMessage(
                 statusTextView,
                 getString(R.string.splash_activity_errorMessage));
-    }
-
-    @Override
-    public void startApp() {
-        Intent intent = new Intent(SplashActivity.this, RootActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
     }
 }

@@ -31,10 +31,9 @@ public abstract class MvpFragment
         View view = inflater.inflate(layout.value(), null);
         ButterKnife.bind(this, view);
         inject(App.getInstance().getComponent());
-
-        //noinspection unchecked
-        getPresenter().setRouter((RouterBase)getActivity());
-
+        getPresenter()
+                .getRouter()
+                .registerActivity((MvpActivity) getActivity());
         return view;
     }
 
@@ -42,5 +41,5 @@ public abstract class MvpFragment
 
     }
 
-    public abstract MvpPresenterBase getPresenter();
+    public abstract MvpPresenter getPresenter();
 }
