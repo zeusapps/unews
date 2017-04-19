@@ -18,4 +18,5 @@
     <string name="fragment_article_connection_error">Не вдалось отримати дані з сервера</string>
     <string name="fragment_settings_articles_cleared">Статті видалені</string>
     <string name="fragment_settings_title">Налаштування</string>
+    <string name="activity_root_hello_message">Вітаємо у додатку Ukraine News!</string>
 </resources>

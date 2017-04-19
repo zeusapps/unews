@@ -11,14 +11,16 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
-import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
+import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.domain.EnsureSourcesInteractor;
 
 @InjectViewState
-public class SplashPresenter extends MvpPresenterBase<SplashView, SplashRouter> {
+public class SplashPresenter extends MvpPresenter<SplashView, SplashRouter> {
 
     @Inject
     EnsureSourcesInteractor ensureSourcesInteractor;
+    @Inject
+    SplashRouter router;
 
     SplashPresenter() {
         getComponent().inject(this);
@@ -44,6 +46,11 @@ public class SplashPresenter extends MvpPresenterBase<SplashView, SplashRouter> 
         });
     }
 
+    @Override
+    public SplashRouter getRouter() {
+        return router;
+    }
+
     private void showError(Throwable error){
         Log.e(SplashPresenter.class.getSimpleName(), error.getMessage(), error);
         getViewState().showError();
@@ -55,4 +62,5 @@ public class SplashPresenter extends MvpPresenterBase<SplashView, SplashRouter> 
                     }
                 });
     }
+
 }

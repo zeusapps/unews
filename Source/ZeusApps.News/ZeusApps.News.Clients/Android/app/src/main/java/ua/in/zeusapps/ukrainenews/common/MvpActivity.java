@@ -21,16 +21,13 @@ public abstract class MvpActivity extends MvpAppCompatActivity {
         Layout layout = (Layout) cls.getAnnotation(Layout.class);
         setContentView(layout.value());
         ButterKnife.bind(this);
-
         inject(App.getInstance().getComponent());
-
-        //noinspection unchecked
-        getPresenter().setRouter((RouterBase) this);
+        getPresenter().getRouter().registerActivity(this);
     }
 
     protected void inject(ApplicationComponent component){
 
     }
 
-    protected abstract MvpPresenterBase getPresenter();
+    protected abstract MvpPresenter getPresenter();
 }

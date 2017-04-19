@@ -7,15 +7,21 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Subscriber;
-import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
+import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.domain.GetLocalSourcesInteractor;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.modules.root.RootRouter;
 
 @InjectViewState
-public class SourcesPresenter extends MvpPresenterBase<SourcesView, RootRouter> {
+public class SourcesPresenter extends MvpPresenter<SourcesView, RootRouter> {
     @Inject
     GetLocalSourcesInteractor interactor;
+    @Inject
+    RootRouter router;
+
+    SourcesPresenter() {
+        getComponent().inject(this);
+    }
 
     @Override
     protected void onFirstViewAttach() {
@@ -37,8 +43,9 @@ public class SourcesPresenter extends MvpPresenterBase<SourcesView, RootRouter> 
         });
     }
 
-    SourcesPresenter() {
-        getComponent().inject(this);
+    @Override
+    public RootRouter getRouter() {
+        return router;
     }
 
     void showArticles(Source source){

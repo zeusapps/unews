@@ -11,9 +11,9 @@ import ua.in.zeusapps.ukrainenews.adapter.BaseViewHolder;
 import ua.in.zeusapps.ukrainenews.adapter.RecyclerViewAdapter;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
-public class SourcesAdapter extends RecyclerViewAdapter<Source> {
+class SourcesAdapter extends RecyclerViewAdapter<Source> {
 
-    public SourcesAdapter(Context context) {
+    SourcesAdapter(Context context) {
         super(context);
     }
 
@@ -29,7 +29,7 @@ public class SourcesAdapter extends RecyclerViewAdapter<Source> {
         @BindView(R.id.sources_fragment_item_template_textView)
         TextView textView;
 
-        public SourceViewHolder(View view) {
+        SourceViewHolder(View view) {
             super(view);
         }
 

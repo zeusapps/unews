@@ -17,7 +17,7 @@ import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.adapter.EndlessRecyclerViewScrollListener;
 import ua.in.zeusapps.ukrainenews.adapter.RecyclerViewAdapter;
 import ua.in.zeusapps.ukrainenews.common.Layout;
-import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
+import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
@@ -67,7 +67,7 @@ public class ArticleFragment
     }
 
     @Override
-    public MvpPresenterBase getPresenter() {
+    public MvpPresenter getPresenter() {
         return presenter;
     }
 

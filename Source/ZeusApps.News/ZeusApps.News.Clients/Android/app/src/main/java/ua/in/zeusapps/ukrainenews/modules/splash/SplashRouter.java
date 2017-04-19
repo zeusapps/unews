@@ -1,7 +1,21 @@
 package ua.in.zeusapps.ukrainenews.modules.splash;
 
-import ua.in.zeusapps.ukrainenews.common.RouterBase;
+import android.content.Intent;
 
-public interface SplashRouter extends RouterBase {
-    void startApp();
+import javax.inject.Inject;
+
+import ua.in.zeusapps.ukrainenews.common.MvpRouter;
+import ua.in.zeusapps.ukrainenews.modules.root.RootActivity;
+
+class SplashRouter extends MvpRouter {
+
+    @Inject
+    public SplashRouter() {
+    }
+
+    void startApp() {
+        Intent intent = createIntent(RootActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startIntentAndFinish(intent);
+    }
 }
