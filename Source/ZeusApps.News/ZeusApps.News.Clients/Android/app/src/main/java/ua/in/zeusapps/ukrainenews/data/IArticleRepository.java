@@ -12,4 +12,5 @@ public interface IArticleRepository {
 
     void create(Article article);
     void removeBySource(Source source);
+    void removeAll();
 }
