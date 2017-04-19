@@ -59,7 +59,7 @@ public class MainActivity
 
     @Override
     public void switchToArticleView(Article article) {
-        showFragment(ArticleDetailsFragment.newInstance(article.getId()));
+        //showFragment(ArticleDetailsFragment.newInstance(article.getId()));
     }
 
     @Override

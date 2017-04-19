@@ -72,6 +72,9 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, RootRouter> {
         });
     }
 
+    void showArticle(Article article, Source source){
+        getRouter().showArticleDetails(article, source);
+    }
 
     private abstract class LoaderSubscriber<T> extends Subscriber<T> {
 

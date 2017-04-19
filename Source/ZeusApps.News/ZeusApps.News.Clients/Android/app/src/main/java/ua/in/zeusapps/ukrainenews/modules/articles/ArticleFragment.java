@@ -13,11 +13,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import rx.Subscription;
+import rx.functions.Action1;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.adapter.EndlessRecyclerViewScrollListener;
 import ua.in.zeusapps.ukrainenews.adapter.RecyclerViewAdapter;
 import ua.in.zeusapps.ukrainenews.common.Layout;
-import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
@@ -30,6 +31,7 @@ public class ArticleFragment
         implements  ArticleView {
 
     private static final String SOURCE_EXTRA = "source";
+    private Subscription _subscription;
     private Source source;
     private RecyclerViewAdapter<Article> _adapter;
     @InjectPresenter
@@ -67,7 +69,7 @@ public class ArticleFragment
     }
 
     @Override
-    public MvpPresenter getPresenter() {
+    public ArticlePresenter getPresenter() {
         return presenter;
     }
 
@@ -102,10 +104,23 @@ public class ArticleFragment
         showError(getString(R.string.fragment_article_connection_error));
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        _subscription.unsubscribe();
+    }
+
     private void initAdapter(List<Article> articles){
         _adapter = new ArticleAdapter(getActivity(), formatter);
         _adapter.addAll(articles);
         _adapter.setAdsProvider(adsProvider);
+        _subscription = _adapter.getItemClicked().subscribe(new Action1<Article>() {
+            @Override
+            public void call(Article article) {
+                getPresenter().showArticle(article, source);
+            }
+        });
     }
 
     private void initRecyclerView(){

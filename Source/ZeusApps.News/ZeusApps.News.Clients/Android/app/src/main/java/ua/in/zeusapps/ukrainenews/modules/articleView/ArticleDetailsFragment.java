@@ -42,11 +42,14 @@ public class ArticleDetailsFragment
         extends BaseRootFragment
         implements ArticleDetailsView, AppBarLayout.OnOffsetChangedListener {
 
+    private static final String ARTICLE_ID_EXTRA = "article_id";
+    private static final String SOURCE_EXTRA = "source";
+
     private static final String MIME_TYPE = "text/html";
     private static final String BLANK_TITLE = " ";
     private static final String HTTP_PREFIX = "http://";
     private static final String HTTPS_PREFIX = "https://";
-    private static final String ARTICLE_ID = "article_id";
+
 
     private boolean _isVisible;
     private int _scrollRange = -1;
@@ -75,17 +78,35 @@ public class ArticleDetailsFragment
     @InjectPresenter
     ArticleDetailsPresenter presenter;
 
-    public static ArticleDetailsFragment newInstance(String articleId) {
-        ArticleDetailsFragment fragment = new ArticleDetailsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARTICLE_ID, articleId);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public ArticleDetailsPresenter getPresenter() {
+        return presenter;
     }
 
     public ArticleDetailsFragment() {
         setHasOptionsMenu(true);
     }
+
+    public static ArticleDetailsFragment newInstance(String articleId, Source source) {
+        ArticleDetailsFragment fragment = new ArticleDetailsFragment();
+        Bundle args = new Bundle();
+        args.putString(ARTICLE_ID_EXTRA, articleId);
+        args.putParcelable(SOURCE_EXTRA, source);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Source source = getArguments().getParcelable(SOURCE_EXTRA);
+        String articleId = getArguments().getString(ARTICLE_ID_EXTRA);
+
+        getPresenter().init(articleId, source);
+    }
+
+
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -112,23 +133,10 @@ public class ArticleDetailsFragment
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        if (_article != null) {
-            outState.putString(ARTICLE_ID, _article.getId());
-        }
-    }
-
-    @Override
     protected void inject(ApplicationComponent component) {
         component.inject(this);
     }
 
-    @Override
-    public MvpPresenter getPresenter() {
-        return presenter;
-    }
 
     @Override
     public void onDetach() {
