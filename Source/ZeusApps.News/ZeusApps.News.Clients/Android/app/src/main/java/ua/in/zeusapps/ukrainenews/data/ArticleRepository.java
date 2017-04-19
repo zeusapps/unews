@@ -82,4 +82,14 @@ class ArticleRepository
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void removeAll() {
+        DeleteBuilder<Article, String> builder = getDao().deleteBuilder();
+        try {
+            builder.delete();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

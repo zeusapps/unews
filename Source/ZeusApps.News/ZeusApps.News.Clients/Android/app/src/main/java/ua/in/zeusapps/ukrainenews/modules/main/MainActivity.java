@@ -66,7 +66,7 @@ public class MainActivity
 
     @Override
     public void switchToSettingsView() {
-        showFragment(new SettingsFragment());
+        //showFragment(new SettingsFragment());
     }
 
     @Override

@@ -1,23 +1,27 @@
 package ua.in.zeusapps.ukrainenews.modules.settings;
 
-import ua.in.zeusapps.ukrainenews.services.IRepository;
+import com.arellomobile.mvp.InjectViewState;
 
-public class SettingsPresenter implements SettingsMVP.Presenter{
+import javax.inject.Inject;
 
-    private SettingsMVP.View _view;
-    private IRepository _repository;
+import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
+import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
+import ua.in.zeusapps.ukrainenews.modules.root.RootRouter;
 
-    public SettingsPresenter(IRepository repository){
-        _repository = repository;
+@InjectViewState
+public class SettingsPresenter
+        extends MvpPresenterBase<SettingsView, RootRouter> {
+
+    @Inject
+    IArticleRepository repository;
+
+    public SettingsPresenter(){
+        getComponent().inject(this);
     }
 
-    @Override
-    public void clearStorage() {
-        _repository.deleteAlArticles();
-    }
-
-    @Override
-    public void setView(SettingsMVP.View view) {
-        _view = view;
+    void clearStorage() {
+        repository.removeAll();
+        getViewState().articlesCleared();
+        getRouter().showSources();
     }
 }

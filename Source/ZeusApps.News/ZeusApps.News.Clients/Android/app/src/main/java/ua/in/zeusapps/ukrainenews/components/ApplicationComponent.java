@@ -12,7 +12,7 @@ import ua.in.zeusapps.ukrainenews.modules.articles.ArticlePresenter;
 import ua.in.zeusapps.ukrainenews.modules.main.MainActivity;
 import ua.in.zeusapps.ukrainenews.modules.main.MainModule;
 import ua.in.zeusapps.ukrainenews.modules.settings.SettingsFragment;
-import ua.in.zeusapps.ukrainenews.modules.settings.SettingsModule;
+import ua.in.zeusapps.ukrainenews.modules.settings.SettingsPresenter;
 import ua.in.zeusapps.ukrainenews.modules.sources.SourcesPresenter;
 import ua.in.zeusapps.ukrainenews.modules.splash.SplashActivity;
 import ua.in.zeusapps.ukrainenews.modules.splash.SplashPresenter;
@@ -22,19 +22,16 @@ import ua.in.zeusapps.ukrainenews.modules.splash.SplashPresenter;
         ApplicationModule.class,
         MainModule.class,
         ArticleViewModule.class,
-        SettingsModule.class,
-
         DataModule.class
 })
 public interface ApplicationComponent {
     void inject(MainActivity target);
     void inject(ArticleFragment fragment);
     void inject(ArticleViewFragment fragment);
-    void inject(SettingsFragment settingsFragment);
     void inject(SplashActivity splashActivity);
 
     void inject(SourcesPresenter presenter);
     void inject(SplashPresenter splashPresenter);
-
     void inject(ArticlePresenter presenter);
+    void inject(SettingsPresenter settingsPresenter);
 }
