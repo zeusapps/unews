@@ -5,6 +5,6 @@ import ua.in.zeusapps.ukrainenews.models.Source;
 
 public interface RootRouter extends RouterBase {
     void showSources();
-
     void showArticles(Source source);
+    void showSettings();
 }

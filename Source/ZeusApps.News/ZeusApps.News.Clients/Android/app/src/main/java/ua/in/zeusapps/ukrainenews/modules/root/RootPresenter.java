@@ -15,14 +15,10 @@ public class RootPresenter extends MvpPresenterBase<RootView, RootRouter> {
     @Override
     protected void onFirstViewAttach() {
         getRouter().showSources();
-        //showSources();
     }
 
-//    public void showSources(){
-//        getRouter().showSources();
-//    }
-//
-//    public void showArticles(Source source){
-//        getRouter().showArticles(source);
-//    }
+    void showSettings(){
+        getRouter().showSettings();
+    }
+
 }

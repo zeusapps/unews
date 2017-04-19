@@ -3,8 +3,9 @@ package ua.in.zeusapps.ukrainenews.modules.root;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -14,11 +15,11 @@ import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
-import ua.in.zeusapps.ukrainenews.common.MvpPresenterBase;
 import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment;
+import ua.in.zeusapps.ukrainenews.modules.settings.SettingsFragment;
 import ua.in.zeusapps.ukrainenews.modules.sources.SourcesFragment;
 
 @Layout(R.layout.activity_root)
@@ -46,7 +47,7 @@ public class RootActivity
     }
 
     @Override
-    protected MvpPresenterBase getPresenter() {
+    protected RootPresenter getPresenter() {
         return presenter;
     }
 
@@ -57,7 +58,7 @@ public class RootActivity
 
     @Override
     public void showSources() {
-        //showFragment(new SourcesFragment());
+        FragmentHelper.clearStack(getSupportFragmentManager());
         FragmentHelper.replace(
                 getSupportFragmentManager(),
                 new SourcesFragment(),
@@ -67,6 +68,11 @@ public class RootActivity
     @Override
     public void showArticles(Source source) {
         showFragment(ArticleFragment.newInstance(source));
+    }
+
+    @Override
+    public void showSettings() {
+        showFragment(new SettingsFragment());
     }
 
     @Override
@@ -117,6 +123,22 @@ public class RootActivity
 
         _lastPressedTimestamp = timestamp;
         showMessage(getString(R.string.root_activity_close_notification));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_root_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.activity_root_menu_settings){
+            getPresenter().showSettings();
+            return true;
+        }
+
+        return false;
     }
 
     private void showFragment(BaseRootFragment fragment){
