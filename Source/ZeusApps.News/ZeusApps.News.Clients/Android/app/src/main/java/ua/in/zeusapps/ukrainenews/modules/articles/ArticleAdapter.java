@@ -15,7 +15,7 @@ import ua.in.zeusapps.ukrainenews.adapter.RecyclerViewAdapter;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
-public class ArticleAdapter extends RecyclerViewAdapter<Article>{
+class ArticleAdapter extends RecyclerViewAdapter<Article>{
     private final Formatter _formatter;
 
     ArticleAdapter(Context context, Formatter formatter) {
@@ -32,7 +32,7 @@ public class ArticleAdapter extends RecyclerViewAdapter<Article>{
 
     class ArticleHolder extends BaseViewHolder<Article>{
 
-        public ArticleHolder(View view) {
+        ArticleHolder(View view) {
             super(view);
         }
 

@@ -12,10 +12,8 @@ import ua.in.zeusapps.ukrainenews.modules.articles.ArticlePresenter;
 import ua.in.zeusapps.ukrainenews.modules.main.MainActivity;
 import ua.in.zeusapps.ukrainenews.modules.main.MainModule;
 import ua.in.zeusapps.ukrainenews.modules.root.RootPresenter;
-import ua.in.zeusapps.ukrainenews.modules.settings.SettingsFragment;
 import ua.in.zeusapps.ukrainenews.modules.settings.SettingsPresenter;
 import ua.in.zeusapps.ukrainenews.modules.sources.SourcesPresenter;
-import ua.in.zeusapps.ukrainenews.modules.splash.SplashActivity;
 import ua.in.zeusapps.ukrainenews.modules.splash.SplashPresenter;
 
 @Singleton
@@ -29,7 +27,6 @@ public interface ApplicationComponent {
     void inject(MainActivity target);
     void inject(ArticleFragment fragment);
     void inject(ArticleViewFragment fragment);
-    void inject(SplashActivity splashActivity);
 
     void inject(SourcesPresenter presenter);
     void inject(SplashPresenter splashPresenter);

@@ -1,6 +1,5 @@
 package ua.in.zeusapps.ukrainenews.modules.splash;
 
-import android.content.Intent;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -11,7 +10,6 @@ import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
-import ua.in.zeusapps.ukrainenews.modules.root.RootActivity;
 
 @Layout(R.layout.activity_splash)
 public class SplashActivity

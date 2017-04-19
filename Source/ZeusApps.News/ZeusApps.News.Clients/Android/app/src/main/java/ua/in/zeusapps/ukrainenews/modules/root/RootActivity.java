@@ -48,8 +48,8 @@ public class RootActivity
     }
 
     @Override
-    public void showMessage(String message) {
-        NotificationHelper.showSnackbarInfoMessage(rootView, message);
+    public void showHello() {
+        showMessage(getString(R.string.activity_root_hello_message));
     }
 
     @Override
@@ -116,5 +116,10 @@ public class RootActivity
 
         _lastPressedTimestamp = timestamp;
         showMessage(getString(R.string.root_activity_close_notification));
+    }
+
+    private void showMessage(String message){
+        NotificationHelper.showSnackbarInfoMessage(
+                rootView, message);
     }
 }

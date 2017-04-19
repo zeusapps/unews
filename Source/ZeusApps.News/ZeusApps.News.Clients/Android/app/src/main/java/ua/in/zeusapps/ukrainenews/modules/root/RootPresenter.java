@@ -13,7 +13,7 @@ public class RootPresenter extends MvpPresenter<RootView, RootRouter> {
 
     public RootPresenter() {
         getComponent().inject(this);
-        getViewState().showMessage("Hello, Moxy!");
+        getViewState().showHello();
     }
 
     @Override
