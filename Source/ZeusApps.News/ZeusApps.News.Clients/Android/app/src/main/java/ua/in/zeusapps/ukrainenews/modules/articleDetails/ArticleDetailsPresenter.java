@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.articleView;
+package ua.in.zeusapps.ukrainenews.modules.articleDetails;
 
 import com.arellomobile.mvp.InjectViewState;
 

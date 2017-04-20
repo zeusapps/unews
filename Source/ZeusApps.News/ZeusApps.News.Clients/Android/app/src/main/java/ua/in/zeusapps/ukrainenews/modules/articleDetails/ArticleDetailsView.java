@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.articleView;
+package ua.in.zeusapps.ukrainenews.modules.articleDetails;
 
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;

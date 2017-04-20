@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.articleView;
+package ua.in.zeusapps.ukrainenews.modules.articleDetails;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -29,7 +29,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
-import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.models.Article;
