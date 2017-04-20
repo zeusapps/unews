@@ -54,22 +54,22 @@ public class ArticleDetailsFragment
     private int _scrollRange = -1;
     private Article _article;
 
-    @BindView(R.id.fragment_article_view_title)
+    @BindView(R.id.fragment_article_details_title)
     TextView titleTextView;
-    @BindView(R.id.fragment_article_view_published)
+    @BindView(R.id.fragment_article_details_published)
     TextView publishedTextView;
-    @BindView(R.id.fragment_article_view_source)
+    @BindView(R.id.fragment_article_details_source)
     TextView sourceTextView;
 
-    @BindView(R.id.fragment_article_view_image)
+    @BindView(R.id.fragment_article_details_image)
     ImageView articleImage;
-    @BindView(R.id.fragment_article_view_toolbar)
+    @BindView(R.id.fragment_article_details_toolbar)
     Toolbar toolbar;
-    @BindView(R.id.fragment_article_view_collapsingToolbar)
+    @BindView(R.id.fragment_article_details_collapsingToolbar)
     CollapsingToolbarLayout toolbarLayout;
-    @BindView(R.id.fragment_article_view_appBar)
+    @BindView(R.id.fragment_article_details_appBar)
     AppBarLayout appBarLayout;
-    @BindView(R.id.fragment_article_view_articleWebView)
+    @BindView(R.id.fragment_article_details_articleWebView)
     WebView articleWebView;
 
     @Inject
