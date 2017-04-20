@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ua.in.zeusapps.ukrainenews.R;
+import ua.in.zeusapps.ukrainenews.common.HideToolbar;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
@@ -39,7 +40,10 @@ import ua.in.zeusapps.ukrainenews.services.Formatter;
 @Layout(R.layout.fragment_article_details)
 public class ArticleDetailsFragment
         extends BaseRootFragment
-        implements ArticleDetailsView, AppBarLayout.OnOffsetChangedListener {
+        implements
+            ArticleDetailsView,
+            AppBarLayout.OnOffsetChangedListener,
+            HideToolbar {
 
     private static final String ARTICLE_ID_EXTRA = "article_id";
     private static final String SOURCE_EXTRA = "source";

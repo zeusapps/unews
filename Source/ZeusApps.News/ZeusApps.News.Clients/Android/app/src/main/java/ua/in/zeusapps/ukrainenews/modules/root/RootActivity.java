@@ -13,6 +13,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
+import ua.in.zeusapps.ukrainenews.common.HideToolbar;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
 import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
@@ -91,6 +92,13 @@ public class RootActivity
     }
 
     public void resolveToolbar(BaseRootFragment fragment) {
+        if (fragment instanceof HideToolbar){
+            toolbar.setVisibility(View.GONE);
+            return;
+        } else {
+            toolbar.setVisibility(View.VISIBLE);
+        }
+
         toolbar.setTitle(fragment.getTitle());
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             toolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
