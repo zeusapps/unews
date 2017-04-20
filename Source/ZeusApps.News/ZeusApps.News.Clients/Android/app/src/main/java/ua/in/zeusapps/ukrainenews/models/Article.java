@@ -15,7 +15,7 @@ public class Article {
     public static final String SOURCE_ID_FIELD_NAME = "sourceId";
     public static final String ID_FIELD_NAME = "id";
 
-    @DatabaseField(useGetSet = true, columnName = ID_FIELD_NAME)
+    @DatabaseField(useGetSet = true, columnName = ID_FIELD_NAME, id = true)
     @SerializedName("id")
     @Expose
     private String id;

@@ -56,6 +56,12 @@ class ArticleRepository
     }
 
     @Override
+    public Observable<Article> getById(String id) {
+        Article article = getDao().queryForId(id);
+        return Observable.just(article);
+    }
+
+    @Override
     public void create(Article article){
         try {
             Article localArticle = getDao().queryBuilder()
