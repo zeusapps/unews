@@ -2,6 +2,7 @@ package ua.in.zeusapps.ukrainenews.modules.root;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -35,6 +36,8 @@ public class RootActivity
     Toolbar toolbar;
     @BindView(R.id.activity_root_fab)
     FloatingActionButton fab;
+    @BindView(R.id.activity_root_appBar)
+    AppBarLayout appBarLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,6 +115,14 @@ public class RootActivity
             toolbar.setNavigationIcon(null);
             toolbar.setNavigationOnClickListener(null);
         }
+    }
+
+    public Toolbar getToolbar(){
+        return toolbar;
+    }
+
+    public void resetAppBarLayoutState(){
+        appBarLayout.setExpanded(true, true);
     }
 
     private void tryClose(){

@@ -118,6 +118,7 @@ public class ArticleFragment
         _subscription = _adapter.getItemClicked().subscribe(new Action1<Article>() {
             @Override
             public void call(Article article) {
+                getRootActivity().resetAppBarLayoutState();
                 getPresenter().showArticle(article, source);
             }
         });

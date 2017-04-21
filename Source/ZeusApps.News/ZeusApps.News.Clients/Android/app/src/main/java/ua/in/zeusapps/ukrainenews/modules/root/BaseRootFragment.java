@@ -39,4 +39,8 @@ public abstract class BaseRootFragment
     public void showInfo(String message){
         NotificationHelper.showSnackbarInfoMessage(getView(), message);
     }
+
+    public RootActivity getRootActivity(){
+        return (RootActivity) getActivity();
+    }
 }

@@ -7,14 +7,18 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -35,6 +39,7 @@ import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.modules.root.BaseRootFragment;
+import ua.in.zeusapps.ukrainenews.modules.root.RootActivity;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 @Layout(R.layout.fragment_article_details)
@@ -42,8 +47,8 @@ public class ArticleDetailsFragment
         extends BaseRootFragment
         implements
             ArticleDetailsView,
-            AppBarLayout.OnOffsetChangedListener,
-            HideToolbar {
+            AppBarLayout.OnOffsetChangedListener//, HideToolbar
+{
 
     private static final String ARTICLE_ID_EXTRA = "article_id";
     private static final String SOURCE_EXTRA = "source";
@@ -67,7 +72,7 @@ public class ArticleDetailsFragment
 
     @BindView(R.id.fragment_article_details_image)
     ImageView articleImage;
-    @BindView(R.id.fragment_article_details_toolbar)
+    //@BindView(R.id.fragment_article_details_toolbar)
     Toolbar toolbar;
     @BindView(R.id.fragment_article_details_collapsingToolbar)
     CollapsingToolbarLayout toolbarLayout;
@@ -102,14 +107,23 @@ public class ArticleDetailsFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        toolbar = getRootActivity().getToolbar();
+        appBarLayout.addOnOffsetChangedListener(this);
 
         Source source = getArguments().getParcelable(SOURCE_EXTRA);
         String articleId = getArguments().getString(ARTICLE_ID_EXTRA);
-
         getPresenter().init(articleId, source);
+
+        return view;
     }
-
-
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -119,6 +133,10 @@ public class ArticleDetailsFragment
         Picasso
                 .with(getContext())
                 .load(_article.getImageUrl())
+                .resize(320, 256)
+                .centerCrop()
+                .error(R.drawable.un)
+                .placeholder(R.drawable.un)
                 .into(articleImage);
 
 
@@ -203,8 +221,6 @@ public class ArticleDetailsFragment
         }
 
         share.setType("text/plain");
-
-
         startActivity(Intent.createChooser(share, _article.getTitle()));
     }
 
