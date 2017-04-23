@@ -118,8 +118,12 @@ public class ArticleDetailsFragment
         toolbar = getRootActivity().getToolbar();
         appBarLayout.addOnOffsetChangedListener(this);
 
+        articleWebView.setWebChromeClient(new Client());
+        articleWebView.getSettings().setJavaScriptEnabled(true);
+
         Source source = getArguments().getParcelable(SOURCE_EXTRA);
         String articleId = getArguments().getString(ARTICLE_ID_EXTRA);
+
         getPresenter().init(articleId, source);
 
         return view;
@@ -144,12 +148,10 @@ public class ArticleDetailsFragment
         publishedTextView.setText(formatter.formatDate(_article.getPublished()));
         sourceTextView.setText(source.getTitle());
 
-        String html = formatter.formatHtml(_article.getHtml());
+        String html = formatter.formatHtml(_article.getHtml() + "<br><br><br><br><br>");
 
-        articleWebView.setWebChromeClient(new Client());
         articleWebView.clearCache(true);
         articleWebView.clearHistory();
-        articleWebView.getSettings().setJavaScriptEnabled(true);
         articleWebView.loadDataWithBaseURL(source.getBaseUrl(), html, MIME_TYPE, source.getEncoding(), null);
     }
 
