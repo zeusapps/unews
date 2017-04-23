@@ -2,11 +2,13 @@ package ua.in.zeusapps.ukrainenews.modules.articleDetails;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
-import rx.functions.Action1;
+import rx.Subscriber;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
-import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
+import ua.in.zeusapps.ukrainenews.domain.GetLocalArticlesInteractor;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.modules.root.RootRouter;
@@ -18,20 +20,41 @@ public class ArticleDetailsPresenter
     @Inject
     RootRouter router;
     @Inject
-    IArticleRepository articleRepository;
+    GetLocalArticlesInteractor localArticlesInteractor;
 
     ArticleDetailsPresenter(){
         getComponent().inject(this);
     }
 
-    public void init(String articleId, final Source source){
-        articleRepository.getById(articleId)
-                .subscribe(new Action1<Article>() {
-                    @Override
-                    public void call(Article article) {
+    public void init(final String articleId, final Source source){
+        localArticlesInteractor.execute(source, new Subscriber<List<Article>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(List<Article> articles) {
+                if (articles.size() == 0){
+                    getRouter().showArticles(source);
+                }
+
+
+                for (Article article: articles) {
+                    if (article.getId().equals(articleId)){
                         getViewState().showArticle(article, source);
+                        return;
                     }
-                });
+                }
+
+                getViewState().showArticle(articles.get(0), source);
+            }
+        });
     }
 
     private void show(Article article){
