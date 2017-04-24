@@ -1,5 +1,8 @@
 package ua.in.zeusapps.ukrainenews.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.j256.ormlite.field.DataType;
@@ -9,7 +12,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.util.Date;
 
 @DatabaseTable
-public class Article {
+public class Article implements Parcelable {
 
     public static final String PUBLISHED_FIELD_NAME = "published";
     public static final String SOURCE_ID_FIELD_NAME = "sourceId";
@@ -59,6 +62,45 @@ public class Article {
     @SerializedName("downvote")
     @Expose
     private Integer downvote;
+
+    public Article() { }
+
+    protected Article(Parcel in) {
+        id = in.readString();
+        sourceId = in.readString();
+        title = in.readString();
+        html = in.readString();
+        url = in.readString();
+        imageUrl = in.readString();
+        published = new Date(in.readLong());
+        upvote = in.readInt();
+        downvote = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(sourceId);
+        dest.writeString(title);
+        dest.writeString(html);
+        dest.writeString(url);
+        dest.writeString(imageUrl);
+        dest.writeLong(published.getTime());
+        dest.writeInt(upvote);
+        dest.writeInt(downvote);
+    }
+
+    public static final Creator<Article> CREATOR = new Creator<Article>() {
+        @Override
+        public Article createFromParcel(Parcel in) {
+            return new Article(in);
+        }
+
+        @Override
+        public Article[] newArray(int size) {
+            return new Article[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -146,5 +188,10 @@ public class Article {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 }
