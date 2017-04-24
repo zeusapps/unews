@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.articleDetails;
+package ua.in.zeusapps.ukrainenews.modules.articlesDetails;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -32,73 +31,66 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ua.in.zeusapps.ukrainenews.R;
-import ua.in.zeusapps.ukrainenews.common.HideToolbar;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.modules.root.BaseRootFragment;
-import ua.in.zeusapps.ukrainenews.modules.root.RootActivity;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
-@Layout(R.layout.fragment_article_details)
-public class ArticleDetailsFragment
+@Layout(R.layout.fragment_article_view)
+public class ArticleViewFragment
         extends BaseRootFragment
         implements
-            ArticleDetailsView,
-            AppBarLayout.OnOffsetChangedListener//, HideToolbar
-{
+            ArticleViewView,
+            AppBarLayout.OnOffsetChangedListener {
 
-    private static final String ARTICLE_ID_EXTRA = "article_id";
+    private static final String ARTICLE_EXTRA = "article";
     private static final String SOURCE_EXTRA = "source";
-
     private static final String MIME_TYPE = "text/html";
     private static final String BLANK_TITLE = " ";
     private static final String HTTP_PREFIX = "http://";
     private static final String HTTPS_PREFIX = "https://";
 
-
     private boolean _isVisible;
     private int _scrollRange = -1;
     private Article _article;
 
-    @BindView(R.id.fragment_article_details_title)
-    TextView titleTextView;
-    @BindView(R.id.fragment_article_details_published)
-    TextView publishedTextView;
-    @BindView(R.id.fragment_article_details_source)
-    TextView sourceTextView;
-
-    @BindView(R.id.fragment_article_details_image)
-    ImageView articleImage;
-    //@BindView(R.id.fragment_article_details_toolbar)
     Toolbar toolbar;
-    @BindView(R.id.fragment_article_details_collapsingToolbar)
+    @BindView(R.id.fragment_article_view_title)
+    TextView titleTextView;
+    @BindView(R.id.fragment_article_view_published)
+    TextView publishedTextView;
+    @BindView(R.id.fragment_article_view_source)
+    TextView sourceTextView;
+    @BindView(R.id.fragment_article_view_image)
+    ImageView articleImage;
+    @BindView(R.id.fragment_article_view_collapsingToolbar)
     CollapsingToolbarLayout toolbarLayout;
     @BindView(R.id.fragment_article_details_appBar)
     AppBarLayout appBarLayout;
-    @BindView(R.id.fragment_article_details_articleWebView)
+    @BindView(R.id.fragment_article_view_articleWebView)
     WebView articleWebView;
 
     @Inject
     Formatter formatter;
     @InjectPresenter
-    ArticleDetailsPresenter presenter;
+    ArticleViewPresenter presenter;
 
     @Override
-    public ArticleDetailsPresenter getPresenter() {
+    public ArticleViewPresenter getPresenter() {
         return presenter;
     }
 
-    public ArticleDetailsFragment() {
+    public ArticleViewFragment() {
         setHasOptionsMenu(true);
     }
 
-    public static ArticleDetailsFragment newInstance(String articleId, Source source) {
-        ArticleDetailsFragment fragment = new ArticleDetailsFragment();
+    public static ArticleViewFragment newInstance(Article article, Source source) {
+        ArticleViewFragment fragment = new ArticleViewFragment();
         Bundle args = new Bundle();
-        args.putString(ARTICLE_ID_EXTRA, articleId);
+        args.putParcelable(ARTICLE_EXTRA, article);
         args.putParcelable(SOURCE_EXTRA, source);
         fragment.setArguments(args);
         return fragment;
@@ -118,40 +110,34 @@ public class ArticleDetailsFragment
         toolbar = getRootActivity().getToolbar();
         appBarLayout.addOnOffsetChangedListener(this);
 
-        articleWebView.setWebChromeClient(new Client());
-        articleWebView.getSettings().setJavaScriptEnabled(true);
+        Source _source = getArguments().getParcelable(SOURCE_EXTRA);
+        _article = getArguments().getParcelable(ARTICLE_EXTRA);
 
-        Source source = getArguments().getParcelable(SOURCE_EXTRA);
-        String articleId = getArguments().getString(ARTICLE_ID_EXTRA);
-
-        getPresenter().init(articleId, source);
+        showArticle(_article, _source);
 
         return view;
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    @Override
     public void showArticle(Article article, Source source) {
-        _article = article;
-
         Picasso
                 .with(getContext())
-                .load(_article.getImageUrl())
+                .load(article.getImageUrl())
                 .resize(320, 256)
                 .centerCrop()
                 .error(R.drawable.un)
                 .placeholder(R.drawable.un)
                 .into(articleImage);
 
+        String html = formatter.formatHtml(article.getHtml() + "<br><br><br><br><br>");
 
-        titleTextView.setText(_article.getTitle());
-        publishedTextView.setText(formatter.formatDate(_article.getPublished()));
+        titleTextView.setText(article.getTitle());
+        publishedTextView.setText(formatter.formatDate(article.getPublished()));
         sourceTextView.setText(source.getTitle());
-
-        String html = formatter.formatHtml(_article.getHtml() + "<br><br><br><br><br>");
-
         articleWebView.clearCache(true);
         articleWebView.clearHistory();
+        articleWebView.setWebChromeClient(new Client());
+        articleWebView.getSettings().setJavaScriptEnabled(true);
         articleWebView.loadDataWithBaseURL(source.getBaseUrl(), html, MIME_TYPE, source.getEncoding(), null);
     }
 
@@ -159,7 +145,6 @@ public class ArticleDetailsFragment
     protected void inject(ApplicationComponent component) {
         component.inject(this);
     }
-
 
     @Override
     public void onDetach() {
