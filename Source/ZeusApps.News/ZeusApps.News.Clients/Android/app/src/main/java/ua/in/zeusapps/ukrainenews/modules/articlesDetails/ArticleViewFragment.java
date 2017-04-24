@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.articleView;
+package ua.in.zeusapps.ukrainenews.modules.articlesDetails;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,18 +10,20 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -29,134 +31,114 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import ua.in.zeusapps.ukrainenews.R;
-import ua.in.zeusapps.ukrainenews.common.BaseFragment;
-import ua.in.zeusapps.ukrainenews.common.BaseMVP;
-import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
+import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
+import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
+import ua.in.zeusapps.ukrainenews.modules.root.BaseRootFragment;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
+@Layout(R.layout.fragment_article_view)
 public class ArticleViewFragment
-        extends BaseFragment
-        implements ArticleViewMVP.IView, AppBarLayout.OnOffsetChangedListener {
+        extends BaseRootFragment
+        implements
+            ArticleViewView,
+            AppBarLayout.OnOffsetChangedListener {
 
-    public static final String TAG = ArticleViewFragment.class.getSimpleName();
-
+    private static final String ARTICLE_EXTRA = "article";
+    private static final String SOURCE_EXTRA = "source";
     private static final String MIME_TYPE = "text/html";
     private static final String BLANK_TITLE = " ";
     private static final String HTTP_PREFIX = "http://";
     private static final String HTTPS_PREFIX = "https://";
-    private static final String ARTICLE_ID = "article_id";
 
     private boolean _isVisible;
     private int _scrollRange = -1;
     private Article _article;
 
+    Toolbar toolbar;
     @BindView(R.id.fragment_article_view_title)
     TextView titleTextView;
     @BindView(R.id.fragment_article_view_published)
     TextView publishedTextView;
     @BindView(R.id.fragment_article_view_source)
     TextView sourceTextView;
-
     @BindView(R.id.fragment_article_view_image)
     ImageView articleImage;
-    @BindView(R.id.fragment_article_view_toolbar)
-    Toolbar toolbar;
     @BindView(R.id.fragment_article_view_collapsingToolbar)
     CollapsingToolbarLayout toolbarLayout;
-    @BindView(R.id.fragment_article_view_appBar)
+    @BindView(R.id.fragment_article_details_appBar)
     AppBarLayout appBarLayout;
     @BindView(R.id.fragment_article_view_articleWebView)
     WebView articleWebView;
 
-
-    @Inject
-    ArticleViewMVP.IPresenter presenter;
-
     @Inject
     Formatter formatter;
+    @InjectPresenter
+    ArticleViewPresenter presenter;
 
-    public static ArticleViewFragment newInstance(String articleId) {
-        ArticleViewFragment fragment = new ArticleViewFragment();
-        Bundle args = new Bundle();
-        args.putString(ARTICLE_ID, articleId);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public ArticleViewPresenter getPresenter() {
+        return presenter;
     }
 
     public ArticleViewFragment() {
         setHasOptionsMenu(true);
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    @Override
-    public void showArticle(Article article, Source source) {
-        _article = article;
+    public static ArticleViewFragment newInstance(Article article, Source source) {
+        ArticleViewFragment fragment = new ArticleViewFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARTICLE_EXTRA, article);
+        args.putParcelable(SOURCE_EXTRA, source);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        toolbar = getRootActivity().getToolbar();
+        appBarLayout.addOnOffsetChangedListener(this);
+
+        Source _source = getArguments().getParcelable(SOURCE_EXTRA);
+        _article = getArguments().getParcelable(ARTICLE_EXTRA);
+
+        showArticle(_article, _source);
+
+        return view;
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    public void showArticle(Article article, Source source) {
         Picasso
                 .with(getContext())
-                .load(_article.getImageUrl())
+                .load(article.getImageUrl())
+                .resize(320, 256)
+                .centerCrop()
+                .error(R.drawable.un)
+                .placeholder(R.drawable.un)
                 .into(articleImage);
 
+        String html = formatter.formatHtml(article.getHtml() + "<br><br><br><br><br>");
 
-        titleTextView.setText(_article.getTitle());
-        publishedTextView.setText(formatter.formatDate(_article.getPublished()));
+        titleTextView.setText(article.getTitle());
+        publishedTextView.setText(formatter.formatDate(article.getPublished()));
         sourceTextView.setText(source.getTitle());
-
-        String html = formatter.formatHtml(_article.getHtml());
-
-        articleWebView.setWebChromeClient(new Client());
         articleWebView.clearCache(true);
         articleWebView.clearHistory();
+        articleWebView.setWebChromeClient(new Client());
         articleWebView.getSettings().setJavaScriptEnabled(true);
         articleWebView.loadDataWithBaseURL(source.getBaseUrl(), html, MIME_TYPE, source.getEncoding(), null);
-    }
-
-    @Override
-    public String GetTag() {
-        return TAG;
-    }
-
-    @Override
-    protected void onCreateViewOverride(View view, @Nullable Bundle savedInstanceState) {
-        setSupportActionBar();
-
-        appBarLayout.addOnOffsetChangedListener(this);
-        toolbarLayout.setTitleEnabled(false);
-
-        String articleId = null;
-        if (savedInstanceState != null){
-            articleId = savedInstanceState.getString(ARTICLE_ID);
-        }
-
-        if (getArguments() != null){
-            articleId = getArguments().getString(ARTICLE_ID);
-        }
-
-        if (articleId != null){
-            presenter.showArticle(articleId);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        if (_article != null) {
-            outState.putString(ARTICLE_ID, _article.getId());
-        }
-    }
-
-    @Override
-    protected BaseMVP.IPresenter getPresenter() {
-        return presenter;
-    }
-
-    @Override
-    protected int getContentResourceId() {
-        return R.layout.fragment_article_view;
     }
 
     @Override
@@ -226,19 +208,22 @@ public class ArticleViewFragment
         }
 
         share.setType("text/plain");
-
-
         startActivity(Intent.createChooser(share, _article.getTitle()));
     }
 
-    private void setSupportActionBar(){
-        toolbar.setTitle(BLANK_TITLE);
-        getCompatActivity().setSupportActionBar(toolbar);
-        ActionBar actionBar = getCompatActivity().getSupportActionBar();
-        if (actionBar != null)
-        {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+    @Override
+    public String getTitle() {
+        return null;
+    }
+
+    @Override
+    public int getFabButtonIcon() {
+        return 0;
+    }
+
+    @Override
+    public View.OnClickListener getFabButtonAction() {
+        return null;
     }
 
     // fix of bug http://stackoverflow.com/questions/32050784/chromium-webview-does-not-seems-to-work-with-android-applyoverrideconfiguration

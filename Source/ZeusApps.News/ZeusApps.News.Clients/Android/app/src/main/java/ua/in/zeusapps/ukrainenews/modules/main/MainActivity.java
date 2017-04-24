@@ -16,9 +16,6 @@ import ua.in.zeusapps.ukrainenews.common.BaseMVP;
 import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Article;
-import ua.in.zeusapps.ukrainenews.modules.articleView.ArticleViewFragment;
-import ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment;
-import ua.in.zeusapps.ukrainenews.modules.settings.SettingsFragment;
 import ua.in.zeusapps.ukrainenews.modules.sources.SourcesFragment;
 
 public class MainActivity
@@ -61,7 +58,7 @@ public class MainActivity
 
     @Override
     public void switchToArticleView(Article article) {
-        showFragment(ArticleViewFragment.newInstance(article.getId()));
+        //showFragment(ArticleViewFragment.newInstance(article.getId()));
     }
 
     @Override

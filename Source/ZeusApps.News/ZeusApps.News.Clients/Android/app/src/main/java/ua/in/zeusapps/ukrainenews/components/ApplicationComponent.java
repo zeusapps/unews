@@ -5,10 +5,11 @@ import javax.inject.Singleton;
 import dagger.Component;
 import ua.in.zeusapps.ukrainenews.data.DataModule;
 import ua.in.zeusapps.ukrainenews.modules.ApplicationModule;
-import ua.in.zeusapps.ukrainenews.modules.articleView.ArticleViewFragment;
-import ua.in.zeusapps.ukrainenews.modules.articleView.ArticleViewModule;
+import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticleDetailsPresenter;
+import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticleViewFragment;
 import ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment;
 import ua.in.zeusapps.ukrainenews.modules.articles.ArticlePresenter;
+import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticleViewPresenter;
 import ua.in.zeusapps.ukrainenews.modules.main.MainActivity;
 import ua.in.zeusapps.ukrainenews.modules.main.MainModule;
 import ua.in.zeusapps.ukrainenews.modules.root.RootPresenter;
@@ -20,7 +21,6 @@ import ua.in.zeusapps.ukrainenews.modules.splash.SplashPresenter;
 @Component(modules = {
         ApplicationModule.class,
         MainModule.class,
-        ArticleViewModule.class,
         DataModule.class
 })
 public interface ApplicationComponent {
@@ -29,8 +29,10 @@ public interface ApplicationComponent {
     void inject(ArticleViewFragment fragment);
 
     void inject(SourcesPresenter presenter);
-    void inject(SplashPresenter splashPresenter);
+    void inject(SplashPresenter presenter);
     void inject(ArticlePresenter presenter);
-    void inject(SettingsPresenter settingsPresenter);
-    void inject(RootPresenter rootPresenter);
+    void inject(SettingsPresenter presenter);
+    void inject(RootPresenter presenter);
+    void inject(ArticleDetailsPresenter presenter);
+    void inject(ArticleViewPresenter presenter);
 }

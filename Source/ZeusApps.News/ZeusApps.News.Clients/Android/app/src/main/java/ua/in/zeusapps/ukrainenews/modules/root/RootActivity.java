@@ -2,6 +2,7 @@ package ua.in.zeusapps.ukrainenews.modules.root;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
+import ua.in.zeusapps.ukrainenews.common.HideToolbar;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
 import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
@@ -34,6 +36,8 @@ public class RootActivity
     Toolbar toolbar;
     @BindView(R.id.activity_root_fab)
     FloatingActionButton fab;
+    @BindView(R.id.activity_root_appBar)
+    AppBarLayout appBarLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,6 +95,13 @@ public class RootActivity
     }
 
     public void resolveToolbar(BaseRootFragment fragment) {
+        if (fragment instanceof HideToolbar){
+            toolbar.setVisibility(View.GONE);
+            return;
+        } else {
+            toolbar.setVisibility(View.VISIBLE);
+        }
+
         toolbar.setTitle(fragment.getTitle());
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             toolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
@@ -104,6 +115,14 @@ public class RootActivity
             toolbar.setNavigationIcon(null);
             toolbar.setNavigationOnClickListener(null);
         }
+    }
+
+    public Toolbar getToolbar(){
+        return toolbar;
+    }
+
+    public void resetAppBarLayoutState(){
+        appBarLayout.setExpanded(true, true);
     }
 
     private void tryClose(){
