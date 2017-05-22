@@ -13,6 +13,7 @@ import java.util.List;
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
+import ua.in.zeusapps.ukrainenews.data.DataModule_ProvidesAdsProviderFactory;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.modules.root.BaseRootFragment;
@@ -29,6 +30,16 @@ class ArticleAdapter extends FragmentPagerAdapter {
 
         _articles = articles;
         _source = source;
+    }
+
+    public int find(String id){
+        for (int i = 0; i < _articles.size(); i++){
+            if (_articles.get(i).getId().equals(id)){
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     @Override

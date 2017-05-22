@@ -38,11 +38,15 @@ public class MvpRouter {
         getActivity().finish();
     }
 
+    protected void startIntent(Intent intent){
+        getActivity().startActivity(intent);
+    }
+
     private FragmentManager getSupportFragmentManager(){
         return getActivity().getSupportFragmentManager();
     }
 
-    private MvpActivity getActivity() {
+    protected MvpActivity getActivity() {
         return _activity;
     }
 }
