@@ -10,6 +10,7 @@ import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticleViewFragment;
 import ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment;
 import ua.in.zeusapps.ukrainenews.modules.articles.ArticlePresenter;
 import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticleViewPresenter;
+import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticlesDetailsPresenter;
 import ua.in.zeusapps.ukrainenews.modules.main.MainActivity;
 import ua.in.zeusapps.ukrainenews.modules.main.MainModule;
 import ua.in.zeusapps.ukrainenews.modules.root.RootPresenter;
@@ -35,4 +36,5 @@ public interface ApplicationComponent {
     void inject(RootPresenter presenter);
     void inject(ArticleDetailsPresenter presenter);
     void inject(ArticleViewPresenter presenter);
+    void inject(ArticlesDetailsPresenter presenter);
 }
