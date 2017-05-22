@@ -85,6 +85,7 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, RootRouter> {
 
         @Override
         public void onError(Throwable e) {
+            getViewState().showLoading(false);
             getViewState().showLoadingError();
         }
     }
