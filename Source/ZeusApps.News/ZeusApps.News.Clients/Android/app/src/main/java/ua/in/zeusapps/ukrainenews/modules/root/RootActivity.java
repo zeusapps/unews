@@ -40,9 +40,7 @@ public class RootActivity
     AppBarLayout appBarLayout;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    protected void onCreateOverride(@Nullable Bundle savedInstanceState) {
         setSupportActionBar(toolbar);
     }
 

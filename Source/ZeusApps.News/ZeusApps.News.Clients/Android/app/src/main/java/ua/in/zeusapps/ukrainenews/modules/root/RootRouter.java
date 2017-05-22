@@ -1,5 +1,7 @@
 package ua.in.zeusapps.ukrainenews.modules.root;
 
+import android.content.Intent;
+
 import javax.inject.Inject;
 
 import ua.in.zeusapps.ukrainenews.R;
@@ -9,6 +11,7 @@ import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticleDetailsFragment;
 import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticleViewFragment;
 import ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment;
+import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticlesDetailsActivity;
 import ua.in.zeusapps.ukrainenews.modules.settings.SettingsFragment;
 import ua.in.zeusapps.ukrainenews.modules.sources.SourcesFragment;
 
@@ -31,9 +34,15 @@ public class RootRouter extends MvpRouter {
     }
 
     public void showArticleDetails(Article article, Source source){
-        ArticleDetailsFragment fragment =
-                ArticleDetailsFragment.newInstance(source, article.getId());
+//        ArticleDetailsFragment fragment =
+//                ArticleDetailsFragment.newInstance(source, article.getId());
+//
+//        addToStack(fragment, R.id.activity_root_content);
 
-        addToStack(fragment, R.id.activity_root_content);
+        Intent articleDetailsIntent = new Intent(getActivity(), ArticlesDetailsActivity.class);
+        articleDetailsIntent.putExtra(ArticlesDetailsActivity.ARTICLE_ID_EXTRA, article.getId());
+        articleDetailsIntent.putExtra(ArticlesDetailsActivity.SOURCE_EXTRA, source);
+
+        startIntent(articleDetailsIntent);
     }
 }
