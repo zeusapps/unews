@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.sources;
+package ua.in.zeusapps.ukrainenews.components.main.fragments.sources;
 
 import android.content.Context;
 import android.view.View;

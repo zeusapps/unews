@@ -1,28 +1,28 @@
-package ua.in.zeusapps.ukrainenews.modules.settings;
+package ua.in.zeusapps.ukrainenews.components.main.fragments.settings;
 
 import com.arellomobile.mvp.InjectViewState;
 
 import javax.inject.Inject;
 
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
+import ua.in.zeusapps.ukrainenews.components.main.MainRouter;
 import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
-import ua.in.zeusapps.ukrainenews.modules.root.RootRouter;
 
 @InjectViewState
 public class SettingsPresenter
-        extends MvpPresenter<SettingsView, RootRouter> {
+        extends MvpPresenter<SettingsView, MainRouter> {
 
     @Inject
     IArticleRepository repository;
     @Inject
-    RootRouter router;
+    MainRouter router;
 
     SettingsPresenter(){
         getComponent().inject(this);
     }
 
     @Override
-    public RootRouter getRouter() {
+    public MainRouter getRouter() {
         return router;
     }
 

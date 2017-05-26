@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.root;
+package ua.in.zeusapps.ukrainenews.components.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,18 +17,19 @@ import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.HideToolbar;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
+import ua.in.zeusapps.ukrainenews.components.main.base.BaseMainFragment;
 import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
 
 @Layout(R.layout.activity_root)
-public class RootActivity
+public class MainActivity
         extends MvpActivity
-        implements RootView {
+        implements MainView {
 
     private final static int PERIOD_TO_CLOSE = 2000;
     private long _lastPressedTimestamp;
     @InjectPresenter
-    RootPresenter presenter;
+    MainPresenter presenter;
 
     @BindView(R.id.activity_root_content)
     FrameLayout rootView;
@@ -45,7 +46,7 @@ public class RootActivity
     }
 
     @Override
-    protected RootPresenter getPresenter() {
+    protected MainPresenter getPresenter() {
         return presenter;
     }
 
@@ -81,7 +82,7 @@ public class RootActivity
         return false;
     }
 
-    public void resolveFab(BaseRootFragment fragment) {
+    public void resolveFab(BaseMainFragment fragment) {
         if (fragment.getFabButtonIcon() > 0) {
             fab.setImageResource(fragment.getFabButtonIcon());
             fab.setVisibility(View.VISIBLE);
@@ -92,7 +93,7 @@ public class RootActivity
         }
     }
 
-    public void resolveToolbar(BaseRootFragment fragment) {
+    public void resolveToolbar(BaseMainFragment fragment) {
         if (fragment instanceof HideToolbar){
             toolbar.setVisibility(View.GONE);
             return;

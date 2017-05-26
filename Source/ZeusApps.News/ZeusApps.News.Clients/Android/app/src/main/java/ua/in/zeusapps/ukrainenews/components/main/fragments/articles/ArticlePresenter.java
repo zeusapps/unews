@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.articles;
+package ua.in.zeusapps.ukrainenews.components.main.fragments.articles;
 
 
 import com.arellomobile.mvp.InjectViewState;
@@ -9,23 +9,23 @@ import javax.inject.Inject;
 
 import rx.Subscriber;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
+import ua.in.zeusapps.ukrainenews.components.main.MainRouter;
 import ua.in.zeusapps.ukrainenews.domain.GetArticlesInteractor;
 import ua.in.zeusapps.ukrainenews.domain.GetInitialArticlesInteractor;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.ArticleRequestBundle;
 import ua.in.zeusapps.ukrainenews.models.ArticleResponse;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.modules.root.RootRouter;
 
 @InjectViewState
-public class ArticlePresenter extends MvpPresenter<ArticleView, RootRouter> {
+public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
 
     @Inject
     GetInitialArticlesInteractor initialArticlesInteractor;
     @Inject
     GetArticlesInteractor articlesInteractor;
     @Inject
-    RootRouter router;
+    MainRouter router;
 
 
     ArticlePresenter() {
@@ -33,7 +33,7 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, RootRouter> {
     }
 
     @Override
-    public RootRouter getRouter() {
+    public MainRouter getRouter() {
         return router;
     }
 

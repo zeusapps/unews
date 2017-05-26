@@ -6,16 +6,16 @@ import javax.inject.Inject;
 
 import rx.Subscriber;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
+import ua.in.zeusapps.ukrainenews.components.main.MainRouter;
 import ua.in.zeusapps.ukrainenews.domain.GetLocalArticlesInteractor;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.modules.root.RootRouter;
 
 public class ArticlesDetailsPresenter
-    extends MvpPresenter<ArticlesDetailsView, RootRouter>{
+    extends MvpPresenter<ArticlesDetailsView, MainRouter>{
 
     @Inject
-    RootRouter rootRouter;
+    MainRouter rootRouter;
     @Inject
     GetLocalArticlesInteractor localArticlesInteractor;
 
@@ -49,7 +49,7 @@ public class ArticlesDetailsPresenter
     }
 
     @Override
-    public RootRouter getRouter() {
+    public MainRouter getRouter() {
         return rootRouter;
     }
 }

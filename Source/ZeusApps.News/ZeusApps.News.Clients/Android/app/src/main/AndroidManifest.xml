@@ -12,18 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".modules.splash.SplashActivity"
+            android:name=".components.splash.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".modules.main.MainActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".modules.root.RootActivity"/>
+        <activity android:name=".components.main.MainActivity"/>
         <activity android:name=".modules.articlesDetails.ArticlesDetailsActivity"/>
     </application>
 

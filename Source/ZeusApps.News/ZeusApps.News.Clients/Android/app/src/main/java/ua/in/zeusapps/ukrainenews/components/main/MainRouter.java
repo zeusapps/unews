@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.root;
+package ua.in.zeusapps.ukrainenews.components.main;
 
 import android.content.Intent;
 
@@ -8,17 +8,15 @@ import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.MvpRouter;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticleDetailsFragment;
-import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticleViewFragment;
-import ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment;
+import ua.in.zeusapps.ukrainenews.components.main.fragments.articles.ArticleFragment;
 import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticlesDetailsActivity;
-import ua.in.zeusapps.ukrainenews.modules.settings.SettingsFragment;
-import ua.in.zeusapps.ukrainenews.modules.sources.SourcesFragment;
+import ua.in.zeusapps.ukrainenews.components.main.fragments.settings.SettingsFragment;
+import ua.in.zeusapps.ukrainenews.components.main.fragments.sources.SourcesFragment;
 
-public class RootRouter extends MvpRouter {
+public class MainRouter extends MvpRouter {
 
     @Inject
-    public RootRouter() {
+    public MainRouter() {
     }
 
     public void showSources() {

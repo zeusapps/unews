@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.root;
+package ua.in.zeusapps.ukrainenews.components.main;
 
 import com.arellomobile.mvp.InjectViewState;
 
@@ -7,11 +7,11 @@ import javax.inject.Inject;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 
 @InjectViewState
-public class RootPresenter extends MvpPresenter<RootView, RootRouter> {
+public class MainPresenter extends MvpPresenter<MainView, MainRouter> {
     @Inject
-    RootRouter router;
+    MainRouter router;
 
-    public RootPresenter() {
+    public MainPresenter() {
         getComponent().inject(this);
         getViewState().showHello();
     }
@@ -26,7 +26,7 @@ public class RootPresenter extends MvpPresenter<RootView, RootRouter> {
     }
 
     @Override
-    public RootRouter getRouter() {
+    public MainRouter getRouter() {
         return router;
     }
 }
