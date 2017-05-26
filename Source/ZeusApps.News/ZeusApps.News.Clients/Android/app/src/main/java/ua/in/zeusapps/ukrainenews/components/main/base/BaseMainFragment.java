@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.components.root.base;
+package ua.in.zeusapps.ukrainenews.components.main.base;
 
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
@@ -7,12 +7,12 @@ import android.util.Log;
 import android.view.View;
 
 import ua.in.zeusapps.ukrainenews.common.MvpFragment;
-import ua.in.zeusapps.ukrainenews.components.root.RootActivity;
+import ua.in.zeusapps.ukrainenews.components.main.MainActivity;
 import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
 
-public abstract class BaseRootFragment
+public abstract class BaseMainFragment
         extends MvpFragment
-        implements BaseRootView {
+        implements BaseMainView {
 
     @SuppressWarnings("unchecked")
     @Override
@@ -20,7 +20,7 @@ public abstract class BaseRootFragment
         super.onActivityCreated(savedInstanceState);
 
         setRetainInstance(true);
-        RootActivity activity = (RootActivity) getActivity();
+        MainActivity activity = (MainActivity) getActivity();
         activity.resolveToolbar(this);
         activity.resolveFab(this);
     }
@@ -42,8 +42,8 @@ public abstract class BaseRootFragment
         NotificationHelper.showSnackbarInfoMessage(getView(), message);
     }
 
-    public RootActivity getRootActivity(){
-        return (RootActivity) getActivity();
+    public MainActivity getRootActivity(){
+        return (MainActivity) getActivity();
     }
 
     @Override

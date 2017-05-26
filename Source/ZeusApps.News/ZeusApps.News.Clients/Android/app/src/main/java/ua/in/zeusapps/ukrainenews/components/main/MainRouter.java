@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.components.root;
+package ua.in.zeusapps.ukrainenews.components.main;
 
 import android.content.Intent;
 
@@ -13,10 +13,10 @@ import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticlesDetailsActivit
 import ua.in.zeusapps.ukrainenews.modules.settings.SettingsFragment;
 import ua.in.zeusapps.ukrainenews.modules.sources.SourcesFragment;
 
-public class RootRouter extends MvpRouter {
+public class MainRouter extends MvpRouter {
 
     @Inject
-    public RootRouter() {
+    public MainRouter() {
     }
 
     public void showSources() {

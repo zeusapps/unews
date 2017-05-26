@@ -17,11 +17,11 @@ import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.components.root.base.BaseRootFragment;
+import ua.in.zeusapps.ukrainenews.components.main.base.BaseMainFragment;
 
 @Layout(R.layout.fragment_sources)
 public class SourcesFragment
-    extends BaseRootFragment
+    extends BaseMainFragment
     implements SourcesView {
 
     private Subscription clickSubscription;

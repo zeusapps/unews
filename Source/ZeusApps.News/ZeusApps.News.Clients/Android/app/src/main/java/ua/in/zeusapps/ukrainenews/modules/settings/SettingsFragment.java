@@ -8,11 +8,11 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import butterknife.OnClick;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
-import ua.in.zeusapps.ukrainenews.components.root.base.BaseRootFragment;
+import ua.in.zeusapps.ukrainenews.components.main.base.BaseMainFragment;
 
 @Layout(R.layout.fragment_settings)
 public class SettingsFragment
-        extends BaseRootFragment
+        extends BaseMainFragment
         implements SettingsView {
 
     @InjectPresenter

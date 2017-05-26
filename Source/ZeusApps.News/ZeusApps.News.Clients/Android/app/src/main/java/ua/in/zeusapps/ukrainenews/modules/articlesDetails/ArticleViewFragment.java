@@ -36,12 +36,12 @@ import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.components.root.base.BaseRootFragment;
+import ua.in.zeusapps.ukrainenews.components.main.base.BaseMainFragment;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 @Layout(R.layout.fragment_article_view)
 public class ArticleViewFragment
-        extends BaseRootFragment
+        extends BaseMainFragment
         implements
             ArticleViewView,
             AppBarLayout.OnOffsetChangedListener {

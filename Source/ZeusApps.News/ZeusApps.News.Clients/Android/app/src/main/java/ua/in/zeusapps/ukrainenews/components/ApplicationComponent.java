@@ -11,7 +11,7 @@ import ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment;
 import ua.in.zeusapps.ukrainenews.modules.articles.ArticlePresenter;
 import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticleViewPresenter;
 import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticlesDetailsPresenter;
-import ua.in.zeusapps.ukrainenews.components.root.RootPresenter;
+import ua.in.zeusapps.ukrainenews.components.main.MainPresenter;
 import ua.in.zeusapps.ukrainenews.modules.settings.SettingsPresenter;
 import ua.in.zeusapps.ukrainenews.modules.sources.SourcesPresenter;
 import ua.in.zeusapps.ukrainenews.components.splash.SplashPresenter;
@@ -28,7 +28,7 @@ public interface ApplicationComponent {
     void inject(SplashPresenter presenter);
     void inject(ArticlePresenter presenter);
     void inject(SettingsPresenter presenter);
-    void inject(RootPresenter presenter);
+    void inject(MainPresenter presenter);
     void inject(ArticleDetailsPresenter presenter);
     void inject(ArticleViewPresenter presenter);
     void inject(ArticlesDetailsPresenter presenter);

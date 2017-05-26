@@ -15,7 +15,7 @@ import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.components.root.base.BaseRootFragment;
+import ua.in.zeusapps.ukrainenews.components.main.base.BaseMainFragment;
 
 class ArticleAdapter extends FragmentPagerAdapter {
     private final List<Article> _articles;
@@ -54,7 +54,7 @@ class ArticleAdapter extends FragmentPagerAdapter {
 
 @Layout(R.layout.fragment_article_details)
 public class ArticleDetailsFragment
-        extends BaseRootFragment
+        extends BaseMainFragment
         implements ArticleDetailsView {
 
     private static final String ARTICLE_ID_EXTRA = "article_id";
