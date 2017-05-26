@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.settings;
+package ua.in.zeusapps.ukrainenews.components.main.fragments.settings;
 
 import com.arellomobile.mvp.InjectViewState;
 
