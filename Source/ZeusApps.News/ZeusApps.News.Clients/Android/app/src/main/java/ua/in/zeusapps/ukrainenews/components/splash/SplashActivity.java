@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.splash;
+package ua.in.zeusapps.ukrainenews.components.splash;
 
 import android.widget.TextView;
 

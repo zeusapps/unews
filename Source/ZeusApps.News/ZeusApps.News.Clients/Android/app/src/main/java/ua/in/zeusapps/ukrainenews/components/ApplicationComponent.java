@@ -14,7 +14,7 @@ import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticlesDetailsPresent
 import ua.in.zeusapps.ukrainenews.modules.root.RootPresenter;
 import ua.in.zeusapps.ukrainenews.modules.settings.SettingsPresenter;
 import ua.in.zeusapps.ukrainenews.modules.sources.SourcesPresenter;
-import ua.in.zeusapps.ukrainenews.modules.splash.SplashPresenter;
+import ua.in.zeusapps.ukrainenews.components.splash.SplashPresenter;
 
 @Singleton
 @Component(modules = {
