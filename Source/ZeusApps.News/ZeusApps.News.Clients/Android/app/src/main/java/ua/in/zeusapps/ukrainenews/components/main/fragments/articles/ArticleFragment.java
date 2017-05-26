@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.articles;
+package ua.in.zeusapps.ukrainenews.components.main.fragments.articles;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;

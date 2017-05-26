@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.articles;
+package ua.in.zeusapps.ukrainenews.components.main.fragments.articles;
 
 import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
