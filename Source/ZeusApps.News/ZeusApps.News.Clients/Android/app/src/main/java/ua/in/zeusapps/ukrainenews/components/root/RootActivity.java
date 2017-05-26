@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.root;
+package ua.in.zeusapps.ukrainenews.components.root;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +17,7 @@ import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.HideToolbar;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
+import ua.in.zeusapps.ukrainenews.components.root.base.BaseRootFragment;
 import ua.in.zeusapps.ukrainenews.helpers.FragmentHelper;
 import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
 

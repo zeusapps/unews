@@ -5,7 +5,7 @@ import android.content.Intent;
 import javax.inject.Inject;
 
 import ua.in.zeusapps.ukrainenews.common.MvpRouter;
-import ua.in.zeusapps.ukrainenews.modules.root.RootActivity;
+import ua.in.zeusapps.ukrainenews.components.root.RootActivity;
 
 class SplashRouter extends MvpRouter {
 

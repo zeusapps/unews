@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.root;
+package ua.in.zeusapps.ukrainenews.components.root.base;
 
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 
 import ua.in.zeusapps.ukrainenews.common.MvpFragment;
+import ua.in.zeusapps.ukrainenews.components.root.RootActivity;
 import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
 
 public abstract class BaseRootFragment

@@ -22,7 +22,7 @@ import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.modules.root.BaseRootFragment;
+import ua.in.zeusapps.ukrainenews.components.root.base.BaseRootFragment;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 @Layout(R.layout.fragment_article)

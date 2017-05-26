@@ -13,10 +13,9 @@ import java.util.List;
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
-import ua.in.zeusapps.ukrainenews.data.DataModule_ProvidesAdsProviderFactory;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.modules.root.BaseRootFragment;
+import ua.in.zeusapps.ukrainenews.components.root.base.BaseRootFragment;
 
 class ArticleAdapter extends FragmentPagerAdapter {
     private final List<Article> _articles;

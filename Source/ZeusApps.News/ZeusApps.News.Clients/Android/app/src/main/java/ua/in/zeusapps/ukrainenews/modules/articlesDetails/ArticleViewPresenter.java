@@ -3,7 +3,7 @@ package ua.in.zeusapps.ukrainenews.modules.articlesDetails;
 import javax.inject.Inject;
 
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
-import ua.in.zeusapps.ukrainenews.modules.root.RootRouter;
+import ua.in.zeusapps.ukrainenews.components.root.RootRouter;
 
 public class ArticleViewPresenter
         extends MvpPresenter<ArticleViewView, RootRouter> {

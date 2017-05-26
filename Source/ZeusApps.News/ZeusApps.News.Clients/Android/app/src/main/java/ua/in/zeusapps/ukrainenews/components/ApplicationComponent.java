@@ -11,7 +11,7 @@ import ua.in.zeusapps.ukrainenews.modules.articles.ArticleFragment;
 import ua.in.zeusapps.ukrainenews.modules.articles.ArticlePresenter;
 import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticleViewPresenter;
 import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticlesDetailsPresenter;
-import ua.in.zeusapps.ukrainenews.modules.root.RootPresenter;
+import ua.in.zeusapps.ukrainenews.components.root.RootPresenter;
 import ua.in.zeusapps.ukrainenews.modules.settings.SettingsPresenter;
 import ua.in.zeusapps.ukrainenews.modules.sources.SourcesPresenter;
 import ua.in.zeusapps.ukrainenews.components.splash.SplashPresenter;

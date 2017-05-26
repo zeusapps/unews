@@ -6,7 +6,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import java.util.List;
 
 import ua.in.zeusapps.ukrainenews.models.Article;
-import ua.in.zeusapps.ukrainenews.modules.root.BaseRootView;
+import ua.in.zeusapps.ukrainenews.components.root.base.BaseRootView;
 
 public interface ArticleView extends BaseRootView {
     void init(List<Article> articles);

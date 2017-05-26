@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.root;
+package ua.in.zeusapps.ukrainenews.components.root.base;
 
 import com.arellomobile.mvp.MvpView;
 
