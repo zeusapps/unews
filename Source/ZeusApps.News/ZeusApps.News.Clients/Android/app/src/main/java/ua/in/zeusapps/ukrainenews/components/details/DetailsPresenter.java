@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import rx.Subscriber;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
-import ua.in.zeusapps.ukrainenews.domain.GetLocalArticlesInteractor;
+import ua.in.zeusapps.ukrainenews.domain.GetLocalArticleIdsInteractor;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
@@ -17,7 +17,7 @@ public class DetailsPresenter
     extends MvpPresenter<DetailsView, DetailsRouter> {
 
     @Inject
-    GetLocalArticlesInteractor localArticlesInteractor;
+    GetLocalArticleIdsInteractor localArticlesInteractor;
     @Inject
     DetailsRouter router;
 
@@ -31,7 +31,7 @@ public class DetailsPresenter
     }
 
     public void init(final Source source, final String articleId){
-        localArticlesInteractor.execute(source, new Subscriber<List<Article>>() {
+        localArticlesInteractor.execute(source, new Subscriber<List<String>>() {
             @Override
             public void onCompleted() {
 
@@ -43,8 +43,8 @@ public class DetailsPresenter
             }
 
             @Override
-            public void onNext(List<Article> articles) {
-                getViewState().load(articles, source);
+            public void onNext(List<String> articleIds) {
+                getViewState().load(articleIds, source);
                 getViewState().switchTo(articleId);
             }
         });

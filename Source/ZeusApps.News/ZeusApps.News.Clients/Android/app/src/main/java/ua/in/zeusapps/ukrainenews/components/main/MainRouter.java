@@ -10,7 +10,6 @@ import ua.in.zeusapps.ukrainenews.components.details.DetailsActivity;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.components.main.fragments.articles.ArticleFragment;
-import ua.in.zeusapps.ukrainenews.modules.articlesDetails.ArticlesDetailsActivity;
 import ua.in.zeusapps.ukrainenews.components.main.fragments.settings.SettingsFragment;
 import ua.in.zeusapps.ukrainenews.components.main.fragments.sources.SourcesFragment;
 

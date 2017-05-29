@@ -7,27 +7,26 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.List;
 
 import ua.in.zeusapps.ukrainenews.components.details.fragments.ArticleDetailsFragment;
-import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
 class DetailsAdapter extends FragmentPagerAdapter {
 
-    private final List<Article> _articles;
+    private final List<String> _articleIds;
     private final Source _source;
 
     public DetailsAdapter(
             FragmentManager manager,
-            List<Article> articles,
+            List<String> articleIds,
             Source source) {
         super(manager);
 
-        _articles = articles;
+        _articleIds = articleIds;
         _source = source;
     }
 
     public int find(String id){
-        for (int i = 0; i < _articles.size(); i++){
-            if (_articles.get(i).getId().equals(id)){
+        for (int i = 0; i < _articleIds.size(); i++){
+            if (_articleIds.get(i).equals(id)){
                 return i;
             }
         }
@@ -37,12 +36,11 @@ class DetailsAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Article article = _articles.get(position);
-        return ArticleDetailsFragment.newInstance(article, _source);
+        return ArticleDetailsFragment.newInstance(_articleIds.get(position), _source);
     }
 
     @Override
     public int getCount() {
-        return _articles.size();
+        return _articleIds.size();
     }
 }

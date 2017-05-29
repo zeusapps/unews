@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
+import rx.functions.Func1;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
@@ -48,25 +49,19 @@ class ArticleRepository
 
     @Override
     public Observable<List<String>> getIds(Source source) {
-        List<String> ids = new ArrayList<>();
-        List<String[]> results;
-        try {
-            results = getDao()
-                    .queryBuilder()
-                    .selectColumns(Article.ID_FIELD_NAME)
-                    .queryRaw()
-                    .getResults();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        return getBySource(source)
+                .map(new Func1<List<Article>, List<String>>() {
+                    @Override
+                    public List<String> call(List<Article> articles) {
+                        List<String> ids = new ArrayList<>();
 
-            return Observable.just(ids);
-        }
+                        for (Article article: articles){
+                            ids.add(article.getId());
+                        }
 
-        for (String[] items: results) {
-            ids.add(items[0]);
-        }
-
-        return Observable.just(ids);
+                        return ids;
+                    }
+                });
     }
 
     @Override

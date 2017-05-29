@@ -9,7 +9,7 @@ import ua.in.zeusapps.ukrainenews.models.Source;
 
 
 public interface DetailsView extends MvpView {
-    void load(List<Article> articles, Source source);
+    void load(List<String> articleIds, Source source);
 
     void switchTo(String id);
 }

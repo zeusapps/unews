@@ -48,8 +48,8 @@ public class DetailsActivity
     }
 
     @Override
-    public void load(List<Article> articles, Source source) {
-        _adapter = new DetailsAdapter(getSupportFragmentManager(), articles, source);
+    public void load(List<String> articleIds, Source source) {
+        _adapter = new DetailsAdapter(getSupportFragmentManager(), articleIds, source);
         viewPager.setAdapter(_adapter);
     }
 
