@@ -16,11 +16,12 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".components.main.MainActivity"/>
-        <activity android:name=".modules.articlesDetails.ArticlesDetailsActivity"/>
+        <activity android:name=".components.main.MainActivity" />
+        <activity android:name=".components.details.DetailsActivity"/>
     </application>
 
 </manifest>

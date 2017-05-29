@@ -21,7 +21,7 @@ class ArticleAdapter extends FragmentPagerAdapter {
     private final List<Article> _articles;
     private final Source _source;
 
-    public ArticleAdapter(
+    ArticleAdapter(
             FragmentManager manager,
             List<Article> articles,
             Source source) {
@@ -31,7 +31,7 @@ class ArticleAdapter extends FragmentPagerAdapter {
         _source = source;
     }
 
-    public int find(String id){
+    int find(String id){
         for (int i = 0; i < _articles.size(); i++){
             if (_articles.get(i).getId().equals(id)){
                 return i;

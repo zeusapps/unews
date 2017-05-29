@@ -1,4 +1,4 @@
-package ua.in.zeusapps.ukrainenews.modules.articlesDetails;
+package ua.in.zeusapps.ukrainenews.components.details;
 
 import com.arellomobile.mvp.InjectViewState;
 
@@ -11,22 +11,26 @@ import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.domain.GetLocalArticlesInteractor;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.components.main.MainRouter;
 
 @InjectViewState
-public class ArticleDetailsPresenter
-        extends MvpPresenter<ArticleDetailsView, MainRouter> {
+public class DetailsPresenter
+    extends MvpPresenter<DetailsView, DetailsRouter> {
 
-    @Inject
-    MainRouter router;
     @Inject
     GetLocalArticlesInteractor localArticlesInteractor;
+    @Inject
+    DetailsRouter router;
 
-    ArticleDetailsPresenter(){
-        //getComponent().inject(this);
+    DetailsPresenter(){
+        getComponent().inject(this);
     }
 
-    void init(final Source source){
+    @Override
+    public DetailsRouter getRouter() {
+        return router;
+    }
+
+    public void init(final Source source, final String articleId){
         localArticlesInteractor.execute(source, new Subscriber<List<Article>>() {
             @Override
             public void onCompleted() {
@@ -40,17 +44,10 @@ public class ArticleDetailsPresenter
 
             @Override
             public void onNext(List<Article> articles) {
-                if (articles.size() == 0){
-                    getRouter().showArticles(source);
-                }
-
-                getViewState().loadArticles(articles);
+                getViewState().load(articles, source);
+                getViewState().switchTo(articleId);
             }
         });
-    }
 
-    @Override
-    public MainRouter getRouter() {
-        return router;
     }
 }

@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.MvpRouter;
+import ua.in.zeusapps.ukrainenews.components.details.DetailsActivity;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.components.main.fragments.articles.ArticleFragment;
@@ -32,14 +33,9 @@ public class MainRouter extends MvpRouter {
     }
 
     public void showArticleDetails(Article article, Source source){
-//        ArticleDetailsFragment fragment =
-//                ArticleDetailsFragment.newInstance(source, article.getId());
-//
-//        addToStack(fragment, R.id.activity_root_content);
-
-        Intent articleDetailsIntent = new Intent(getActivity(), ArticlesDetailsActivity.class);
-        articleDetailsIntent.putExtra(ArticlesDetailsActivity.ARTICLE_ID_EXTRA, article.getId());
-        articleDetailsIntent.putExtra(ArticlesDetailsActivity.SOURCE_EXTRA, source);
+        Intent articleDetailsIntent = new Intent(getActivity(), DetailsActivity.class);
+        articleDetailsIntent.putExtra(DetailsActivity.ARTICLE_ID_EXTRA, article.getId());
+        articleDetailsIntent.putExtra(DetailsActivity.SOURCE_EXTRA, source);
 
         startIntent(articleDetailsIntent);
     }
