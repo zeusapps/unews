@@ -22,21 +22,6 @@ class ArticleRepository
     }
 
     @Override
-    public Observable<List<Article>> getAll() {
-        try {
-            List<Article> articles = getDao()
-                    .queryBuilder()
-                    .orderBy(Article.PUBLISHED_FIELD_NAME, false)
-                    .query();
-            return Observable.just(articles);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        List<Article> empty = new ArrayList<>();
-        return Observable.just(empty);
-    }
-
-    @Override
     public Observable<List<Article>> getBySource(Source source) {
         List<Article> articles;
 
@@ -59,6 +44,29 @@ class ArticleRepository
     public Observable<Article> getById(String id) {
         Article article = getDao().queryForId(id);
         return Observable.just(article);
+    }
+
+    @Override
+    public Observable<List<String>> getIds(Source source) {
+        List<String> ids = new ArrayList<>();
+        List<String[]> results;
+        try {
+            results = getDao()
+                    .queryBuilder()
+                    .selectColumns(Article.ID_FIELD_NAME)
+                    .queryRaw()
+                    .getResults();
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return Observable.just(ids);
+        }
+
+        for (String[] items: results) {
+            ids.add(items[0]);
+        }
+
+        return Observable.just(ids);
     }
 
     @Override
