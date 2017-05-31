@@ -5,12 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,6 +58,8 @@ public class ArticleDetailsFragment
     TextView publishedTextView;
     @BindView(R.id.fragment_article_view_source)
     TextView sourceTextView;
+    @BindView(R.id.fragment_article_details_nestedScrollView)
+    NestedScrollView scrollView;
     @BindView(R.id.fragment_article_view_articleWebView)
     WebView articleWebView;
     @BindView(R.id.toolbar)
@@ -120,6 +124,12 @@ public class ArticleDetailsFragment
         articleWebView.clearHistory();
         articleWebView.setWebChromeClient(new Client());
         articleWebView.getSettings().setJavaScriptEnabled(true);
+        articleWebView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                scrollView.scrollTo(0,0);
+            }
+        });
         articleWebView.loadDataWithBaseURL(
                 source.getBaseUrl(), html, MIME_TYPE, source.getEncoding(), null);
     }
@@ -145,6 +155,8 @@ public class ArticleDetailsFragment
             }
             return BitmapFactory.decodeResource(getContext().getResources(), R.drawable.un);
         }
+
+
     }
 }
 

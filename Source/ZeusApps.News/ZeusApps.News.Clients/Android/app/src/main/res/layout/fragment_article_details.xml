@@ -18,12 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginEnd="16dp"
-            app:expandedTitleMarginStart="16dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
             android:id="@+id/fragment_article_view_collapsingToolbar">
-
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -36,11 +33,9 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:layout_collapseMode="pin"
-                />
-
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
@@ -48,7 +43,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:elevation="8dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/fragment_article_details_nestedScrollView">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -59,7 +55,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:textColor="#222"
+                android:textStyle="bold"
                 android:textSize="24sp"
                 tools:text="Article title"
 
