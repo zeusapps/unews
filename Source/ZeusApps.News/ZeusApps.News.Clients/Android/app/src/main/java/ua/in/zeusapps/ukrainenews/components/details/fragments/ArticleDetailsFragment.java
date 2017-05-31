@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,17 +24,16 @@ import rx.functions.Action1;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpFragment;
-import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
-@Layout(R.layout.fragment_article_view)
+@Layout(R.layout.fragment_article_details)
 public class ArticleDetailsFragment
     extends MvpFragment
-    implements ArticleDetailsView {
+    implements ArticleDetailsView, View.OnClickListener {
 
     private static final String ARTICLE_ID_EXTRA = "article_id";
     private static final String SOURCE_EXTRA = "source";
@@ -58,9 +58,11 @@ public class ArticleDetailsFragment
     TextView sourceTextView;
     @BindView(R.id.fragment_article_view_articleWebView)
     WebView articleWebView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
-    public MvpPresenter getPresenter() {
+    public ArticleDetailsPresenter getPresenter() {
         return presenter;
     }
 
@@ -94,6 +96,7 @@ public class ArticleDetailsFragment
                         showArticle(article, source);
                     }
                 });
+        setToolbar(source);
         return view;
     }
 
@@ -119,6 +122,17 @@ public class ArticleDetailsFragment
         articleWebView.getSettings().setJavaScriptEnabled(true);
         articleWebView.loadDataWithBaseURL(
                 source.getBaseUrl(), html, MIME_TYPE, source.getEncoding(), null);
+    }
+
+    @Override
+    public void onClick(View v) {
+        getPresenter().close();
+    }
+
+    private void setToolbar(Source source){
+        toolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
+        toolbar.setNavigationOnClickListener(this);
+        toolbar.setTitle(source.getTitle());
     }
 
     // fix of bug http://stackoverflow.com/questions/32050784/chromium-webview-does-not-seems-to-work-with-android-applyoverrideconfiguration

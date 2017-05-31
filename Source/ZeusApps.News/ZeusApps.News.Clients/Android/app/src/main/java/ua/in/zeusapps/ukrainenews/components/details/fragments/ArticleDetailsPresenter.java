@@ -11,12 +11,16 @@ public class ArticleDetailsPresenter
     @Inject
     DetailsRouter router;
 
-    public ArticleDetailsPresenter() {
+    ArticleDetailsPresenter() {
         getComponent().inject(this);
     }
 
     @Override
     public DetailsRouter getRouter() {
         return router;
+    }
+
+    public void close(){
+        getRouter().close();
     }
 }

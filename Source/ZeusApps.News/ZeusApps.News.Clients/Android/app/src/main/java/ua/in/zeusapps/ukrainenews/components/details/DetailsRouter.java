@@ -10,4 +10,8 @@ public class DetailsRouter
     @Inject
     public DetailsRouter() {
     }
+
+    public void close(){
+        getActivity().finish();
+    }
 }
