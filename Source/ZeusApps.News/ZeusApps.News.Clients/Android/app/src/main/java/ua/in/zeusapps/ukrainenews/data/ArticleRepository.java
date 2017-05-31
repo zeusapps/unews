@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
+import rx.functions.Func1;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
@@ -19,21 +20,6 @@ class ArticleRepository
 
     ArticleRepository(Context context) {
         super(context, Article.class);
-    }
-
-    @Override
-    public Observable<List<Article>> getAll() {
-        try {
-            List<Article> articles = getDao()
-                    .queryBuilder()
-                    .orderBy(Article.PUBLISHED_FIELD_NAME, false)
-                    .query();
-            return Observable.just(articles);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        List<Article> empty = new ArrayList<>();
-        return Observable.just(empty);
     }
 
     @Override
@@ -59,6 +45,23 @@ class ArticleRepository
     public Observable<Article> getById(String id) {
         Article article = getDao().queryForId(id);
         return Observable.just(article);
+    }
+
+    @Override
+    public Observable<List<String>> getIds(Source source) {
+        return getBySource(source)
+                .map(new Func1<List<Article>, List<String>>() {
+                    @Override
+                    public List<String> call(List<Article> articles) {
+                        List<String> ids = new ArrayList<>();
+
+                        for (Article article: articles){
+                            ids.add(article.getId());
+                        }
+
+                        return ids;
+                    }
+                });
     }
 
     @Override
