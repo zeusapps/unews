@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -54,9 +55,6 @@ public class ArticleDetailsFragment
     private static final String ARTICLE_ID_EXTRA = "article_id";
     private static final String SOURCE_EXTRA = "source";
     private static final String MIME_TYPE = "text/html";
-    private static final String BLANK_TITLE = " ";
-    private static final String HTTP_PREFIX = "http://";
-    private static final String HTTPS_PREFIX = "https://";
 
     private Source _source;
     private Article _article;
@@ -85,6 +83,8 @@ public class ArticleDetailsFragment
     ShareButton shareFacebookButton;
     @BindView(R.id.fragment_article_details_sendFacebookButton)
     SendButton sendFacebookButton;
+    @BindView(R.id.fragment_article_details_appBar)
+    AppBarLayout appBarLayout;
 
     @Override
     public ArticleDetailsPresenter getPresenter() {
@@ -163,23 +163,35 @@ public class ArticleDetailsFragment
     public void onClick(View v) {
         getPresenter().close();
     }
+
     @OnClick(R.id.fragment_article_details_shareOther)
     public void shareOther(){
         if (_source == null || _article == null){
             return;
         }
 
-        Spanned html = Html.fromHtml(_article.getHtml());
-
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType(MIME_TYPE);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, html);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, prepareHtml());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             shareIntent.putExtra(Intent.EXTRA_ORIGINATING_URI, _article.getUrl());
         }
 
         startActivity(Intent.createChooser(shareIntent, _article.getTitle()));
+    }
+    @OnClick(R.id.fragment_article_view_shareButton)
+    public void share(){
+        appBarLayout.setExpanded(false, true);
+        scrollView.fullScroll(NestedScrollView.FOCUS_DOWN);
+    }
+
+    private Spanned prepareHtml(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(_article.getHtml(), Html.FROM_HTML_MODE_COMPACT);
+        }
+
+        return Html.fromHtml(_article.getHtml(), Html.FROM_HTML_MODE_LEGACY);
     }
 
     private void setToolbar(){
