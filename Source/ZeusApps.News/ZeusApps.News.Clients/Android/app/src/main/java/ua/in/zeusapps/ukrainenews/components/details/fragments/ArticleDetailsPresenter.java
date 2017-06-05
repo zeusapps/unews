@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.components.details.DetailsRouter;
+import ua.in.zeusapps.ukrainenews.models.Article;
 
 public class ArticleDetailsPresenter
     extends MvpPresenter<ArticleDetailsView, DetailsRouter> {
@@ -22,5 +23,10 @@ public class ArticleDetailsPresenter
 
     public void close(){
         getRouter().close();
+    }
+
+
+    void viewInBrowser(Article article){
+        getRouter().viewInBrowser(article);
     }
 }

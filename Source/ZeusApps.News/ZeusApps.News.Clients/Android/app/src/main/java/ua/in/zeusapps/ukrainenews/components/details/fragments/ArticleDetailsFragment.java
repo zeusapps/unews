@@ -3,11 +3,13 @@ package ua.in.zeusapps.ukrainenews.components.details.fragments;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -17,6 +19,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.SendButton;
+import com.facebook.share.widget.ShareButton;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -64,6 +73,10 @@ public class ArticleDetailsFragment
     WebView articleWebView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.fragment_article_details_shareFacebookButton)
+    ShareButton shareFacebookButton;
+    @BindView(R.id.fragment_article_details_sendFacebookButton)
+    SendButton sendFacebookButton;
 
     @Override
     public ArticleDetailsPresenter getPresenter() {
@@ -115,7 +128,7 @@ public class ArticleDetailsFragment
                 .placeholder(R.drawable.un)
                 .into(articleImage);
 
-        String html = formatter.formatHtml(article.getHtml() + "<br><br><br><br><br>");
+        String html = formatter.formatHtml(article.getHtml() + "<br><br>");
 
         titleTextView.setText(article.getTitle());
         publishedTextView.setText(formatter.formatDate(article.getPublished()));
@@ -127,11 +140,14 @@ public class ArticleDetailsFragment
         articleWebView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {
-                scrollView.scrollTo(0,0);
+                fixScroll();
             }
         });
         articleWebView.loadDataWithBaseURL(
                 source.getBaseUrl(), html, MIME_TYPE, source.getEncoding(), null);
+        shareFacebook(article);
+        updateToolbar(article);
+        fixScroll();
     }
 
     @Override
@@ -145,6 +161,58 @@ public class ArticleDetailsFragment
         toolbar.setTitle(source.getTitle());
     }
 
+    private void updateToolbar(final Article article){
+        toolbar
+                .getMenu()
+                .add(article.getTitle())
+                .setIcon(R.drawable.ic_launch_white_24dp)
+                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        return openInBrowser(article);
+                    }
+                })
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    }
+
+    private void shareFacebook(Article article){
+        ShareLinkContent link = new ShareLinkContent
+                .Builder()
+                .setContentUrl(Uri.parse(article.getUrl()))
+                .build();
+
+        shareFacebookButton.setContentDescription(article.getTitle());
+        shareFacebookButton.setShareContent(link);
+
+        sendFacebookButton.setShareContent(link);
+        CallbackManager manager = CallbackManager.Factory.create();
+        sendFacebookButton.registerCallback(manager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+    }
+
+    private void fixScroll(){
+        scrollView.scrollTo(0,0);
+    }
+
+    private boolean openInBrowser(Article article){
+        getPresenter().viewInBrowser(article);
+        return true;
+    }
+
     // fix of bug http://stackoverflow.com/questions/32050784/chromium-webview-does-not-seems-to-work-with-android-applyoverrideconfiguration
     private class Client extends WebChromeClient {
         @Override
@@ -155,8 +223,6 @@ public class ArticleDetailsFragment
             }
             return BitmapFactory.decodeResource(getContext().getResources(), R.drawable.un);
         }
-
-
     }
 }
 
