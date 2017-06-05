@@ -19,4 +19,8 @@
     <string name="fragment_settings_articles_cleared">Статті видалені</string>
     <string name="fragment_settings_title">Налаштування</string>
     <string name="activity_root_hello_message">Вітаємо у додатку Ukraine News!</string>
+    <string name="facebook_app_id">1383427461748579</string>
+    <string name="fragment_article_details_share_facebook">Поширити</string>
+    <string name="fragment_article_details_share_other">Поділитись іншим способом</string>
+    <string name="fragment_article_details_send_facebook">Відправити повідомленням</string>
 </resources>
