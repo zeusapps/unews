@@ -24,7 +24,7 @@ class DetailsAdapter extends FragmentPagerAdapter {
         _source = source;
     }
 
-    public int find(String id){
+    int find(String id){
         for (int i = 0; i < _articleIds.size(); i++){
             if (_articleIds.get(i).equals(id)){
                 return i;
@@ -32,6 +32,10 @@ class DetailsAdapter extends FragmentPagerAdapter {
         }
 
         return -1;
+    }
+
+    String getArticleId(int position){
+        return _articleIds.get(position);
     }
 
     @Override

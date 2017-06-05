@@ -50,4 +50,8 @@ public class DetailsPresenter
         });
 
     }
+
+    void currentArticleChanged(String articleId){
+        getViewState().switchTo(articleId);
+    }
 }
