@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="ua.in.zeusapps.ukrainenews">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,6 +12,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+
         <activity
             android:name=".components.splash.SplashActivity"
             android:screenOrientation="portrait">
@@ -22,6 +26,11 @@
         </activity>
         <activity android:name=".components.main.MainActivity" />
         <activity android:name=".components.details.DetailsActivity"/>
+
+        <provider
+            android:authorities="com.facebook.app.FacebookContentProvider1383427461748579"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>

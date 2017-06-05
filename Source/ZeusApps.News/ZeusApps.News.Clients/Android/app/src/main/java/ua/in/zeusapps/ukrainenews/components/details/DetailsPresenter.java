@@ -30,7 +30,7 @@ public class DetailsPresenter
         return router;
     }
 
-    public void init(final Source source, final String articleId){
+    void init(final Source source, final String articleId){
         localArticlesInteractor.execute(source, new Subscriber<List<String>>() {
             @Override
             public void onCompleted() {
@@ -49,5 +49,9 @@ public class DetailsPresenter
             }
         });
 
+    }
+
+    void currentArticleChanged(String articleId){
+        getViewState().switchTo(articleId);
     }
 }
