@@ -1,13 +1,17 @@
 package ua.in.zeusapps.ukrainenews.components.details.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +35,7 @@ import com.squareup.picasso.Picasso;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import rx.functions.Action1;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
@@ -52,6 +57,9 @@ public class ArticleDetailsFragment
     private static final String BLANK_TITLE = " ";
     private static final String HTTP_PREFIX = "http://";
     private static final String HTTPS_PREFIX = "https://";
+
+    private Source _source;
+    private Article _article;
 
     @InjectPresenter
     ArticleDetailsPresenter presenter;
@@ -103,36 +111,37 @@ public class ArticleDetailsFragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        final Source source = getArguments().getParcelable(SOURCE_EXTRA);
+        _source = getArguments().getParcelable(SOURCE_EXTRA);
         String articleId = getArguments().getString(ARTICLE_ID_EXTRA);
         articleRepository
                 .getById(articleId)
                 .subscribe(new Action1<Article>() {
                     @Override
                     public void call(Article article) {
-                        showArticle(article, source);
+                        _article = article;
+                        showArticle();
                     }
                 });
-        setToolbar(source);
+        setToolbar();
         return view;
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    public void showArticle(Article article, Source source) {
+    public void showArticle() {
         Picasso
                 .with(getContext())
-                .load(article.getImageUrl())
+                .load(_article.getImageUrl())
                 .resize(320, 256)
                 .centerCrop()
                 .error(R.drawable.un)
                 .placeholder(R.drawable.un)
                 .into(articleImage);
 
-        String html = formatter.formatHtml(article.getHtml() + "<br><br>");
+        String html = formatter.formatHtml(_article.getHtml() + "<br><br>");
 
-        titleTextView.setText(article.getTitle());
-        publishedTextView.setText(formatter.formatDate(article.getPublished()));
-        sourceTextView.setText(source.getTitle());
+        titleTextView.setText(_article.getTitle());
+        publishedTextView.setText(formatter.formatDate(_article.getPublished()));
+        sourceTextView.setText(_source.getTitle());
         articleWebView.clearCache(true);
         articleWebView.clearHistory();
         articleWebView.setWebChromeClient(new Client());
@@ -144,9 +153,9 @@ public class ArticleDetailsFragment
             }
         });
         articleWebView.loadDataWithBaseURL(
-                source.getBaseUrl(), html, MIME_TYPE, source.getEncoding(), null);
-        shareFacebook(article);
-        updateToolbar(article);
+                _source.getBaseUrl(), html, MIME_TYPE, _source.getEncoding(), null);
+        shareFacebook();
+        updateToolbar();
         fixScroll();
     }
 
@@ -154,34 +163,52 @@ public class ArticleDetailsFragment
     public void onClick(View v) {
         getPresenter().close();
     }
+    @OnClick(R.id.fragment_article_details_shareOther)
+    public void shareOther(){
+        if (_source == null || _article == null){
+            return;
+        }
 
-    private void setToolbar(Source source){
-        toolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
-        toolbar.setNavigationOnClickListener(this);
-        toolbar.setTitle(source.getTitle());
+        Spanned html = Html.fromHtml(_article.getHtml());
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType(MIME_TYPE);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, html);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            shareIntent.putExtra(Intent.EXTRA_ORIGINATING_URI, _article.getUrl());
+        }
+
+        startActivity(Intent.createChooser(shareIntent, _article.getTitle()));
     }
 
-    private void updateToolbar(final Article article){
+    private void setToolbar(){
+        toolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
+        toolbar.setNavigationOnClickListener(this);
+        toolbar.setTitle(_source.getTitle());
+    }
+
+    private void updateToolbar(){
         toolbar
                 .getMenu()
-                .add(article.getTitle())
+                .add(_article.getTitle())
                 .setIcon(R.drawable.ic_launch_white_24dp)
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        return openInBrowser(article);
+                        return openInBrowser(_article);
                     }
                 })
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
-    private void shareFacebook(Article article){
+    private void shareFacebook(){
         ShareLinkContent link = new ShareLinkContent
                 .Builder()
-                .setContentUrl(Uri.parse(article.getUrl()))
+                .setContentUrl(Uri.parse(_article.getUrl()))
                 .build();
 
-        shareFacebookButton.setContentDescription(article.getTitle());
+        shareFacebookButton.setContentDescription(_article.getTitle());
         shareFacebookButton.setShareContent(link);
 
         sendFacebookButton.setShareContent(link);
