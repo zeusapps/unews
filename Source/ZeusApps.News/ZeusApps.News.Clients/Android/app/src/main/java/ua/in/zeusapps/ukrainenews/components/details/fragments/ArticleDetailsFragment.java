@@ -13,6 +13,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,14 +51,16 @@ import ua.in.zeusapps.ukrainenews.services.Formatter;
 @Layout(R.layout.fragment_article_details)
 public class ArticleDetailsFragment
     extends MvpFragment
-    implements ArticleDetailsView, View.OnClickListener {
+    implements ArticleDetailsView, View.OnClickListener, AppBarLayout.OnOffsetChangedListener, NestedScrollView.OnScrollChangeListener {
 
+    private static final String TAG = ArticleDetailsFragment.class.getSimpleName();
     private static final String ARTICLE_ID_EXTRA = "article_id";
     private static final String SOURCE_EXTRA = "source";
     private static final String MIME_TYPE = "text/html";
 
     private Source _source;
     private Article _article;
+    private boolean _isExpanded;
 
     @InjectPresenter
     ArticleDetailsPresenter presenter;
@@ -124,6 +127,24 @@ public class ArticleDetailsFragment
                 });
         setToolbar();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        toolbar.setNavigationOnClickListener(this);
+        appBarLayout.addOnOffsetChangedListener(this);
+        scrollView.setOnScrollChangeListener(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        toolbar.setNavigationOnClickListener(null);
+        appBarLayout.removeOnOffsetChangedListener(this);
+        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) null);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -196,7 +217,6 @@ public class ArticleDetailsFragment
 
     private void setToolbar(){
         toolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
-        toolbar.setNavigationOnClickListener(this);
         toolbar.setTitle(_source.getTitle());
     }
 
@@ -244,12 +264,34 @@ public class ArticleDetailsFragment
     }
 
     private void fixScroll(){
+        Log.d(TAG, "Trying to fixScroll");
         scrollView.scrollTo(0,0);
     }
 
     private boolean openInBrowser(Article article){
         getPresenter().viewInBrowser(article);
         return true;
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        _isExpanded = (verticalOffset == 0);
+
+        Log.d(TAG, _isExpanded ? "Expanded" : "Collapsed");
+    }
+
+    @Override
+    public void onScrollChange(
+            NestedScrollView v, int scrollX, int scrollY,
+            int oldScrollX, int oldScrollY) {
+//        if (scrollX < 4){
+//            return;
+//        }
+
+        if (_isExpanded){
+            Log.d(TAG, "!!!");
+            fixScroll();
+        }
     }
 
     // fix of bug http://stackoverflow.com/questions/32050784/chromium-webview-does-not-seems-to-work-with-android-applyoverrideconfiguration
