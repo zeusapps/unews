@@ -3,8 +3,10 @@ package ua.in.zeusapps.ukrainenews.common;
 import android.app.Application;
 
 import com.google.android.gms.ads.MobileAds;
+import com.twitter.sdk.android.core.Twitter;
 
 import butterknife.ButterKnife;
+import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.components.DaggerApplicationComponent;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.modules.ApplicationModule;
@@ -31,7 +33,8 @@ public class App extends Application {
         ButterKnife.setDebug(true);
 
 
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-5823688689397702~2489213275");
+        MobileAds.initialize(getApplicationContext(), getString(R.string.AD_APP_ID));
+        Twitter.initialize(this);
 
         _instance = this;
     }
