@@ -51,6 +51,8 @@ dependencies {
     compile 'com.arello-mobile:moxy:1.4.6'
     compile 'com.arello-mobile:moxy-app-compat:1.4.6'
     compile 'com.facebook.android:facebook-android-sdk:4.23.0'
+    compile 'com.twitter.sdk.android:twitter-core:3.0.0'
+    compile 'com.twitter.sdk.android:tweet-composer:3.0.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.arello-mobile:moxy-compiler:1.4.6'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
