@@ -4,6 +4,7 @@
     <string name="settings">Налаштування</string>
     <string name="sources">Джерела</string>
     <string name="banner_ad_unit_id">ca-app-pub-5823688689397702/3965946474</string>
+    <string name="AD_APP_ID">ca-app-pub-5823688689397702~2489213275</string>
     <string name="network_error">Неможливо здійснити оновлення</string>
     <string name="view_on_site">Переглянути на сайті</string>
     <string name="fragment_settings_clear_storage_button">Очистити кеш</string>
@@ -20,7 +21,10 @@
     <string name="fragment_settings_title">Налаштування</string>
     <string name="activity_root_hello_message">Вітаємо у додатку Ukraine News!</string>
     <string name="facebook_app_id">1383427461748579</string>
+    <string name="com.twitter.sdk.android.CONSUMER_KEY">axP5gEoxboLCrah7TwyYm0cWH</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET">zrjVArOdpRJILWFAPddKX3u108Afek54r8oLYKFNVFFBjGaXeh</string>
     <string name="fragment_article_details_share_facebook">Поширити</string>
     <string name="fragment_article_details_share_other">Поділитись іншим способом</string>
     <string name="fragment_article_details_send_facebook">Відправити повідомленням</string>
+    <string name="fragment_article_details_share_twitter">Поширити через Twitter</string>
 </resources>
