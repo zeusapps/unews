@@ -112,7 +112,7 @@ public class ArticleFragment
     }
 
     private void initAdapter(List<Article> articles){
-        _adapter = new ArticleAdapter(getActivity(), formatter);
+        _adapter = new ArticleAdapter(getActivity(), formatter, source);
         _adapter.addAll(articles);
         _adapter.setAdsProvider(adsProvider);
         _subscription = _adapter.getItemClicked().subscribe(new Action1<Article>() {

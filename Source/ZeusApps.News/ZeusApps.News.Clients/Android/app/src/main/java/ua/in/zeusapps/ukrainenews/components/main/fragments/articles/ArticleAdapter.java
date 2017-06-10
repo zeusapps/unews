@@ -13,14 +13,19 @@ import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.adapter.BaseViewHolder;
 import ua.in.zeusapps.ukrainenews.adapter.RecyclerViewAdapter;
 import ua.in.zeusapps.ukrainenews.models.Article;
+import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 class ArticleAdapter extends RecyclerViewAdapter<Article>{
     private final Formatter _formatter;
-
-    ArticleAdapter(Context context, Formatter formatter) {
+    private final Source _source;
+    ArticleAdapter(
+            Context context,
+            Formatter formatter,
+            Source source) {
         super(context);
         _formatter = formatter;
+        _source = source;
     }
 
     @Override
@@ -36,6 +41,8 @@ class ArticleAdapter extends RecyclerViewAdapter<Article>{
             super(view);
         }
 
+        @BindView(R.id.fragment_article_item_template_source)
+        TextView sourceTextView;
         @BindView(R.id.fragment_article_item_template_published)
         TextView publishedTextView;
         @BindView(R.id.fragment_article_item_template_title)
@@ -49,6 +56,7 @@ class ArticleAdapter extends RecyclerViewAdapter<Article>{
 
             publishedTextView.setText(_formatter.formatDate(article.getPublished()));
             titleTextView.setText(article.getTitle());
+            sourceTextView.setText(_source.getTitle());
 
             String url = article.getImageUrl();
 
