@@ -8,67 +8,59 @@
     android:layout_marginTop="8dp"
     app:cardElevation="4dp">
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="100dp">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="256dp"
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
             android:id="@+id/fragment_article_item_template_image"
+            android:src="@drawable/un"
             android:contentDescription="@string/fragment_article_item_template_image_description"
             android:scaleType="centerCrop" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimary" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_marginLeft="4dp"
                 android:id="@+id/fragment_article_item_template_source"
                 android:textColor="@color/colorPrimary"
+                android:textSize="12sp"
                 tools:text="SOURCE"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_marginLeft="4dp"
                 android:id="@+id/fragment_article_item_template_published"
                 android:textColor="@color/colorGray400"
+                android:textSize="12sp"
                 tools:text="PUBLISHED: 22.01 10.06.17"/>
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:textColor="@color/colorGray700"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:lines="3"
+                android:id="@+id/fragment_article_item_template_title"
+                tools:text="ARTICLE TITLE: Article title lorem ipsum"/>
 
         </LinearLayout>
 
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:textColor="@color/colorGray700"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:id="@+id/fragment_article_item_template_title"
-            tools:text="ARTICLE TITLE: Article title lorem ipsum"/>
-
     </LinearLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
 
-        android:background="?attr/selectableItemBackground">
 
-    </FrameLayout>
+
 
 </android.support.v7.widget.CardView>
