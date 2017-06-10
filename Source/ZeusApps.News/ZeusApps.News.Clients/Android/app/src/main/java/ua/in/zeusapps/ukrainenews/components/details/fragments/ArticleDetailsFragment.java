@@ -33,6 +33,9 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.SendButton;
 import com.facebook.share.widget.ShareButton;
 import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+
+import java.net.URL;
 
 import javax.inject.Inject;
 
@@ -183,6 +186,13 @@ public class ArticleDetailsFragment
     @Override
     public void onClick(View v) {
         getPresenter().close();
+    }
+
+    @OnClick(R.id.fragment_article_details_shareTwitter)
+    public void shareTwitter(){
+        TweetComposer.Builder builder = new TweetComposer.Builder(getContext())
+                .text("#UkraineNews " + _article.getTitle() + " " + _article.getUrl());
+        builder.show();
     }
 
     @OnClick(R.id.fragment_article_details_shareOther)
