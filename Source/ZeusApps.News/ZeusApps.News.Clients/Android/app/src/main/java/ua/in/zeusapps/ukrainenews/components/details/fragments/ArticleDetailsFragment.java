@@ -35,7 +35,8 @@ import com.facebook.share.widget.ShareButton;
 import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -60,6 +61,7 @@ public class ArticleDetailsFragment
     private static final String ARTICLE_ID_EXTRA = "article_id";
     private static final String SOURCE_EXTRA = "source";
     private static final String MIME_TYPE = "text/html";
+    private static final String HASH_TAG = "#UkraineNews";
 
     private Source _source;
     private Article _article;
@@ -190,9 +192,16 @@ public class ArticleDetailsFragment
 
     @OnClick(R.id.fragment_article_details_shareTwitter)
     public void shareTwitter(){
-        TweetComposer.Builder builder = new TweetComposer.Builder(getContext())
-                .text("#UkraineNews " + _article.getTitle() + " " + _article.getUrl());
-        builder.show();
+        String tweet = new TwitterTextBuilder()
+                .setLink(_article.getUrl())
+                .setTitle(_article.getTitle())
+                .addHashTag(HASH_TAG)
+                .build();
+
+        new TweetComposer
+                .Builder(getContext())
+                .text(tweet)
+                .show();
     }
 
     @OnClick(R.id.fragment_article_details_shareOther)
@@ -294,12 +303,7 @@ public class ArticleDetailsFragment
     public void onScrollChange(
             NestedScrollView v, int scrollX, int scrollY,
             int oldScrollX, int oldScrollY) {
-//        if (scrollX < 4){
-//            return;
-//        }
-
         if (_isExpanded){
-            Log.d(TAG, "!!!");
             fixScroll();
         }
     }
@@ -314,6 +318,106 @@ public class ArticleDetailsFragment
             }
             return BitmapFactory.decodeResource(getContext().getResources(), R.drawable.un);
         }
+    }
+}
+
+class TwitterTextBuilder {
+    private static final int TWEET_LENGTH = 140;
+    private static final String SEPARATOR = " ";
+    private String _title;
+    private String _link;
+    private List<String> _hashTags = new ArrayList<>();
+
+    public TwitterTextBuilder setTitle(String title){
+        if (title == null){
+            throw new IllegalArgumentException("Title should be not null.");
+        }
+
+        if (_title != null){
+            throw new IllegalStateException("Title already set.");
+        }
+
+        _title = title;
+        return this;
+    }
+
+    public TwitterTextBuilder setLink(String link){
+        if (link == null){
+            throw new IllegalArgumentException("Link should be not null.");
+        }
+
+        if (_link != null){
+            throw new IllegalStateException("Link already set.");
+        }
+
+        _link = link;
+        return this;
+    }
+
+    public TwitterTextBuilder addHashTag(String hashTag){
+        if (hashTag == null){
+            throw new IllegalArgumentException("HashTag should be not null.");
+        }
+
+        if (!_hashTags.contains(hashTag)){
+            _hashTags.add(hashTag);
+        }
+
+        return this;
+    }
+
+    public TwitterTextBuilder removeHashTag(String hashTag){
+        if (hashTag == null){
+            throw new IllegalArgumentException("HashTag should be not null.");
+        }
+
+        if (!_hashTags.contains(hashTag)){
+            _hashTags.remove(hashTag);
+        }
+
+        return this;
+    }
+
+    public String build(){
+        StringBuilder sb = new StringBuilder();
+
+        int titleLength = _title == null
+                ? 0
+                : _title.length();
+        int linkLength = _link == null
+                ? 0
+                : _link.length();
+
+        if (titleLength > TWEET_LENGTH ||
+            linkLength > TWEET_LENGTH ||
+            (titleLength + linkLength) > TWEET_LENGTH) {
+            return _link == null
+                    ? ""
+                    : _link;
+        }
+
+        if (_title != null){
+            sb.append(_title).append(SEPARATOR);
+        }
+
+
+        if (_link != null){
+            sb.append(_link).append(SEPARATOR);
+        }
+
+        if (sb.length() >= TWEET_LENGTH){
+            return sb.toString();
+        }
+
+        for (String hashTag: _hashTags){
+            sb.append(hashTag).append(SEPARATOR);
+
+            if (sb.length() >= TWEET_LENGTH){
+                return sb.toString();
+            }
+        }
+
+        return sb.toString();
     }
 }
 
