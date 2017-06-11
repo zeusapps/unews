@@ -26,7 +26,7 @@ public class ArticleAdapter extends BaseAdsAdapter<Article>{
 
     @Override
     public ArticleHolder onCreateContentViewHolder(ViewGroup parent, int viewType) {
-        View view = getSimpleView(R.layout.fragment_article_item_template, parent);
+        View view = getSimpleView(R.layout.fragment_article_item_template_small, parent);
         return new ArticleHolder(view);
     }
 
