@@ -8,4 +8,6 @@ import ua.in.zeusapps.ukrainenews.components.main.base.BaseMainView;
 public interface SettingsView extends BaseMainView {
     @StateStrategyType(OneExecutionStateStrategy.class)
     void articlesCleared();
+
+    void setArticleTemplateType(int articleTemplateType);
 }

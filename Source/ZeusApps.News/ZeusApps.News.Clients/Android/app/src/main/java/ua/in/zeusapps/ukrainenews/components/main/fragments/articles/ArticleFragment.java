@@ -24,6 +24,7 @@ import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.components.main.base.BaseMainFragment;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
+import ua.in.zeusapps.ukrainenews.services.SettingsService;
 
 @Layout(R.layout.fragment_article)
 public class ArticleFragment
@@ -44,6 +45,8 @@ public class ArticleFragment
     Formatter formatter;
     @Inject
     RecyclerViewAdapter.AdsProvider adsProvider;
+    @Inject
+    SettingsService settingsService;
 
     public static ArticleFragment newInstance(Source source) {
         ArticleFragment fragment = new ArticleFragment();
@@ -112,7 +115,10 @@ public class ArticleFragment
     }
 
     private void initAdapter(List<Article> articles){
-        _adapter = new ArticleAdapter(getActivity(), formatter, source);
+        int resource = settingsService.getArticleTemplateType() == SettingsService.ARTICLE_TEMPLATE_BIG
+                ? R.layout.fragment_article_item_template
+                : R.layout.fragment_article_item_template_small;
+        _adapter = new ArticleAdapter(getActivity(), formatter, source, resource);
         _adapter.addAll(articles);
         _adapter.setAdsProvider(adsProvider);
         _subscription = _adapter.getItemClicked().subscribe(new Action1<Article>() {

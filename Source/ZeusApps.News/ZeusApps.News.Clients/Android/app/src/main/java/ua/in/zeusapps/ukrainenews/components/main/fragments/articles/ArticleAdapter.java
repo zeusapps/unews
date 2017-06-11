@@ -1,6 +1,7 @@
 package ua.in.zeusapps.ukrainenews.components.main.fragments.articles;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,19 +20,22 @@ import ua.in.zeusapps.ukrainenews.services.Formatter;
 class ArticleAdapter extends RecyclerViewAdapter<Article>{
     private final Formatter _formatter;
     private final Source _source;
+    private final int _itemTemplateId;
     ArticleAdapter(
             Context context,
             Formatter formatter,
-            Source source) {
+            Source source,
+            @LayoutRes int itemTemplateId) {
         super(context);
         _formatter = formatter;
+        _itemTemplateId = itemTemplateId;
         _source = source;
     }
 
     @Override
     protected BaseViewHolder onCreateContentViewHolder(ViewGroup parent, int viewType) {
         View view = getLayoutInflater()
-                .inflate(R.layout.fragment_article_item_template_small, parent, false);
+                .inflate(_itemTemplateId, parent, false);
         return new ArticleHolder(view);
     }
 

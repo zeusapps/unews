@@ -27,4 +27,7 @@
     <string name="fragment_article_details_share_other">Поділитись іншим способом</string>
     <string name="fragment_article_details_send_facebook">Відправити повідомленням</string>
     <string name="fragment_article_details_share_twitter">Поширити через Twitter</string>
+    <string name="fragment_settings_article_template_text_view">Шаблон відображення новин:</string>
+    <string name="fragment_settings_article_template_big">Велика</string>
+    <string name="fragment_settings_article_template_small">Маленька</string>
 </resources>
