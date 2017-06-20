@@ -61,6 +61,7 @@ public class ArticleFragment
         super.onCreate(savedInstanceState);
         source = getArguments().getParcelable(SOURCE_EXTRA);
 
+        // TODO check subscription flow
         if (!presenter.isInRestoreState(this)){
             presenter.init(source);
         }
@@ -111,7 +112,9 @@ public class ArticleFragment
     public void onDestroy() {
         super.onDestroy();
 
-        _subscription.unsubscribe();
+        if (_subscription != null) {
+            _subscription.unsubscribe();
+        }
     }
 
     private void initAdapter(List<Article> articles){
