@@ -14,7 +14,10 @@
         android:theme="@style/AppTheme">
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="60107d35df33361a992ecbd7859dc5a00f414578"
+            />
         <activity
             android:name=".components.splash.SplashActivity"
             android:screenOrientation="portrait">
