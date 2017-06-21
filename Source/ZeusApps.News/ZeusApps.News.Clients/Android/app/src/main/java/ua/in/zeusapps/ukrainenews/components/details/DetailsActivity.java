@@ -1,8 +1,6 @@
 package ua.in.zeusapps.ukrainenews.components.details;
 
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -15,7 +13,6 @@ import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
-import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
 @Layout(R.layout.activity_details)
@@ -45,9 +42,7 @@ public class DetailsActivity
         String articleId = getIntent().getStringExtra(ARTICLE_ID_EXTRA);
         Source source = getIntent().getParcelableExtra(SOURCE_EXTRA);
 
-        if (!getPresenter().isInRestoreState(this)){
-            getPresenter().init(source, articleId);
-        }
+        getPresenter().init(source, articleId);
     }
 
     @Override
