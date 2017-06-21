@@ -1,5 +1,7 @@
 package ua.in.zeusapps.ukrainenews.components.details;
 
+import android.util.Log;
+
 import com.arellomobile.mvp.InjectViewState;
 
 import java.util.List;
@@ -9,12 +11,14 @@ import javax.inject.Inject;
 import rx.Subscriber;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.domain.GetLocalArticleIdsInteractor;
-import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
 @InjectViewState
 public class DetailsPresenter
     extends MvpPresenter<DetailsView, DetailsRouter> {
+
+    private final static String TAG = DetailsPresenter.class.getSimpleName();
+    private String _articleId = null;
 
     @Inject
     GetLocalArticleIdsInteractor localArticlesInteractor;
@@ -22,6 +26,7 @@ public class DetailsPresenter
     DetailsRouter router;
 
     DetailsPresenter(){
+        Log.d(TAG, "DetailsPresenter constructor call");
         getComponent().inject(this);
     }
 
@@ -31,6 +36,7 @@ public class DetailsPresenter
     }
 
     void init(final Source source, final String articleId){
+        Log.d(TAG, "DetailsPresenter init call");
         localArticlesInteractor.execute(source, new Subscriber<List<String>>() {
             @Override
             public void onCompleted() {
@@ -45,13 +51,21 @@ public class DetailsPresenter
             @Override
             public void onNext(List<String> articleIds) {
                 getViewState().load(articleIds, source);
-                getViewState().switchTo(articleId);
+
+                if (_articleId != null && articleIds.contains(_articleId)){
+                    getViewState().switchTo(_articleId);
+                } else {
+                    _articleId = articleId;
+                    getViewState().switchTo(articleId);
+                }
             }
         });
 
     }
 
     void currentArticleChanged(String articleId){
+        Log.d(TAG, "DetailsPresenter currentArticleChanged, articleId = " + articleId);
+        _articleId = articleId;
         getViewState().switchTo(articleId);
     }
 }
