@@ -11,8 +11,7 @@ import com.arellomobile.mvp.presenter.PresenterType;
 import java.util.List;
 
 import butterknife.BindView;
-import rx.Subscriber;
-import rx.Subscription;
+import io.reactivex.disposables.Disposable;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
@@ -24,7 +23,7 @@ public class SourcesFragment
     extends BaseMainFragment
     implements SourcesView {
 
-    private Subscription clickSubscription;
+    private Disposable _disposable;
     @BindView(R.id.fragment_sources_items)
     RecyclerView recyclerView;
     @BindView(R.id.fragment_sources_textView)
@@ -37,18 +36,7 @@ public class SourcesFragment
     public void showSources(final List<Source> sources) {
         final SourcesAdapter adapter = new SourcesAdapter(getContext());
         adapter.addAll(sources);
-        clickSubscription = adapter.getItemClicked().subscribe(new Subscriber<Source>() {
-            @Override
-            public void onCompleted() { }
-            @Override
-            public void onError(Throwable e) { }
-            @Override
-            public void onNext(Source source) {
-                presenter.showArticles(source);
-            }
-        });
-
-
+        _disposable = adapter.getItemClicked().subscribe(presenter::showArticles);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
     }
@@ -81,6 +69,9 @@ public class SourcesFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        clickSubscription.unsubscribe();
+
+        if (_disposable != null && !_disposable.isDisposed()){
+            _disposable.dispose();
+        }
     }
 }

@@ -3,14 +3,13 @@ package ua.in.zeusapps.ukrainenews.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.subjects.PublishSubject;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 
 public abstract class RecyclerViewAdapter<TItem>
         extends RecyclerView.Adapter<BaseViewHolder> {
@@ -30,7 +29,7 @@ public abstract class RecyclerViewAdapter<TItem>
     }
 
     public Observable<TItem> getItemClicked(){
-        return itemClickedSubject.asObservable();
+        return itemClickedSubject;
     }
 
     public void addAll(List<TItem> items){
@@ -113,12 +112,7 @@ public abstract class RecyclerViewAdapter<TItem>
         }
 
         final TItem item = _items.get(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemClickedSubject.onNext(item);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> itemClickedSubject.onNext(item));
         //noinspection unchecked
         holder.update(_context, item);
     }

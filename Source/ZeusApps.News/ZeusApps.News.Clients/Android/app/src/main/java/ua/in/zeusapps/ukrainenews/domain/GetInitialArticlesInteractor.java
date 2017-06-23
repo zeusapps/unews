@@ -6,8 +6,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.functions.Func1;
+import io.reactivex.Observable;
 import ua.in.zeusapps.ukrainenews.common.Interactor;
 import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
 import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
@@ -41,24 +40,13 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
     @Override
     protected Observable<List<Article>> buildObservable(final Source source) {
         return getLocal(source)
-                .flatMap(new Func1<List<Article>, Observable<List<Article>>>() {
-                    @Override
-                    public Observable<List<Article>> call(List<Article> articles) {
-                        return getNewerOrAll(source, articles);
-                    }
+                .flatMap(articles -> getNewerOrAll(source, articles))
+                .flatMap(articles ->  {
+                    saveNewArticles(articles, source);
+                    return getLocal(source);
                 })
-                .flatMap(new Func1<List<Article>, Observable<List<Article>>>() {
-                    @Override
-                    public Observable<List<Article>> call(List<Article> articles) {
-                        saveNewArticles(articles, source);
-                        return getLocal(source);
-                    }
-                })
-                .onErrorResumeNext(new Func1<Throwable, Observable<? extends List<Article>>>() {
-                    @Override
-                    public Observable<? extends List<Article>> call(Throwable throwable) {
-                        return getLocal(source);
-                    }
+                .onErrorResumeNext(t -> {
+                    return getLocal(source);
                 });
     }
 
@@ -84,9 +72,7 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
             _articleRepository.removeBySource(source);
         }
 
-        for (Article article: articles) {
-            _articleRepository.create(article);
-        }
+        articles.forEach(_articleRepository::create);
     }
 
     private boolean shouldNotUpdate(Source source){

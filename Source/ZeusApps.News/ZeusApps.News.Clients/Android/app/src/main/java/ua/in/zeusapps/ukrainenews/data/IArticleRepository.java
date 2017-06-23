@@ -2,7 +2,7 @@ package ua.in.zeusapps.ukrainenews.data;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 

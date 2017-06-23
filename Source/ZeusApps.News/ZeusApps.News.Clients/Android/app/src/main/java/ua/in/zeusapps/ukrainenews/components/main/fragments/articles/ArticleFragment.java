@@ -13,8 +13,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import rx.Subscription;
-import rx.functions.Action1;
+import io.reactivex.disposables.Disposable;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.adapter.EndlessRecyclerViewScrollListener;
 import ua.in.zeusapps.ukrainenews.adapter.RecyclerViewAdapter;
@@ -32,7 +31,7 @@ public class ArticleFragment
         implements  ArticleView {
 
     private static final String SOURCE_EXTRA = "source";
-    private Subscription _subscription;
+    private Disposable _disposable;
     private Source source;
     private RecyclerViewAdapter<Article> _adapter;
     @InjectPresenter
@@ -112,8 +111,8 @@ public class ArticleFragment
     public void onDestroy() {
         super.onDestroy();
 
-        if (_subscription != null) {
-            _subscription.unsubscribe();
+        if (_disposable != null && !_disposable.isDisposed()) {
+            _disposable.dispose();
         }
     }
 
@@ -124,12 +123,9 @@ public class ArticleFragment
         _adapter = new ArticleAdapter(getActivity(), formatter, source, resource);
         _adapter.addAll(articles);
         _adapter.setAdsProvider(adsProvider);
-        _subscription = _adapter.getItemClicked().subscribe(new Action1<Article>() {
-            @Override
-            public void call(Article article) {
-                getRootActivity().resetAppBarLayoutState();
-                getPresenter().showArticle(article, source);
-            }
+        _disposable = _adapter.getItemClicked().subscribe(article -> {
+            getRootActivity().resetAppBarLayoutState();
+            getPresenter().showArticle(article, source);
         });
     }
 
@@ -149,12 +145,9 @@ public class ArticleFragment
     }
 
     private void initSwipeRefreshLayout(){
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Article article = _adapter.getFirst();
-                presenter.loadNewer(source, article);
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            Article article = _adapter.getFirst();
+            presenter.loadNewer(source, article);
         });
     }
 

@@ -2,11 +2,8 @@ package ua.in.zeusapps.ukrainenews.components.main.fragments.sources;
 
 import com.arellomobile.mvp.InjectViewState;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
-import rx.Subscriber;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.components.main.MainRouter;
 import ua.in.zeusapps.ukrainenews.domain.GetLocalSourcesInteractor;
@@ -25,22 +22,9 @@ public class SourcesPresenter extends MvpPresenter<SourcesView, MainRouter> {
 
     @Override
     protected void onFirstViewAttach() {
-        interactor.execute(new Subscriber<List<Source>>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getViewState().showError();
-            }
-
-            @Override
-            public void onNext(List<Source> sources) {
-                getViewState().showSources(sources);
-            }
-        });
+        interactor.executeWithError(
+                sources -> getViewState().showSources(sources),
+                throwable -> getViewState().showError());
     }
 
     @Override

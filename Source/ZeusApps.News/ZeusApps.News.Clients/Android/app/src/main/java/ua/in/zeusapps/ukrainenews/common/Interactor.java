@@ -1,16 +1,16 @@
 package ua.in.zeusapps.ukrainenews.common;
 
-import rx.Observable;
-import rx.Scheduler;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public abstract class Interactor<ResultType, ParameterType> {
 
-    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     protected final Scheduler jobScheduler;
     private final Scheduler uiScheduler;
 
@@ -26,20 +26,37 @@ public abstract class Interactor<ResultType, ParameterType> {
 
     protected abstract Observable<ResultType> buildObservable(ParameterType parameter);
 
-    public void execute(ParameterType parameter, Subscriber<ResultType> subscriber) {
-        Subscription subscription = buildObservable(parameter)
+    public void executeWithError(ParameterType parameter,
+                        Consumer<ResultType> resultConsumer,
+                        Consumer<? super Throwable> errorConsumer){
+        Observable<ResultType> observable = buildObservable(parameter)
                 .subscribeOn(jobScheduler)
-                .observeOn(uiScheduler)
-                .subscribe(subscriber);
+                .observeOn(uiScheduler);
 
-        compositeSubscription.add(subscription);
+        if (errorConsumer != null){
+            observable = observable.doOnError(errorConsumer);
+        }
+
+        Disposable disposable = observable.subscribe(resultConsumer);
+        compositeDisposable.add(disposable);
     }
 
-    public void execute(Subscriber<ResultType> subscriber) {
-        execute(null, subscriber);
+    public void executeWithError(
+            Consumer<ResultType> resultConsumer,
+            Consumer<? super Throwable> errorConsumer){
+        executeWithError(null, resultConsumer, errorConsumer);
+    }
+
+
+    public void execute(ParameterType parameter, Consumer<ResultType> consumer) {
+        executeWithError(parameter, consumer, null);
+    }
+
+    public void execute(Consumer<ResultType> consumer) {
+        execute(null, consumer);
     }
 
     public void unsubscribe() {
-        compositeSubscription.clear();
+        compositeDisposable.clear();
     }
 }
