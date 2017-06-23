@@ -1,16 +1,16 @@
 package ua.in.zeusapps.ukrainenews.common;
 
-import rx.Observable;
-import rx.Scheduler;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public abstract class Interactor<ResultType, ParameterType> {
 
-    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private final CompositeDisposable disposable = new CompositeDisposable();
     protected final Scheduler jobScheduler;
     private final Scheduler uiScheduler;
 
@@ -26,20 +26,20 @@ public abstract class Interactor<ResultType, ParameterType> {
 
     protected abstract Observable<ResultType> buildObservable(ParameterType parameter);
 
-    public void execute(ParameterType parameter, Subscriber<ResultType> subscriber) {
-        Subscription subscription = buildObservable(parameter)
+    public void execute(ParameterType parameter, Consumer<ResultType> consumer) {
+        Disposable subscription = buildObservable(parameter)
                 .subscribeOn(jobScheduler)
                 .observeOn(uiScheduler)
-                .subscribe(subscriber);
+                .subscribe(consumer);
 
-        compositeSubscription.add(subscription);
+        disposable.add(subscription);
     }
 
-    public void execute(Subscriber<ResultType> subscriber) {
-        execute(null, subscriber);
+    public void execute(Consumer<ResultType> consumer) {
+        execute(null, consumer);
     }
 
     public void unsubscribe() {
-        compositeSubscription.clear();
+        disposable.clear();
     }
 }

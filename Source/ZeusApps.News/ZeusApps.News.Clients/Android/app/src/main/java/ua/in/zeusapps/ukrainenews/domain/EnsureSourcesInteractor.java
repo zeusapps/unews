@@ -6,8 +6,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.functions.Func1;
+import io.reactivex.Observable;
 import ua.in.zeusapps.ukrainenews.common.Interactor;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.IDataService;
@@ -29,18 +28,10 @@ public class EnsureSourcesInteractor extends Interactor<Boolean, List<Source>> {
     @Override
     protected Observable<Boolean> buildObservable(List<Source> remoteSources) {
         return _dataService.getSources()
-                .onErrorResumeNext(new Func1<Throwable, Observable<? extends List<Source>>>() {
-                    @Override
-                    public Observable<? extends List<Source>> call(Throwable throwable) {
-                        return Observable.just(_repository.getAll());
-                    }
+                .onErrorResumeNext(x -> {
+                    return Observable.just(_repository.getAll());
                 })
-                .map(new Func1<List<Source>, Boolean>() {
-                    @Override
-                    public Boolean call(List<Source> sources) {
-                        return checkSources(sources);
-                    }
-                });
+                .map(this::checkSources);
     }
 
     @NonNull
@@ -49,19 +40,17 @@ public class EnsureSourcesInteractor extends Interactor<Boolean, List<Source>> {
             return false;
         }
 
-
         List<Source> localSources = _repository.getAll();
-        for (Source local: localSources) {
-            if (!remoteSources.contains(local)){
-                _repository.delete(local);
-            }
-        }
 
-        for (Source remote: remoteSources){
-            if (!localSources.contains(remote)){
-                _repository.create(remote);
-            }
-        }
+        localSources
+                .stream()
+                .filter(local -> !remoteSources.contains(local))
+                .forEach(_repository::delete);
+
+        remoteSources
+                .stream()
+                .filter(remote -> !localSources.contains(remote))
+                .forEach(_repository::create);
 
         return true;
     }
