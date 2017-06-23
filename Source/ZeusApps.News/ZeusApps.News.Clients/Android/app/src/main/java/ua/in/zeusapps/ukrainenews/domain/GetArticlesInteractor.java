@@ -1,12 +1,10 @@
 package ua.in.zeusapps.ukrainenews.domain;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.functions.Func1;
+import io.reactivex.Observable;
 import ua.in.zeusapps.ukrainenews.common.Interactor;
 import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
 import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
@@ -47,24 +45,20 @@ public class GetArticlesInteractor extends Interactor<ArticleResponse, ArticleRe
                 PAGE_COUNT,
                 publishedString,
                 bundle.getIsAfter())
-                .map(new Func1<List<Article>, ArticleResponse>() {
-                    @Override
-                    public ArticleResponse call(List<Article> articles) {
-
-                        boolean isRefresh = false;
-                        if (!bundle.getIsAfter()){
-                            updateSourceTimestamp(bundle.getSource());
-                            if (articles.size() == PAGE_COUNT){
-                                _articleRepository.removeBySource(bundle.getSource());
-                                isRefresh = true;
-                            }
+                .map(articles -> {
+                    boolean isRefresh = false;
+                    if (!bundle.getIsAfter()){
+                        updateSourceTimestamp(bundle.getSource());
+                        if (articles.size() == PAGE_COUNT){
+                            _articleRepository.removeBySource(bundle.getSource());
+                            isRefresh = true;
                         }
-
-                        for (Article article: articles) {
-                            _articleRepository.create(article);
-                        }
-                        return new ArticleResponse(articles, isRefresh);
                     }
+
+                    for (Article article: articles) {
+                        _articleRepository.create(article);
+                    }
+                    return new ArticleResponse(articles, isRefresh);
                 });
     }
 
