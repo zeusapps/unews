@@ -42,7 +42,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import rx.functions.Action1;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpFragment;
@@ -122,14 +121,11 @@ public class ArticleDetailsFragment
         _source = getArguments().getParcelable(SOURCE_EXTRA);
         String articleId = getArguments().getString(ARTICLE_ID_EXTRA);
         articleRepository
-                .getById(articleId)
-                .subscribe(new Action1<Article>() {
-                    @Override
-                    public void call(Article article) {
-                        _article = article;
-                        showArticle();
-                    }
-                });
+            .getById(articleId)
+            .subscribe(article -> {
+                _article = article;
+                showArticle();
+            });
         setToolbar();
         return view;
     }
@@ -244,12 +240,7 @@ public class ArticleDetailsFragment
                 .getMenu()
                 .add(_article.getTitle())
                 .setIcon(R.drawable.ic_launch_white_24dp)
-                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        return openInBrowser(_article);
-                    }
-                })
+                .setOnMenuItemClickListener(item -> openInBrowser(_article))
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
@@ -341,7 +332,7 @@ class TwitterTextBuilder {
         return this;
     }
 
-    public TwitterTextBuilder setLink(String link){
+    TwitterTextBuilder setLink(String link){
         if (link == null){
             throw new IllegalArgumentException("Link should be not null.");
         }
@@ -354,7 +345,7 @@ class TwitterTextBuilder {
         return this;
     }
 
-    public TwitterTextBuilder addHashTag(String hashTag){
+    TwitterTextBuilder addHashTag(String hashTag){
         if (hashTag == null){
             throw new IllegalArgumentException("HashTag should be not null.");
         }
@@ -378,7 +369,7 @@ class TwitterTextBuilder {
         return this;
     }
 
-    public String build(){
+    String build(){
         StringBuilder sb = new StringBuilder();
 
         int titleLength = _title == null

@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public abstract class Interactor<ResultType, ParameterType> {
 
-    private final CompositeDisposable disposable = new CompositeDisposable();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     protected final Scheduler jobScheduler;
     private final Scheduler uiScheduler;
 
@@ -26,13 +26,30 @@ public abstract class Interactor<ResultType, ParameterType> {
 
     protected abstract Observable<ResultType> buildObservable(ParameterType parameter);
 
-    public void execute(ParameterType parameter, Consumer<ResultType> consumer) {
-        Disposable subscription = buildObservable(parameter)
+    public void executeWithError(ParameterType parameter,
+                        Consumer<ResultType> resultConsumer,
+                        Consumer<? super Throwable> errorConsumer){
+        Observable<ResultType> observable = buildObservable(parameter)
                 .subscribeOn(jobScheduler)
-                .observeOn(uiScheduler)
-                .subscribe(consumer);
+                .observeOn(uiScheduler);
 
-        disposable.add(subscription);
+        if (errorConsumer != null){
+            observable = observable.doOnError(errorConsumer);
+        }
+
+        Disposable disposable = observable.subscribe(resultConsumer);
+        compositeDisposable.add(disposable);
+    }
+
+    public void executeWithError(
+            Consumer<ResultType> resultConsumer,
+            Consumer<? super Throwable> errorConsumer){
+        executeWithError(null, resultConsumer, errorConsumer);
+    }
+
+
+    public void execute(ParameterType parameter, Consumer<ResultType> consumer) {
+        executeWithError(parameter, consumer, null);
     }
 
     public void execute(Consumer<ResultType> consumer) {
@@ -40,6 +57,6 @@ public abstract class Interactor<ResultType, ParameterType> {
     }
 
     public void unsubscribe() {
-        disposable.clear();
+        compositeDisposable.clear();
     }
 }
