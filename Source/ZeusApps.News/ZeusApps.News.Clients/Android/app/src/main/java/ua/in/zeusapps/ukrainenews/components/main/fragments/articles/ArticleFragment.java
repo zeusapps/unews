@@ -138,6 +138,11 @@ public class ArticleFragment
     }
 
     @Override
+    public void showEmptyUpdate() {
+        showInfo(getString(R.string.fragment_article_empty_update));
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 

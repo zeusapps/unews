@@ -1,5 +1,6 @@
 package ua.in.zeusapps.ukrainenews.components.main.fragments.articles;
 
+import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
@@ -17,4 +18,6 @@ public interface ArticleView extends BaseMainView {
     void showLoading(boolean state);
     @StateStrategyType(SingleStateStrategy.class)
     void showLoadingError();
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void showEmptyUpdate();
 }

@@ -53,6 +53,10 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
         articlesInteractor.execute(bundle, response -> {
                     getViewState().addNewer(response.getArticles(), response.getIsRefresh());
                     getViewState().showLoading(false);
+
+                    if (!bundle.getIsAfter() && response.getArticles().size() == 0){
+                        getViewState().showEmptyUpdate();
+                    }
                 });
     }
 
