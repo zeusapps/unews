@@ -39,35 +39,40 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
     @Override
     protected Observable<List<Article>> buildObservable(final Source source) {
         return _articleRepository.getBySource(source)
-                .flatMap(articles -> {
-                    if (articles.size() == 0){
-                        return _dataService.getArticles(source.getKey(), PAGE_SIZE)
-                                .map(newArticles -> {
-                                    if (newArticles.size() == PAGE_SIZE){
-                                        _articleRepository.removeBySource(source);
-                                    }
-                                    save(articles, source);
-                                    return newArticles;
-                                });
+            .flatMap(articles -> {
+                if (articles.size() == 0){
+                    return getInitialRemoteArticles(source);
+                }
+
+                return shouldNotUpdate(source)
+                    ? Observable.just(articles)
+                    : getNewerArticles(source, articles);
+            });
+    }
+
+    private Observable<List<Article>> getInitialRemoteArticles(Source source){
+        return _dataService.getArticles(source.getKey(), PAGE_SIZE)
+            .map(articles -> {
+                save(articles, source);
+                return articles;
+            });
+    }
+
+    private Observable<List<Article>> getNewerArticles(Source source, List<Article> olderArticles){
+        String published = _formatter.formatDate(olderArticles.get(0).getPublished());
+
+        return _dataService
+                .getNewerArticles(source.getKey(), PAGE_SIZE, published, false)
+                .map(articles -> {
+                    if (articles.size() == PAGE_SIZE){
+                        _articleRepository.removeBySource(source);
+                        save(articles, source);
+                        return articles;
                     }
 
-                    if (shouldNotUpdate(source)){
-                        return Observable.just(articles);
-                    }
-                    String published = _formatter.formatDate(articles.get(0).getPublished());
-                    return _dataService
-                            .getNewerArticles(source.getKey(), PAGE_SIZE, published, false)
-                            .flatMap(newArticles -> {
-                                if (newArticles.size() == PAGE_SIZE){
-                                    _articleRepository.removeBySource(source);
-                                    save(newArticles, source);
-                                    return Observable.just(newArticles);
-                                }
-
-                                save(newArticles, source);
-                                newArticles.addAll(articles);
-                                return Observable.just(newArticles);
-                            });
+                    save(articles, source);
+                    articles.addAll(olderArticles);
+                    return articles;
                 });
     }
 
