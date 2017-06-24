@@ -14,7 +14,7 @@ public class GetLocalSourcesInteractor extends Interactor<List<Source>, Void>{
     private ISourceRepository _repository;
 
     @Inject
-    public GetLocalSourcesInteractor(ISourceRepository repository) {
+    GetLocalSourcesInteractor(ISourceRepository repository) {
         _repository = repository;
     }
 

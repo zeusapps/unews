@@ -1,6 +1,5 @@
 package ua.in.zeusapps.ukrainenews.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,40 +38,46 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
 
     @Override
     protected Observable<List<Article>> buildObservable(final Source source) {
-        return getLocal(source)
-                .flatMap(articles -> getNewerOrAll(source, articles))
-                .flatMap(articles ->  {
-                    saveNewArticles(articles, source);
-                    return getLocal(source);
-                })
-                .onErrorResumeNext(t -> {
-                    return getLocal(source);
+        return _articleRepository.getBySource(source)
+                .flatMap(articles -> {
+                    if (articles.size() == 0){
+                        return _dataService.getArticles(source.getKey(), PAGE_SIZE)
+                                .map(newArticles -> {
+                                    if (newArticles.size() == PAGE_SIZE){
+                                        _articleRepository.removeBySource(source);
+                                    }
+                                    save(articles, source);
+                                    return newArticles;
+                                });
+                    }
+
+                    if (shouldNotUpdate(source)){
+                        return Observable.just(articles);
+                    }
+                    String published = _formatter.formatDate(articles.get(0).getPublished());
+                    return _dataService
+                            .getNewerArticles(source.getKey(), PAGE_SIZE, published, false)
+                            .flatMap(newArticles -> {
+                                if (newArticles.size() == PAGE_SIZE){
+                                    _articleRepository.removeBySource(source);
+                                    save(newArticles, source);
+                                    return Observable.just(newArticles);
+                                }
+
+                                save(newArticles, source);
+                                newArticles.addAll(articles);
+                                return Observable.just(newArticles);
+                            });
                 });
     }
 
-    private Observable<List<Article>> getLocal(Source source){
-        return _articleRepository.getBySource(source);
-    }
+    private void save(List<Article> articles, Source source){
+        source.setTimestamp(new Date());
+        _sourceRepository.update(source);
 
-    private Observable<List<Article>> getNewerOrAll(Source source, List<Article> local){
-        if (local.size() == 0) {
-            return _dataService.getArticles(source.getKey(), PAGE_SIZE);
+        for (Article article: articles) {
+            _articleRepository.create(article);
         }
-
-        if (shouldNotUpdate(source)){
-            List<Article> emptyResult = new ArrayList<>();
-            return Observable.just(emptyResult);
-        }
-
-        return getNewerArticles(source, local.get(0));
-    }
-
-    private void saveNewArticles(List<Article> articles, Source source){
-        if (articles.size() == PAGE_SIZE){
-            _articleRepository.removeBySource(source);
-        }
-
-        articles.forEach(_articleRepository::create);
     }
 
     private boolean shouldNotUpdate(Source source){
@@ -82,13 +87,5 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
 
         return timestamp != null  &&
                 timestamp.getTime() + timeSkew > nowTimestamp.getTime();
-    }
-
-    private Observable<List<Article>> getNewerArticles(Source source, Article firstArticle){
-        source.setTimestamp(new Date());
-        _sourceRepository.update(source);
-        String dateString = _formatter.toStringDate(firstArticle.getPublished());
-        return _dataService.getNewerArticles(
-                source.getKey(), PAGE_SIZE, dateString, false);
     }
 }

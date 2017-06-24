@@ -9,12 +9,12 @@ import ua.in.zeusapps.ukrainenews.common.Interactor;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.IDataService;
 
-public class GetSourcesInteractor extends Interactor<List<Source>, Void> {
+class GetSourcesInteractor extends Interactor<List<Source>, Void> {
 
     private IDataService _dataService;
 
     @Inject
-    public GetSourcesInteractor(IDataService dataService) {
+    GetSourcesInteractor(IDataService dataService) {
         _dataService = dataService;
     }
 

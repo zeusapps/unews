@@ -14,7 +14,7 @@ public class GetLocalArticleIdsInteractor extends Interactor<List<String>, Sourc
     private final IArticleRepository _articleRepository;
 
     @Inject
-    public GetLocalArticleIdsInteractor(IArticleRepository articleRepository) {
+    GetLocalArticleIdsInteractor(IArticleRepository articleRepository) {
         _articleRepository = articleRepository;
     }
 
