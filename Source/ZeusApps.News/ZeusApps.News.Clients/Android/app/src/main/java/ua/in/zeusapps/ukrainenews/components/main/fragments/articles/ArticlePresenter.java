@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.components.main.MainRouter;
+import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
 import ua.in.zeusapps.ukrainenews.domain.GetArticlesInteractor;
 import ua.in.zeusapps.ukrainenews.domain.GetInitialArticlesInteractor;
 import ua.in.zeusapps.ukrainenews.models.Article;
@@ -21,8 +22,9 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
     @Inject
     GetArticlesInteractor articlesInteractor;
     @Inject
+    ISourceRepository sourceRepository;
+    @Inject
     MainRouter router;
-
 
     ArticlePresenter() {
         getComponent().inject(this);
@@ -33,8 +35,10 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
         return router;
     }
 
-    void init(Source source){
+    void init(String sourceId){
         getViewState().showLoading(true);
+        Source source = sourceRepository.getById(sourceId);
+        getViewState().setSource(source);
         initialArticlesInteractor.execute(
             source,
             articles -> {
@@ -46,8 +50,10 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
     void loadNewer(Source source, Article article) {
         ArticleRequestBundle bundle = new ArticleRequestBundle(source, article, false);
 
-        articlesInteractor.execute(bundle, response ->
-                getViewState().addNewer(response.getArticles(), response.getIsRefresh()));
+        articlesInteractor.execute(bundle, response -> {
+                    getViewState().addNewer(response.getArticles(), response.getIsRefresh());
+                    getViewState().showLoading(false);
+                });
     }
 
     void loadOlder(Source source, Article article) {
