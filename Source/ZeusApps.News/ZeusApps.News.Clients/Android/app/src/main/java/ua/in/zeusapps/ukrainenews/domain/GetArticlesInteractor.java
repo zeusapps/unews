@@ -44,18 +44,33 @@ public class GetArticlesInteractor extends Interactor<ArticleResponse, ArticleRe
         String key = source.getKey();
         boolean isAfter = bundle.getIsAfter();
 
-        return _dataService.getNewerArticles(key, PAGE_COUNT, published, isAfter)
-                .map(articles -> {
-                    if (isAfter){
-                        save(articles);
-                        return new ArticleResponse(articles, false);
-                    }
+        return isAfter
+                ? getOlderArticles(key, published)
+                : getNewerArticles(source, key, published);
+    }
 
-                    updateSourceTimestamp(source);
-                    if (articles.size() == PAGE_COUNT){
-                        _articleRepository.removeBySource(source);
-                        return new ArticleResponse(articles, true);
-                    }
+    private Observable<ArticleResponse> getNewerArticles(
+            Source source, String key, String published){
+        return _dataService
+            .getArticles(key, PAGE_COUNT, published, false)
+            .map(articles -> {
+                updateSourceTimestamp(source);
+                boolean refresh = false;
+
+                if (articles.size() == PAGE_COUNT){
+                    _articleRepository.removeBySource(source);
+                    refresh = true;
+                }
+
+                save(articles);
+                return new ArticleResponse(articles, refresh);
+            });
+    }
+
+    private Observable<ArticleResponse> getOlderArticles(String key, String published){
+        return _dataService.getArticles(key, PAGE_COUNT, published, true)
+                .map(articles -> {
+                    save(articles);
                     return new ArticleResponse(articles, false);
                 });
     }
