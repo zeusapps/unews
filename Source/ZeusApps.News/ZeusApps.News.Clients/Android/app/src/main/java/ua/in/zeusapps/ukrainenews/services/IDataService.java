@@ -16,7 +16,7 @@ public interface IDataService {
             @Query("count") int count);
 
     @GET("api/sources/{sourceId}/articles")
-    Observable<List<Article>> getNewerArticles(
+    Observable<List<Article>> getArticles(
             @Path("sourceId") String sourceId,
             @Query("count") int count,
             @Query("published") String published,

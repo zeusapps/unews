@@ -62,7 +62,7 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
         String published = _formatter.formatDate(olderArticles.get(0).getPublished());
 
         return _dataService
-                .getNewerArticles(source.getKey(), PAGE_SIZE, published, false)
+                .getArticles(source.getKey(), PAGE_SIZE, published, false)
                 .map(articles -> {
                     if (articles.size() == PAGE_SIZE){
                         _articleRepository.removeBySource(source);
