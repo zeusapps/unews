@@ -22,6 +22,11 @@ public class SourceRepository
     }
 
     @Override
+    public Source getById(String id) {
+        return getDao().queryForId(id);
+    }
+
+    @Override
     public void create(Source source) {
         getDao().create(source);
     }
