@@ -8,9 +8,9 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import ua.in.zeusapps.ukrainenews.common.Interactor;
+import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.IDataService;
-import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
 
 public class EnsureSourcesInteractor extends Interactor<Boolean, List<Source>> {
 
@@ -18,7 +18,7 @@ public class EnsureSourcesInteractor extends Interactor<Boolean, List<Source>> {
     private final IDataService _dataService;
 
     @Inject
-    public EnsureSourcesInteractor(
+    EnsureSourcesInteractor(
             ISourceRepository repository,
             IDataService dataService) {
         _repository = repository;
@@ -42,15 +42,17 @@ public class EnsureSourcesInteractor extends Interactor<Boolean, List<Source>> {
 
         List<Source> localSources = _repository.getAll();
 
-        localSources
-                .stream()
-                .filter(local -> !remoteSources.contains(local))
-                .forEach(_repository::delete);
+        for (Source source: localSources) {
+            if (!remoteSources.contains(source)){
+                _repository.delete(source);
+            }
+        }
 
-        remoteSources
-                .stream()
-                .filter(remote -> !localSources.contains(remote))
-                .forEach(_repository::create);
+        for (Source source: remoteSources){
+            if (!localSources.contains(source)){
+                _repository.create(source);
+            }
+        }
 
         return true;
     }

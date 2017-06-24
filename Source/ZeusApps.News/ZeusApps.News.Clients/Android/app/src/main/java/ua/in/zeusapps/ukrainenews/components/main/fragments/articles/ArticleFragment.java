@@ -1,6 +1,7 @@
 package ua.in.zeusapps.ukrainenews.components.main.fragments.articles;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,10 +31,17 @@ public class ArticleFragment
         extends BaseMainFragment
         implements  ArticleView {
 
-    private static final String SOURCE_EXTRA = "source";
+    private static final String SCROLL_POSITION = "scroll_position";
+    private static final String SOURCE_ID_EXTRA = "source_id";
+    private static final String SOURCE_TITLE_EXTRA = "source_title";
+
+    private LinearLayoutManager _layoutManager;
+    private Source _source;
+    private String _sourceTitle;
     private Disposable _disposable;
-    private Source source;
     private RecyclerViewAdapter<Article> _adapter;
+    private int _scrollPosition = -1;
+
     @InjectPresenter
     ArticlePresenter presenter;
     @BindView(R.id.fragment_article_swipeRefreshLayout)
@@ -50,7 +58,8 @@ public class ArticleFragment
     public static ArticleFragment newInstance(Source source) {
         ArticleFragment fragment = new ArticleFragment();
         Bundle args = new Bundle();
-        args.putParcelable(SOURCE_EXTRA, source);
+        args.putString(SOURCE_ID_EXTRA, source.getId());
+        args.putString(SOURCE_TITLE_EXTRA, source.getTitle());
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,12 +67,28 @@ public class ArticleFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        source = getArguments().getParcelable(SOURCE_EXTRA);
+        String sourceId = getArguments().getString(SOURCE_ID_EXTRA);
+        _sourceTitle = getArguments().getString(SOURCE_TITLE_EXTRA);
 
-        // TODO check subscription flow
         if (!presenter.isInRestoreState(this)){
-            presenter.init(source);
+            presenter.init(sourceId);
         }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null){
+            _scrollPosition = savedInstanceState.getInt(SCROLL_POSITION);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(SCROLL_POSITION, _layoutManager.findFirstVisibleItemPosition());
     }
 
     @Override
@@ -81,6 +106,11 @@ public class ArticleFragment
         initAdapter(articles);
         initRecyclerView();
         initSwipeRefreshLayout();
+    }
+
+    @Override
+    public void setSource(Source source) {
+        _source = source;
     }
 
     @Override
@@ -108,6 +138,11 @@ public class ArticleFragment
     }
 
     @Override
+    public void showEmptyUpdate() {
+        showInfo(getString(R.string.fragment_article_empty_update));
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
@@ -120,40 +155,45 @@ public class ArticleFragment
         int resource = settingsService.getArticleTemplateType() == SettingsService.ARTICLE_TEMPLATE_BIG
                 ? R.layout.fragment_article_item_template
                 : R.layout.fragment_article_item_template_small;
-        _adapter = new ArticleAdapter(getActivity(), formatter, source, resource);
+        _adapter = new ArticleAdapter(getActivity(), formatter, _source, resource);
         _adapter.addAll(articles);
         _adapter.setAdsProvider(adsProvider);
         _disposable = _adapter.getItemClicked().subscribe(article -> {
             getRootActivity().resetAppBarLayoutState();
-            getPresenter().showArticle(article, source);
+            getPresenter().showArticle(article, _source);
         });
     }
 
     private void initRecyclerView(){
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        final EndlessRecyclerViewScrollListener listener = new EndlessRecyclerViewScrollListener(layoutManager) {
+        _layoutManager = new LinearLayoutManager(getContext());
+        final EndlessRecyclerViewScrollListener listener =
+                new EndlessRecyclerViewScrollListener(_layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                presenter.loadOlder(source, _adapter.getLast());
+                presenter.loadOlder(_source, _adapter.getLast());
             }
         };
 
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(_layoutManager);
         recyclerView.setAdapter(_adapter);
         // TODO implement View.OnScrollChangeListener
         recyclerView.setOnScrollListener(listener);
+
+        if (_scrollPosition != -1) {
+            recyclerView.scrollToPosition(_scrollPosition);
+        }
     }
 
     private void initSwipeRefreshLayout(){
         swipeRefreshLayout.setOnRefreshListener(() -> {
             Article article = _adapter.getFirst();
-            presenter.loadNewer(source, article);
+            presenter.loadNewer(_source, article);
         });
     }
 
     @Override
     public String getTitle() {
-        return source.getTitle();
+        return _sourceTitle;
     }
 
     @Override

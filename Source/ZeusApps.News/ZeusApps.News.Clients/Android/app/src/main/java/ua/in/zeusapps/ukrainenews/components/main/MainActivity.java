@@ -104,12 +104,7 @@ public class MainActivity
         toolbar.setTitle(fragment.getTitle());
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             toolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
+            toolbar.setNavigationOnClickListener(v -> onBackPressed());
         } else {
             toolbar.setNavigationIcon(null);
             toolbar.setNavigationOnClickListener(null);

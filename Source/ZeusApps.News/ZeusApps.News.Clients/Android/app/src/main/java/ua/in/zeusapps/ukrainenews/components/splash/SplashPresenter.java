@@ -8,9 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Action1;
+import io.reactivex.Observable;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.domain.EnsureSourcesInteractor;
 
@@ -29,21 +27,9 @@ public class SplashPresenter extends MvpPresenter<SplashView, SplashRouter> {
 
     @Override
     protected void onFirstViewAttach() {
-        ensureSourcesInteractor.execute(new Subscriber<Boolean>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                showError(e);
-            }
-
-            @Override
-            public void onNext(Boolean aBoolean) {
-                getRouter().startApp();
-            }
-        });
+        ensureSourcesInteractor.executeWithError(
+                this::startApp,
+                this::showError);
     }
 
     @Override
@@ -54,13 +40,12 @@ public class SplashPresenter extends MvpPresenter<SplashView, SplashRouter> {
     private void showError(Throwable error){
         Log.e(SplashPresenter.class.getSimpleName(), error.getMessage(), error);
         getViewState().showError();
-        Observable.interval(4000, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long aLong) {
-                        System.exit(0);
-                    }
-                });
+        Observable
+                .interval(4000, TimeUnit.MILLISECONDS)
+                .subscribe(value -> System.exit(0));
     }
 
+    private void startApp(Boolean value){
+        getRouter().startApp();
+    }
 }

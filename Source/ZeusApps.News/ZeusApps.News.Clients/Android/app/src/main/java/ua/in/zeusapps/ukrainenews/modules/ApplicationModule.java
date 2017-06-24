@@ -12,13 +12,11 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ua.in.zeusapps.ukrainenews.common.App;
 import ua.in.zeusapps.ukrainenews.common.Constants;
 import ua.in.zeusapps.ukrainenews.common.GsonUTCDateAdapter;
-import ua.in.zeusapps.ukrainenews.services.IRepository;
-import ua.in.zeusapps.ukrainenews.services.Repository;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 import ua.in.zeusapps.ukrainenews.services.IDataService;
 
@@ -59,16 +57,9 @@ public class ApplicationModule {
         GsonConverterFactory factory = GsonConverterFactory.create(gson);
 
         return new Retrofit.Builder()
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(factory)
                 .baseUrl(Constants.REMOTE_URL)
                 .build();
-    }
-
-    @Provides
-    @Singleton
-    public IRepository provideRepository(Context context){
-        //return new Repository(context, formatter);
-        return new Repository(context);
     }
 }

@@ -19,7 +19,6 @@ public abstract class BaseMainFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setRetainInstance(true);
         MainActivity activity = (MainActivity) getActivity();
         activity.resolveToolbar(this);
         activity.resolveFab(this);

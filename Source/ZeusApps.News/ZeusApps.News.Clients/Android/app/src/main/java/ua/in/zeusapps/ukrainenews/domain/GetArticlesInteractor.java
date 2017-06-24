@@ -1,6 +1,7 @@
 package ua.in.zeusapps.ukrainenews.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -24,7 +25,7 @@ public class GetArticlesInteractor extends Interactor<ArticleResponse, ArticleRe
     private final Formatter _formatter;
 
     @Inject
-    public GetArticlesInteractor(
+    GetArticlesInteractor(
             ISourceRepository sourceRepository,
             IArticleRepository articleRepository,
             IDataService dataService,
@@ -38,28 +39,46 @@ public class GetArticlesInteractor extends Interactor<ArticleResponse, ArticleRe
     @Override
     protected Observable<ArticleResponse> buildObservable(final ArticleRequestBundle bundle) {
 
-        String publishedString = _formatter.toStringDate(bundle.getArticle().getPublished());
+        Source source = bundle.getSource();
+        String published = _formatter.toStringDate(bundle.getArticle().getPublished());
+        String key = source.getKey();
+        boolean isAfter = bundle.getIsAfter();
 
-        return _dataService.getNewerArticles(
-                bundle.getSource().getKey(),
-                PAGE_COUNT,
-                publishedString,
-                bundle.getIsAfter())
+        return isAfter
+                ? getOlderArticles(key, published)
+                : getNewerArticles(source, key, published);
+    }
+
+    private Observable<ArticleResponse> getNewerArticles(
+            Source source, String key, String published){
+        return _dataService
+            .getArticles(key, PAGE_COUNT, published, false)
+            .map(articles -> {
+                updateSourceTimestamp(source);
+                boolean refresh = false;
+
+                if (articles.size() == PAGE_COUNT){
+                    _articleRepository.removeBySource(source);
+                    refresh = true;
+                }
+
+                save(articles);
+                return new ArticleResponse(articles, refresh);
+            });
+    }
+
+    private Observable<ArticleResponse> getOlderArticles(String key, String published){
+        return _dataService.getArticles(key, PAGE_COUNT, published, true)
                 .map(articles -> {
-                    boolean isRefresh = false;
-                    if (!bundle.getIsAfter()){
-                        updateSourceTimestamp(bundle.getSource());
-                        if (articles.size() == PAGE_COUNT){
-                            _articleRepository.removeBySource(bundle.getSource());
-                            isRefresh = true;
-                        }
-                    }
-
-                    for (Article article: articles) {
-                        _articleRepository.create(article);
-                    }
-                    return new ArticleResponse(articles, isRefresh);
+                    save(articles);
+                    return new ArticleResponse(articles, false);
                 });
+    }
+
+    private void save(List<Article> articles){
+        for (Article article: articles) {
+            _articleRepository.create(article);
+        }
     }
 
     private void updateSourceTimestamp(Source source){

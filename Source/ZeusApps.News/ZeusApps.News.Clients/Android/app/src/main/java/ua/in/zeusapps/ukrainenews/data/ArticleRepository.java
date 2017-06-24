@@ -9,8 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.functions.Func1;
+import io.reactivex.Observable;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
@@ -50,18 +49,15 @@ class ArticleRepository
     @Override
     public Observable<List<String>> getIds(Source source) {
         return getBySource(source)
-                .map(new Func1<List<Article>, List<String>>() {
-                    @Override
-                    public List<String> call(List<Article> articles) {
-                        List<String> ids = new ArrayList<>();
+            .map(articles -> {
+                List<String> ids = new ArrayList<>();
 
-                        for (Article article: articles){
-                            ids.add(article.getId());
-                        }
+                for (Article article: articles) {
+                    ids.add(article.getId());
+                }
 
-                        return ids;
-                    }
-                });
+                return ids;
+            });
     }
 
     @Override

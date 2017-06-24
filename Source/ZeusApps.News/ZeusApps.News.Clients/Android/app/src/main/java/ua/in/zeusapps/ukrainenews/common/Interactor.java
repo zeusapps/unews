@@ -37,8 +37,7 @@ public abstract class Interactor<ResultType, ParameterType> {
             observable = observable.doOnError(errorConsumer);
         }
 
-        Disposable disposable = observable.subscribe(resultConsumer);
-        compositeDisposable.add(disposable);
+        compositeDisposable.add(observable.subscribe(resultConsumer));
     }
 
     public void executeWithError(
