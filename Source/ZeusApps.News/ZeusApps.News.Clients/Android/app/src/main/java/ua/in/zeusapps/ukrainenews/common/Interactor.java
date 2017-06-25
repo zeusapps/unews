@@ -1,11 +1,16 @@
 package ua.in.zeusapps.ukrainenews.common;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.internal.functions.Functions;
+import io.reactivex.internal.observers.DisposableLambdaObserver;
+import io.reactivex.internal.observers.LambdaObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public abstract class Interactor<ResultType, ParameterType> {
@@ -33,11 +38,11 @@ public abstract class Interactor<ResultType, ParameterType> {
                 .subscribeOn(jobScheduler)
                 .observeOn(uiScheduler);
 
-        if (errorConsumer != null){
-            observable = observable.doOnError(errorConsumer);
+        if (errorConsumer == null){
+            errorConsumer = Functions.ERROR_CONSUMER;
         }
 
-        compositeDisposable.add(observable.subscribe(resultConsumer));
+        compositeDisposable.add(observable.subscribe(resultConsumer, errorConsumer));
     }
 
     public void executeWithError(

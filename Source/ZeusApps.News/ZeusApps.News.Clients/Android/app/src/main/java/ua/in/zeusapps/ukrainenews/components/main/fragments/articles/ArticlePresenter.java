@@ -35,6 +35,14 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
         return router;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        initialArticlesInteractor.unsubscribe();
+        articlesInteractor.unsubscribe();
+    }
+
     void init(String sourceId){
         getViewState().showLoading(true);
         Source source = sourceRepository.getById(sourceId);
@@ -50,13 +58,19 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
     void loadNewer(Source source, Article article) {
         ArticleRequestBundle bundle = new ArticleRequestBundle(source, article, false);
 
-        articlesInteractor.execute(bundle, response -> {
+        articlesInteractor.executeWithError(
+                bundle,
+                response -> {
                     getViewState().addNewer(response.getArticles(), response.getIsRefresh());
                     getViewState().showLoading(false);
 
                     if (!bundle.getIsAfter() && response.getArticles().size() == 0){
                         getViewState().showEmptyUpdate();
                     }
+                },
+                throwable -> {
+                    getViewState().showLoading(false);
+                    getViewState().showLoadingError();
                 });
     }
 
@@ -64,10 +78,16 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
         ArticleRequestBundle bundle = new ArticleRequestBundle(source, article, true);
 
         getViewState().showLoading(true);
-        articlesInteractor.execute(bundle, response -> {
-            getViewState().addOlder(response.getArticles());
-            getViewState().showLoading(false);
-        });
+        articlesInteractor.executeWithError(
+                bundle,
+                response -> {
+                    getViewState().addOlder(response.getArticles());
+                    getViewState().showLoading(false);
+                },
+                throwable -> {
+                    getViewState().showLoading(false);
+                    getViewState().showLoadingError();
+                });
     }
 
     void showArticle(Article article, Source source){

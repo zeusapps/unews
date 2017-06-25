@@ -1,5 +1,6 @@
 package ua.in.zeusapps.ukrainenews.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +53,7 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
 
     private Observable<List<Article>> getInitialRemoteArticles(Source source){
         return _dataService.getArticles(source.getKey(), PAGE_SIZE)
+            .onErrorReturn(throwable -> new ArrayList<>())
             .map(articles -> {
                 save(articles, source);
                 return articles;
@@ -63,6 +65,7 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
 
         return _dataService
                 .getArticles(source.getKey(), PAGE_SIZE, published, false)
+                .onErrorReturn(throwable -> new ArrayList<>())
                 .map(articles -> {
                     if (articles.size() == PAGE_SIZE){
                         _articleRepository.removeBySource(source);
