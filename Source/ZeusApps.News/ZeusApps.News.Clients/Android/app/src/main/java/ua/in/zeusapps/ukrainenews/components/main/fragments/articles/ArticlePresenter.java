@@ -48,18 +48,17 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
         Source source = sourceRepository.getById(sourceId);
         getViewState().setSource(source);
         initialArticlesInteractor.execute(
-            source,
-            articles -> {
-                getViewState().init(articles);
-                getViewState().showLoading(false);
-            });
+                articles -> {
+                    getViewState().init(articles);
+                    getViewState().showLoading(false);
+                },
+                source);
     }
 
     void loadNewer(Source source, Article article) {
         ArticleRequestBundle bundle = new ArticleRequestBundle(source, article, false);
 
-        articlesInteractor.executeWithError(
-                bundle,
+        articlesInteractor.execute(
                 response -> {
                     getViewState().addNewer(response.getArticles(), response.getIsRefresh());
                     getViewState().showLoading(false);
@@ -71,15 +70,15 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
                 throwable -> {
                     getViewState().showLoading(false);
                     getViewState().showLoadingError();
-                });
+                },
+                bundle);
     }
 
     void loadOlder(Source source, Article article) {
         ArticleRequestBundle bundle = new ArticleRequestBundle(source, article, true);
 
         getViewState().showLoading(true);
-        articlesInteractor.executeWithError(
-                bundle,
+        articlesInteractor.execute(
                 response -> {
                     getViewState().addOlder(response.getArticles());
                     getViewState().showLoading(false);
@@ -87,7 +86,8 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
                 throwable -> {
                     getViewState().showLoading(false);
                     getViewState().showLoadingError();
-                });
+                },
+                bundle);
     }
 
     void showArticle(Article article, Source source){
