@@ -6,16 +6,16 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
-import ua.in.zeusapps.ukrainenews.common.Interactor;
+import io.reactivex.Single;
+import ua.in.zeusapps.ukrainenews.common.SingleInteractor;
 import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
+import ua.in.zeusapps.ukrainenews.data.IDataService;
 import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
-import ua.in.zeusapps.ukrainenews.services.IDataService;
 
-public class GetInitialArticlesInteractor extends Interactor<List<Article>, Source> {
+public class GetInitialArticlesInteractor extends SingleInteractor<List<Article>, Source> {
 
     private final IDataService _dataService;
     private final IArticleRepository _articleRepository;
@@ -38,7 +38,7 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
     }
 
     @Override
-    protected Observable<List<Article>> buildObservable(final Source source) {
+    protected Single<List<Article>> build(final Source source) {
         return _articleRepository.getBySource(source)
             .flatMap(articles -> {
                 if (articles.size() == 0){
@@ -46,21 +46,21 @@ public class GetInitialArticlesInteractor extends Interactor<List<Article>, Sour
                 }
 
                 return shouldNotUpdate(source)
-                    ? Observable.just(articles)
+                    ? Single.just(articles)
                     : getNewerArticles(source, articles);
             });
     }
 
-    private Observable<List<Article>> getInitialRemoteArticles(Source source){
+    private Single<List<Article>> getInitialRemoteArticles(Source source){
         return _dataService.getArticles(source.getKey(), PAGE_SIZE)
-            .onErrorReturn(throwable -> new ArrayList<>())
-            .map(articles -> {
-                save(articles, source);
-                return articles;
-            });
+                .onErrorReturn(throwable -> new ArrayList<>())
+                .map(articles -> {
+                    save(articles, source);
+                    return articles;
+                });
     }
 
-    private Observable<List<Article>> getNewerArticles(Source source, List<Article> olderArticles){
+    private Single<List<Article>> getNewerArticles(Source source, List<Article> olderArticles){
         String published = _formatter.formatDate(olderArticles.get(0).getPublished());
 
         return _dataService

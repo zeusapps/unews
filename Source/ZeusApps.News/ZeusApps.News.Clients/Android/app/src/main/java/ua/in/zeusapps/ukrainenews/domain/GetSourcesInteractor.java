@@ -4,12 +4,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
-import ua.in.zeusapps.ukrainenews.common.Interactor;
+import io.reactivex.Single;
+import ua.in.zeusapps.ukrainenews.common.SingleInteractor;
+import ua.in.zeusapps.ukrainenews.data.IDataService;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.services.IDataService;
 
-class GetSourcesInteractor extends Interactor<List<Source>, Void> {
+class GetSourcesInteractor extends SingleInteractor<List<Source>, Void> {
 
     private IDataService _dataService;
 
@@ -19,7 +19,7 @@ class GetSourcesInteractor extends Interactor<List<Source>, Void> {
     }
 
     @Override
-    protected Observable<List<Source>> buildObservable(Void parameter) {
+    protected Single<List<Source>> build(Void parameter) {
         return _dataService.getSources();
     }
 }
