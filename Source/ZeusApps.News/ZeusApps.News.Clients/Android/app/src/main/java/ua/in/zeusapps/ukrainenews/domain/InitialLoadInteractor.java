@@ -10,7 +10,7 @@ import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.IDataService;
 
 public class InitialLoadInteractor
-    extends Interactor<Boolean, Void> {
+        extends Interactor<Boolean, Void> {
 
     private final ISourceRepository _sourceRepository;
     private final IArticleRepository _articleRepository;
@@ -27,25 +27,27 @@ public class InitialLoadInteractor
 
     @Override
     protected Observable<Boolean> buildObservable(Void parameter) {
-         _dataService.getSources()
-                .onErrorReturn(throwable -> _sourceRepository.getAll());
+        return _dataService
+                .getSources()
+                .onErrorReturn(throwable -> _sourceRepository.getAll())
+                .map(x -> true);
     }
 
-    private Boolean checkSources(List<Source> remoteSources){
-        if (remoteSources == null || remoteSources.size() == 0){
+    private Boolean checkSources(List<Source> remoteSources) {
+        if (remoteSources == null || remoteSources.size() == 0) {
             return false;
         }
 
         List<Source> localSources = _sourceRepository.getAll();
 
-        for (Source source: localSources) {
-            if (!remoteSources.contains(source)){
+        for (Source source : localSources) {
+            if (!remoteSources.contains(source)) {
                 _sourceRepository.delete(source);
             }
         }
 
-        for (Source source: remoteSources){
-            if (!localSources.contains(source)){
+        for (Source source : remoteSources) {
+            if (!localSources.contains(source)) {
                 _sourceRepository.create(source);
             }
         }
