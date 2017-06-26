@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
@@ -22,32 +23,43 @@ class ArticleRepository
     }
 
     @Override
-    public Observable<List<Article>> getBySource(Source source) {
-        List<Article> articles;
+    public Single<List<Article>> getBySource(Source source) {
+        return Single.fromCallable(() -> {
+            List<Article> articles;
 
-        try {
+            try {
+                QueryBuilder<Article, String> builder = getDao().queryBuilder();
+                builder.where().eq(Article.SOURCE_ID_FIELD_NAME, source.getKey());
+
+                articles = builder
+                        .orderBy(Article.PUBLISHED_FIELD_NAME, false)
+                        .query();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                articles = new ArrayList<>();
+            }
+
+            return articles;
+        });
+    }
+
+    @Override
+    public Single<Article> getById(String id) {
+        return Single.fromCallable(() -> getDao().queryForId(id));
+    }
+
+    @Override
+    public Single<Article> getNewest(Source source) {
+        return Single.fromCallable(() -> {
             QueryBuilder<Article, String> builder = getDao().queryBuilder();
             builder.where().eq(Article.SOURCE_ID_FIELD_NAME, source.getKey());
-
-            articles = builder
-                    .orderBy(Article.PUBLISHED_FIELD_NAME, false)
-                    .query();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            articles = new ArrayList<>();
-        }
-
-        return Observable.just(articles);
+            builder.orderBy(Article.PUBLISHED_FIELD_NAME, false);
+            return builder.queryForFirst();
+        });
     }
 
     @Override
-    public Observable<Article> getById(String id) {
-        Article article = getDao().queryForId(id);
-        return Observable.just(article);
-    }
-
-    @Override
-    public Observable<List<String>> getIds(Source source) {
+    public Single<List<String>> getIds(Source source) {
         return getBySource(source)
             .map(articles -> {
                 List<String> ids = new ArrayList<>();

@@ -27,7 +27,7 @@ public class SplashPresenter extends MvpPresenter<SplashView, SplashRouter> {
 
     @Override
     protected void onFirstViewAttach() {
-        ensureSourcesInteractor.executeWithError(
+        ensureSourcesInteractor.execute(
                 this::startApp,
                 this::showError);
     }

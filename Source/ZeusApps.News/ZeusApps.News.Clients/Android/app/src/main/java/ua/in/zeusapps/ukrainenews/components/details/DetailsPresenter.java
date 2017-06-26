@@ -34,15 +34,17 @@ public class DetailsPresenter
 
     void init(final Source source, final String articleId){
         Log.d(TAG, "DetailsPresenter init call");
-        localArticlesInteractor.execute(source, articleIds -> {
-            getViewState().load(articleIds, source);
-            if (_articleId != null && articleIds.contains(_articleId)){
-                getViewState().switchTo(_articleId);
-            } else {
-                _articleId = articleId;
-                getViewState().switchTo(articleId);
-            }
-        });
+        localArticlesInteractor.execute(
+                articleIds -> {
+                    getViewState().load(articleIds, source);
+                    if (_articleId != null && articleIds.contains(_articleId)){
+                        getViewState().switchTo(_articleId);
+                    } else {
+                        _articleId = articleId;
+                        getViewState().switchTo(articleId);
+                    }
+                },
+                source);
     }
 
     void currentArticleChanged(String articleId){

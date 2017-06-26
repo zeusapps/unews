@@ -22,7 +22,7 @@ public class SourcesPresenter extends MvpPresenter<SourcesView, MainRouter> {
 
     @Override
     protected void onFirstViewAttach() {
-        interactor.executeWithError(
+        interactor.execute(
                 sources -> getViewState().showSources(sources),
                 throwable -> getViewState().showError());
     }
