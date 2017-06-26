@@ -1,8 +1,8 @@
-package ua.in.zeusapps.ukrainenews.services;
+package ua.in.zeusapps.ukrainenews.data;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -11,17 +11,17 @@ import ua.in.zeusapps.ukrainenews.models.Source;
 
 public interface IDataService {
     @GET("api/sources/{sourceId}/articles")
-    Observable<List<Article>> getArticles(
+    Single<List<Article>> getArticles(
             @Path("sourceId") String sourceId,
             @Query("count") int count);
 
     @GET("api/sources/{sourceId}/articles")
-    Observable<List<Article>> getArticles(
+    Single<List<Article>> getArticles(
             @Path("sourceId") String sourceId,
             @Query("count") int count,
             @Query("published") String published,
             @Query("isAfter") boolean isAfter);
 
     @GET("api/sources")
-    Observable<List<Source>> getSources();
+    Single<List<Source>> getSources();
 }

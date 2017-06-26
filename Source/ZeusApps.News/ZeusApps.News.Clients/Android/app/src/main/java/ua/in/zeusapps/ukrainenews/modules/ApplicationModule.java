@@ -18,7 +18,7 @@ import ua.in.zeusapps.ukrainenews.common.App;
 import ua.in.zeusapps.ukrainenews.common.Constants;
 import ua.in.zeusapps.ukrainenews.common.GsonUTCDateAdapter;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
-import ua.in.zeusapps.ukrainenews.services.IDataService;
+import ua.in.zeusapps.ukrainenews.data.IDataService;
 
 @Module
 public class ApplicationModule {
