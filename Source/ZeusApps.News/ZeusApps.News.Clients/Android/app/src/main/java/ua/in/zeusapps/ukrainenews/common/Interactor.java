@@ -89,46 +89,9 @@ public abstract class Interactor<ResultType, ParameterType> {
         execute(resultConsumer, Functions.ERROR_CONSUMER, Functions.EMPTY_ACTION, Functions.emptyConsumer(), parameter);
     }
 
-    public void execute(
-            Consumer<ResultType> resultConsumer) {
+    public void execute(Consumer<ResultType> resultConsumer) {
         execute(resultConsumer, Functions.ERROR_CONSUMER, Functions.EMPTY_ACTION, Functions.emptyConsumer(), null);
     }
-//    public void executeWithError(ParameterType parameter,
-//                        Consumer<ResultType> resultConsumer,
-//                        Consumer<? super Throwable> errorConsumer){
-//        Observable<ResultType> observable = buildObservable(parameter)
-//                .subscribeOn(jobScheduler)
-//                .observeOn(uiScheduler);
-//
-//        if (errorConsumer == null){
-//            errorConsumer = Functions.ERROR_CONSUMER;
-//        }
-//
-//        compositeDisposable.add(observable.subscribe(resultConsumer, errorConsumer));
-//    }
-//
-//    public void executeWithError(
-//            Consumer<ResultType> resultConsumer,
-//            Consumer<? super Throwable> errorConsumer){
-//        executeWithError(null, resultConsumer, errorConsumer);
-//    }
-//
-//    public void execute(Subscriber<ResultType> subscriber) {
-//
-//
-//
-//
-//
-//        compositeDisposable.add(buildObservable(null))
-//    }
-//
-//    public void execute(ParameterType parameter, Consumer<ResultType> consumer) {
-//        executeWithError(parameter, consumer, null);
-//    }
-//
-//    public void execute(Consumer<ResultType> consumer) {
-//        execute(null, consumer);
-//    }
 
     public void unsubscribe() {
         compositeDisposable.clear();
