@@ -7,9 +7,9 @@ import javax.inject.Inject;
 
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.components.main.MainRouter;
-import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
 import ua.in.zeusapps.ukrainenews.domain.GetArticlesInteractor;
 import ua.in.zeusapps.ukrainenews.domain.GetInitialArticlesInteractor;
+import ua.in.zeusapps.ukrainenews.domain.GetSourceInteractor;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.ArticleRequestBundle;
 import ua.in.zeusapps.ukrainenews.models.Source;
@@ -22,7 +22,8 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
     @Inject
     GetArticlesInteractor articlesInteractor;
     @Inject
-    ISourceRepository sourceRepository;
+    GetSourceInteractor sourceInteractor;
+
     @Inject
     MainRouter router;
 
@@ -43,16 +44,17 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
         articlesInteractor.unsubscribe();
     }
 
-    void init(String sourceId){
+    void init(String sourceId) {
         getViewState().showLoading(true);
-        Source source = sourceRepository.getById(sourceId);
-        getViewState().setSource(source);
-        initialArticlesInteractor.execute(
-                articles -> {
-                    getViewState().init(articles);
-                    getViewState().showLoading(false);
-                },
-                source);
+        sourceInteractor.execute(source -> {
+            getViewState().setSource(source);
+            initialArticlesInteractor.execute(
+                    articles -> {
+                        getViewState().init(articles);
+                        getViewState().showLoading(false);
+                    },
+                    source);
+        }, sourceId);
     }
 
     void loadNewer(Source source, Article article) {
@@ -63,7 +65,7 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
                     getViewState().addNewer(response.getArticles(), response.getIsRefresh());
                     getViewState().showLoading(false);
 
-                    if (!bundle.getIsAfter() && response.getArticles().size() == 0){
+                    if (!bundle.getIsAfter() && response.getArticles().size() == 0) {
                         getViewState().showEmptyUpdate();
                     }
                 },
@@ -90,7 +92,7 @@ public class ArticlePresenter extends MvpPresenter<ArticleView, MainRouter> {
                 bundle);
     }
 
-    void showArticle(Article article, Source source){
+    void showArticle(Article article, Source source) {
         getRouter().showArticleDetails(article, source);
     }
 }
