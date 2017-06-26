@@ -10,23 +10,23 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.internal.functions.Functions;
 import io.reactivex.schedulers.Schedulers;
 
-public abstract class Interactor<ResultType, ParameterType> {
+public abstract class ObservableInteractor<ResultType, ParameterType> {
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     protected final Scheduler jobScheduler;
     private final Scheduler uiScheduler;
 
-    public Interactor(Scheduler jobScheduler, Scheduler uiScheduler){
+    public ObservableInteractor(Scheduler jobScheduler, Scheduler uiScheduler){
         this.jobScheduler = jobScheduler;
         this.uiScheduler = uiScheduler;
     }
 
-    public Interactor() {
+    public ObservableInteractor() {
         this.jobScheduler = Schedulers.computation();
         this.uiScheduler = AndroidSchedulers.mainThread();
     }
 
-    protected abstract Observable<ResultType> buildObservable(ParameterType parameter);
+    protected abstract Observable<ResultType> build(ParameterType parameter);
 
     public void execute(
             Consumer<ResultType> resultConsumer,
@@ -35,7 +35,7 @@ public abstract class Interactor<ResultType, ParameterType> {
             Consumer<? super Disposable> subscribeConsumer,
             ParameterType parameter){
 
-        Observable<ResultType> observable = buildObservable(parameter)
+        Observable<ResultType> observable = build(parameter)
                 .subscribeOn(jobScheduler)
                 .observeOn(uiScheduler);
 
