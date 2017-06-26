@@ -4,12 +4,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
-import ua.in.zeusapps.ukrainenews.common.Interactor;
+import io.reactivex.Single;
+import ua.in.zeusapps.ukrainenews.common.SingleInteractor;
 import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
-public class GetLocalArticleIdsInteractor extends Interactor<List<String>, Source> {
+public class GetLocalArticleIdsInteractor extends SingleInteractor<List<String>, Source> {
 
     private final IArticleRepository _articleRepository;
 
@@ -19,7 +19,7 @@ public class GetLocalArticleIdsInteractor extends Interactor<List<String>, Sourc
     }
 
     @Override
-    protected Observable<List<String>> buildObservable(Source source) {
+    protected Single<List<String>> build(Source source) {
         return _articleRepository.getIds(source);
     }
 }

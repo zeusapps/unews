@@ -5,18 +5,18 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
-import ua.in.zeusapps.ukrainenews.common.Interactor;
+import io.reactivex.Single;
+import ua.in.zeusapps.ukrainenews.common.SingleInteractor;
 import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
+import ua.in.zeusapps.ukrainenews.data.IDataService;
 import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.ArticleRequestBundle;
 import ua.in.zeusapps.ukrainenews.models.ArticleResponse;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
-import ua.in.zeusapps.ukrainenews.services.IDataService;
 
-public class GetArticlesInteractor extends Interactor<ArticleResponse, ArticleRequestBundle>{
+public class GetArticlesInteractor extends SingleInteractor<ArticleResponse, ArticleRequestBundle> {
 
     private final static int PAGE_COUNT = 20;
     private final ISourceRepository _sourceRepository;
@@ -37,7 +37,7 @@ public class GetArticlesInteractor extends Interactor<ArticleResponse, ArticleRe
     }
 
     @Override
-    protected Observable<ArticleResponse> buildObservable(final ArticleRequestBundle bundle) {
+    protected Single<ArticleResponse> build(final ArticleRequestBundle bundle) {
 
         Source source = bundle.getSource();
         String published = _formatter.toStringDate(bundle.getArticle().getPublished());
@@ -49,12 +49,12 @@ public class GetArticlesInteractor extends Interactor<ArticleResponse, ArticleRe
                 : getNewerArticles(source, key, published);
     }
 
-    private Observable<ArticleResponse> getNewerArticles(
+    private Single<ArticleResponse> getNewerArticles(
             Source source, String key, String published){
         return _dataService
             .getArticles(key, PAGE_COUNT, published, false)
             .map(articles -> {
-                updateSourceTimestamp(source);
+                _sourceRepository.updateTimestamp(source);
                 boolean refresh = false;
 
                 if (articles.size() == PAGE_COUNT){
@@ -67,7 +67,7 @@ public class GetArticlesInteractor extends Interactor<ArticleResponse, ArticleRe
             });
     }
 
-    private Observable<ArticleResponse> getOlderArticles(String key, String published){
+    private Single<ArticleResponse> getOlderArticles(String key, String published){
         return _dataService.getArticles(key, PAGE_COUNT, published, true)
                 .map(articles -> {
                     save(articles);
@@ -75,14 +75,9 @@ public class GetArticlesInteractor extends Interactor<ArticleResponse, ArticleRe
                 });
     }
 
-    private void save(List<Article> articles){
-        for (Article article: articles) {
+    private void save(List<Article> articles) {
+        for (Article article : articles) {
             _articleRepository.create(article);
         }
-    }
-
-    private void updateSourceTimestamp(Source source){
-        source.setTimestamp(new Date());
-        _sourceRepository.update(source);
     }
 }

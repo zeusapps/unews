@@ -10,23 +10,23 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.internal.functions.Functions;
 import io.reactivex.schedulers.Schedulers;
 
-public abstract class Interactor<ResultType, ParameterType> {
+public abstract class ObservableInteractor<ResultType, ParameterType> {
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     protected final Scheduler jobScheduler;
     private final Scheduler uiScheduler;
 
-    public Interactor(Scheduler jobScheduler, Scheduler uiScheduler){
+    public ObservableInteractor(Scheduler jobScheduler, Scheduler uiScheduler){
         this.jobScheduler = jobScheduler;
         this.uiScheduler = uiScheduler;
     }
 
-    public Interactor() {
+    public ObservableInteractor() {
         this.jobScheduler = Schedulers.computation();
         this.uiScheduler = AndroidSchedulers.mainThread();
     }
 
-    protected abstract Observable<ResultType> buildObservable(ParameterType parameter);
+    protected abstract Observable<ResultType> build(ParameterType parameter);
 
     public void execute(
             Consumer<ResultType> resultConsumer,
@@ -35,7 +35,7 @@ public abstract class Interactor<ResultType, ParameterType> {
             Consumer<? super Disposable> subscribeConsumer,
             ParameterType parameter){
 
-        Observable<ResultType> observable = buildObservable(parameter)
+        Observable<ResultType> observable = build(parameter)
                 .subscribeOn(jobScheduler)
                 .observeOn(uiScheduler);
 
@@ -89,46 +89,9 @@ public abstract class Interactor<ResultType, ParameterType> {
         execute(resultConsumer, Functions.ERROR_CONSUMER, Functions.EMPTY_ACTION, Functions.emptyConsumer(), parameter);
     }
 
-    public void execute(
-            Consumer<ResultType> resultConsumer) {
+    public void execute(Consumer<ResultType> resultConsumer) {
         execute(resultConsumer, Functions.ERROR_CONSUMER, Functions.EMPTY_ACTION, Functions.emptyConsumer(), null);
     }
-//    public void executeWithError(ParameterType parameter,
-//                        Consumer<ResultType> resultConsumer,
-//                        Consumer<? super Throwable> errorConsumer){
-//        Observable<ResultType> observable = buildObservable(parameter)
-//                .subscribeOn(jobScheduler)
-//                .observeOn(uiScheduler);
-//
-//        if (errorConsumer == null){
-//            errorConsumer = Functions.ERROR_CONSUMER;
-//        }
-//
-//        compositeDisposable.add(observable.subscribe(resultConsumer, errorConsumer));
-//    }
-//
-//    public void executeWithError(
-//            Consumer<ResultType> resultConsumer,
-//            Consumer<? super Throwable> errorConsumer){
-//        executeWithError(null, resultConsumer, errorConsumer);
-//    }
-//
-//    public void execute(Subscriber<ResultType> subscriber) {
-//
-//
-//
-//
-//
-//        compositeDisposable.add(buildObservable(null))
-//    }
-//
-//    public void execute(ParameterType parameter, Consumer<ResultType> consumer) {
-//        executeWithError(parameter, consumer, null);
-//    }
-//
-//    public void execute(Consumer<ResultType> consumer) {
-//        execute(null, consumer);
-//    }
 
     public void unsubscribe() {
         compositeDisposable.clear();
