@@ -32,4 +32,5 @@
     <string name="fragment_settings_article_template_small">Маленька</string>
     <string name="fragment_article_empty_update">Ви переглядаєте найсвіжіші новини</string>
     <string name="activity_splash_source_update">Оновлення %s…</string>
+    <string name="fragment_top_stories_title">Останні новини</string>
 </resources>
