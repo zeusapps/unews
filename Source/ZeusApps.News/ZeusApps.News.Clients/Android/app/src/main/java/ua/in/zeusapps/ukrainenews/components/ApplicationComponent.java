@@ -6,6 +6,7 @@ import dagger.Component;
 import ua.in.zeusapps.ukrainenews.components.details.DetailsPresenter;
 import ua.in.zeusapps.ukrainenews.components.details.fragments.ArticleDetailsFragment;
 import ua.in.zeusapps.ukrainenews.components.details.fragments.ArticleDetailsPresenter;
+import ua.in.zeusapps.ukrainenews.components.main.fragments.topStories.TopStoriesFragment;
 import ua.in.zeusapps.ukrainenews.data.DataModule;
 import ua.in.zeusapps.ukrainenews.modules.ApplicationModule;
 import ua.in.zeusapps.ukrainenews.components.main.fragments.articles.ArticleFragment;
@@ -31,4 +32,5 @@ public interface ApplicationComponent {
     void inject(DetailsPresenter presenter);
     void inject(ArticleDetailsPresenter presenter);
     void inject(ArticleDetailsFragment fragment);
+    void inject(TopStoriesFragment fragment);
 }
