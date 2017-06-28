@@ -1,6 +1,7 @@
 package ua.in.zeusapps.ukrainenews.common;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -28,6 +29,19 @@ public abstract class ObservableInteractor<ResultType, ParameterType> {
 
     protected abstract Observable<ResultType> build(ParameterType parameter);
 
+    private Observable<ResultType> buildIO(ParameterType parameter){
+        return build(parameter).subscribeOn(jobScheduler).observeOn(uiScheduler);
+    }
+
+    public void register(Disposable disposable){
+        compositeDisposable.add(disposable);
+    }
+
+    public void execute(Observer<? super ResultType> observer, ParameterType parameter){
+        Observable<ResultType> observable = buildIO(parameter);
+        observable.subscribe(observer);
+    }
+
     public void execute(
             Consumer<ResultType> resultConsumer,
             Consumer<? super Throwable> errorConsumer,
@@ -35,11 +49,7 @@ public abstract class ObservableInteractor<ResultType, ParameterType> {
             Consumer<? super Disposable> subscribeConsumer,
             ParameterType parameter){
 
-        Observable<ResultType> observable = build(parameter)
-                .subscribeOn(jobScheduler)
-                .observeOn(uiScheduler);
-
-
+        Observable<ResultType> observable = buildIO(parameter);
         Disposable disposable = observable.subscribe(
                 resultConsumer, errorConsumer, onComplete, subscribeConsumer);
         compositeDisposable.add(disposable);
@@ -92,6 +102,8 @@ public abstract class ObservableInteractor<ResultType, ParameterType> {
     public void execute(Consumer<ResultType> resultConsumer) {
         execute(resultConsumer, Functions.ERROR_CONSUMER, Functions.EMPTY_ACTION, Functions.emptyConsumer(), null);
     }
+
+
 
     public void unsubscribe() {
         compositeDisposable.clear();

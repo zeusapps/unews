@@ -45,9 +45,9 @@ public class GetInitialArticlesInteractor extends SingleInteractor<List<Article>
                     return getInitialRemoteArticles(source);
                 }
 
-                return shouldNotUpdate(source)
-                    ? Single.just(articles)
-                    : getNewerArticles(source, articles);
+                return _sourceRepository.shouldUpdate(source)
+                    ? getNewerArticles(source, articles)
+                    : Single.just(articles);
             });
     }
 
@@ -80,20 +80,7 @@ public class GetInitialArticlesInteractor extends SingleInteractor<List<Article>
     }
 
     private void save(List<Article> articles, Source source){
-        source.setTimestamp(new Date());
-        _sourceRepository.update(source);
-
-        for (Article article: articles) {
-            _articleRepository.create(article);
-        }
-    }
-
-    private boolean shouldNotUpdate(Source source){
-        Date nowTimestamp = new Date();
-        Date timestamp = source.getTimestamp();
-        int timeSkew = 1000 * 60 * 15;
-
-        return timestamp != null  &&
-                timestamp.getTime() + timeSkew > nowTimestamp.getTime();
+        _sourceRepository.updateTimestamp(source);
+        _articleRepository.create(articles);
     }
 }

@@ -1,8 +1,5 @@
 package ua.in.zeusapps.ukrainenews.domain;
 
-import java.util.Date;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.Single;
@@ -10,7 +7,6 @@ import ua.in.zeusapps.ukrainenews.common.SingleInteractor;
 import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
 import ua.in.zeusapps.ukrainenews.data.IDataService;
 import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
-import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.ArticleRequestBundle;
 import ua.in.zeusapps.ukrainenews.models.ArticleResponse;
 import ua.in.zeusapps.ukrainenews.models.Source;
@@ -50,34 +46,27 @@ public class GetArticlesInteractor extends SingleInteractor<ArticleResponse, Art
     }
 
     private Single<ArticleResponse> getNewerArticles(
-            Source source, String key, String published){
+            Source source, String key, String published) {
         return _dataService
-            .getArticles(key, PAGE_COUNT, published, false)
-            .map(articles -> {
-                _sourceRepository.updateTimestamp(source);
-                boolean refresh = false;
-
-                if (articles.size() == PAGE_COUNT){
-                    _articleRepository.removeBySource(source);
-                    refresh = true;
-                }
-
-                save(articles);
-                return new ArticleResponse(articles, refresh);
-            });
-    }
-
-    private Single<ArticleResponse> getOlderArticles(String key, String published){
-        return _dataService.getArticles(key, PAGE_COUNT, published, true)
+                .getArticles(key, PAGE_COUNT, published, false)
                 .map(articles -> {
-                    save(articles);
-                    return new ArticleResponse(articles, false);
+                    _sourceRepository.updateTimestamp(source);
+                    boolean refresh = false;
+                    if (articles.size() == PAGE_COUNT) {
+                        _articleRepository.removeBySource(source);
+                        refresh = true;
+                    }
+                    _articleRepository.create(articles);
+                    return new ArticleResponse(articles, refresh);
                 });
     }
 
-    private void save(List<Article> articles) {
-        for (Article article : articles) {
-            _articleRepository.create(article);
-        }
+    private Single<ArticleResponse> getOlderArticles(String key, String published) {
+        return _dataService
+                .getArticles(key, PAGE_COUNT, published, true)
+                .map(articles -> {
+                    _articleRepository.create(articles);
+                    return new ArticleResponse(articles, false);
+                });
     }
 }
