@@ -17,11 +17,11 @@ import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
 
-class ArticleAdapter extends RecyclerViewAdapter<Article>{
+public class ArticleAdapter extends RecyclerViewAdapter<Article>{
     private final Formatter _formatter;
     private final Source _source;
     private final int _itemTemplateId;
-    ArticleAdapter(
+    public ArticleAdapter(
             Context context,
             Formatter formatter,
             Source source,
