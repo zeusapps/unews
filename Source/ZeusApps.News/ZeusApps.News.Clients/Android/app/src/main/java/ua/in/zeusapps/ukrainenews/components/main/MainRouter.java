@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.MvpRouter;
 import ua.in.zeusapps.ukrainenews.components.details.DetailsActivity;
+import ua.in.zeusapps.ukrainenews.components.main.fragments.topStories.TopStoriesFragment;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.components.main.fragments.articles.ArticleFragment;
@@ -20,7 +21,7 @@ public class MainRouter extends MvpRouter {
     }
 
     public void showSources() {
-        addClearStack(new SourcesFragment(), R.id.activity_root_content);
+        addClearStack(new TopStoriesFragment(), R.id.activity_root_content);
     }
 
     public void showArticles(Source source) {
