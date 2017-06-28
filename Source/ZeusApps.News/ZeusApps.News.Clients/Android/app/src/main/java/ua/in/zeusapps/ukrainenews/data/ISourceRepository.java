@@ -14,4 +14,5 @@ public interface ISourceRepository {
     void delete(Source source);
     void update(Source source);
     void updateTimestamp(Source source);
+    boolean shouldUpdate(Source source);
 }

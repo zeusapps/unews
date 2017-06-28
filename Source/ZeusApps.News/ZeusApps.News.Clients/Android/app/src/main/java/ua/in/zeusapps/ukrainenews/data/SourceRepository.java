@@ -13,6 +13,8 @@ class SourceRepository
         extends RepositoryBase<Source, String>
         implements ISourceRepository {
 
+    private final static int TIME_SKEW = 900000; // 15 minutes
+
     SourceRepository(Context context) {
         super(context, Source.class);
     }
@@ -67,5 +69,13 @@ class SourceRepository
     public void updateTimestamp(Source source) {
         source.setTimestamp(new Date());
         update(source);
+    }
+
+    @Override
+    public boolean shouldUpdate(Source source) {
+        Date nowTimestamp = new Date();
+        Date timestamp = source.getTimestamp();
+
+        return timestamp == null || timestamp.getTime() + TIME_SKEW < nowTimestamp.getTime();
     }
 }

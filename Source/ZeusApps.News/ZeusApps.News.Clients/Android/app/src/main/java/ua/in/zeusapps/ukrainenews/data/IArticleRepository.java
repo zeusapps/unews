@@ -12,6 +12,7 @@ public interface IArticleRepository {
     Single<Article> getNewest(Source source);
     Single<List<String>> getIds(Source source);
     void create(Article article);
+    void create(List<Article> articles);
     void removeBySource(Source source);
     void removeAll();
 }
