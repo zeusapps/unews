@@ -8,6 +8,7 @@ import ua.in.zeusapps.ukrainenews.models.Source;
 
 public interface IArticleRepository {
     Single<List<Article>> getBySource(Source source);
+    Single<List<Article>> getTopArticles();
     Single<Article> getById(String id);
     Single<Article> getNewest(Source source);
     Single<List<String>> getIds(Source source);

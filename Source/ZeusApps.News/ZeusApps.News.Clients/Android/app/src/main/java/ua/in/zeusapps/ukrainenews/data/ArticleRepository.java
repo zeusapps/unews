@@ -24,21 +24,21 @@ class ArticleRepository
     @Override
     public Single<List<Article>> getBySource(Source source) {
         return Single.fromCallable(() -> {
-            List<Article> articles;
+            QueryBuilder<Article, String> builder = getDao().queryBuilder();
+            builder.where().eq(Article.SOURCE_ID_FIELD_NAME, source.getKey());
+            return builder
+                    .orderBy(Article.PUBLISHED_FIELD_NAME, false)
+                    .query();
+        });
+    }
 
-            try {
-                QueryBuilder<Article, String> builder = getDao().queryBuilder();
-                builder.where().eq(Article.SOURCE_ID_FIELD_NAME, source.getKey());
-
-                articles = builder
-                        .orderBy(Article.PUBLISHED_FIELD_NAME, false)
-                        .query();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                articles = new ArrayList<>();
-            }
-
-            return articles;
+    @Override
+    public Single<List<Article>> getTopArticles() {
+        return Single.fromCallable(() -> {
+            QueryBuilder<Article, String> builder = getDao().queryBuilder();
+            return builder.orderBy(Article.PUBLISHED_FIELD_NAME, false)
+                    .limit(20L)
+                    .query();
         });
     }
 
@@ -60,26 +60,26 @@ class ArticleRepository
     @Override
     public Single<List<String>> getIds(Source source) {
         return getBySource(source)
-            .map(articles -> {
-                List<String> ids = new ArrayList<>();
+                .map(articles -> {
+                    List<String> ids = new ArrayList<>();
 
-                for (Article article: articles) {
-                    ids.add(article.getId());
-                }
+                    for (Article article : articles) {
+                        ids.add(article.getId());
+                    }
 
-                return ids;
-            });
+                    return ids;
+                });
     }
 
     @Override
-    public void create(Article article){
+    public void create(Article article) {
         try {
             Article localArticle = getDao().queryBuilder()
                     .where()
                     .eq(Article.ID_FIELD_NAME, article.getId())
                     .queryForFirst();
 
-            if (localArticle == null){
+            if (localArticle == null) {
                 getDao().create(article);
             }
         } catch (SQLException e) {
@@ -89,7 +89,7 @@ class ArticleRepository
 
     @Override
     public void create(List<Article> articles) {
-        for (Article article: articles) {
+        for (Article article : articles) {
             create(article);
         }
     }
