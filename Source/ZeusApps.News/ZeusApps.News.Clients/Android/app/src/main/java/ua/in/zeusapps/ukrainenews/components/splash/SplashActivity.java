@@ -10,6 +10,7 @@ import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
+import ua.in.zeusapps.ukrainenews.models.Source;
 
 @Layout(R.layout.activity_splash)
 public class SplashActivity
@@ -30,6 +31,12 @@ public class SplashActivity
     @Override
     public void showLoading() {
         statusTextView.setText(getString(R.string.splash_activity_loadingStatus));
+    }
+
+    @Override
+    public void showLoadingSource(Source source) {
+        String text = getString(R.string.activity_splash_source_update);
+        statusTextView.setText(String.format(text, source.getTitle()));
     }
 
     @Override
