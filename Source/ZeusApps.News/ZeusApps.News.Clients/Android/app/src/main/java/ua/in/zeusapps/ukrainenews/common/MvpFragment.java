@@ -34,10 +34,19 @@ public abstract class MvpFragment
         getPresenter()
                 .getRouter()
                 .registerActivity((MvpActivity) getActivity());
+        onCreateViewOverride(inflater, container, savedInstanceState, view);
         return view;
     }
 
     protected void inject(ApplicationComponent component){
+
+    }
+
+    protected void onCreateViewOverride(
+            LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState,
+            View createdView){
 
     }
 
