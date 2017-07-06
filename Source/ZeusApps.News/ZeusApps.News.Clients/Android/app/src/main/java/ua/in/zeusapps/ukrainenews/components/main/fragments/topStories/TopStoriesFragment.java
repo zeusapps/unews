@@ -12,11 +12,12 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
+import ua.in.zeusapps.ukrainenews.common.App;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.components.main.base.BaseMainFragment;
-import ua.in.zeusapps.ukrainenews.components.main.fragments.articles.ArticleAdapter;
+import ua.in.zeusapps.ukrainenews.components.articles.ArticleAdapter;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
@@ -38,7 +39,7 @@ public class TopStoriesFragment extends BaseMainFragment implements TopStoriesVi
 
     @Override
     public String getTitle() {
-        return getString(R.string.fragment_top_stories_title);
+        return App.getInstance().getString(R.string.fragment_top_stories_title);
     }
 
     @Override

@@ -13,6 +13,7 @@ import java.util.List;
 import butterknife.BindView;
 import io.reactivex.disposables.Disposable;
 import ua.in.zeusapps.ukrainenews.R;
+import ua.in.zeusapps.ukrainenews.common.App;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.models.Source;
@@ -48,7 +49,7 @@ public class SourcesFragment
 
     @Override
     public String getTitle() {
-        return getString(R.string.fragment_sources_title);
+        return App.getInstance().getString(R.string.fragment_sources_title);
     }
 
     @Override
