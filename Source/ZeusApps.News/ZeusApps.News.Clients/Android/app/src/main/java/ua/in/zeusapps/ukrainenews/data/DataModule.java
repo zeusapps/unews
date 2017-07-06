@@ -9,7 +9,7 @@ import dagger.Provides;
 import ua.in.zeusapps.ukrainenews.adapter.RecyclerViewAdapter;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.components.main.fragments.articles.AdsProvider;
+import ua.in.zeusapps.ukrainenews.components.articles.AdsProvider;
 
 @Module
 public class DataModule {
