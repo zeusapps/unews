@@ -29,6 +29,7 @@
         </activity>
         <activity android:name=".components.main.MainActivity" />
         <activity android:name=".components.details.DetailsActivity"/>
+        <activity android:name=".components.articles.ArticlesActivity"/>
 
         <provider
             android:authorities="com.facebook.app.FacebookContentProvider1383427461748579"
