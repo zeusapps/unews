@@ -36,7 +36,7 @@ public class SettingsPresenter
     void clearStorage() {
         repository.removeAll();
         getViewState().articlesCleared();
-        getRouter().showSources();
+        //getRouter().showSources();
     }
 
     void setArticleItemTemplateType(int articleItemTemplateType){
