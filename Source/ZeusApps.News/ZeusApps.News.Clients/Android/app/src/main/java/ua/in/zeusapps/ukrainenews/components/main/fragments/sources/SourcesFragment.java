@@ -16,6 +16,7 @@ import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.App;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
+import ua.in.zeusapps.ukrainenews.helpers.NotificationHelper;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.components.main.base.BaseMainFragment;
 
@@ -44,7 +45,9 @@ public class SourcesFragment
 
     @Override
     public void showError() {
-        //TODO implement show error
+        NotificationHelper.showSnackbarErrorMessage(
+                textView,
+                getString(R.string.fragment_sources_load_failed));
     }
 
     @Override
