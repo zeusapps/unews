@@ -1,11 +1,13 @@
 package ua.in.zeusapps.ukrainenews.components.articles;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
@@ -38,6 +40,7 @@ public class ArticlesActivity extends MvpActivity implements ArticlesView {
     private Disposable _disposable;
     private RecyclerViewAdapter<Article> _adapter;
     private int _scrollPosition = -1;
+    private RecyclerView.OnScrollListener _scrollListener;
 
     @InjectPresenter
     ArticlesPresenter _presenter;
@@ -63,13 +66,20 @@ public class ArticlesActivity extends MvpActivity implements ArticlesView {
     protected void onCreateOverride(@Nullable Bundle savedInstanceState) {
         String sourceId = getIntent().getStringExtra(SOURCE_ID_EXTRA);
 
-        if (!_presenter.isInRestoreState(this)){
+        if (!_presenter.isInRestoreState(this)) {
             _presenter.init(sourceId);
         }
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             _scrollPosition = savedInstanceState.getInt(SCROLL_POSITION);
         }
+
+        _scrollListener = new EndlessRecyclerViewScrollListener(_layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                getPresenter().loadOlder(_source, _adapter.getLast());
+            }
+        };
     }
 
     @Override
@@ -86,18 +96,11 @@ public class ArticlesActivity extends MvpActivity implements ArticlesView {
         _toolbar.setNavigationOnClickListener(v -> finish());
         _swipeRefreshLayout.setOnRefreshListener(() -> {
             Article article = _adapter.getFirst();
-            if (article != null){
+            if (article != null) {
                 getPresenter().loadNewer(_source, article);
             }
         });
-
-        // TODO implement View.OnScrollChangeListener
-        _recyclerView.setOnScrollListener(new EndlessRecyclerViewScrollListener(_layoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                getPresenter().loadOlder(_source, _adapter.getLast());
-            }
-        });
+        _recyclerView.addOnScrollListener(_scrollListener);
     }
 
     @Override
@@ -106,14 +109,14 @@ public class ArticlesActivity extends MvpActivity implements ArticlesView {
 
         _toolbar.setNavigationOnClickListener(null);
         _swipeRefreshLayout.setOnRefreshListener(null);
-        _recyclerView.setOnScrollListener(null);
+        _recyclerView.removeOnScrollListener(_scrollListener);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        if (_disposable != null && !_disposable.isDisposed()){
+        if (_disposable != null && !_disposable.isDisposed()) {
             _disposable.dispose();
         }
     }
@@ -138,7 +141,7 @@ public class ArticlesActivity extends MvpActivity implements ArticlesView {
 
     @Override
     public void addNewer(List<Article> articles, boolean refresh) {
-        if (refresh){
+        if (refresh) {
             _adapter.clear();
         }
 
@@ -169,7 +172,7 @@ public class ArticlesActivity extends MvpActivity implements ArticlesView {
                 getString(R.string.fragment_article_empty_update));
     }
 
-    private void initAdapter(List<Article> articles){
+    private void initAdapter(List<Article> articles) {
         int resource = _settingsService.getArticleTemplateType() == SettingsService.ARTICLE_TEMPLATE_BIG
                 ? R.layout.fragment_article_item_template
                 : R.layout.fragment_article_item_template_small;
@@ -180,7 +183,7 @@ public class ArticlesActivity extends MvpActivity implements ArticlesView {
         _disposable = _adapter.getItemClicked().subscribe(article -> getPresenter().showArticle(article, _source));
     }
 
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         _recyclerView.setLayoutManager(_layoutManager);
         _recyclerView.setAdapter(_adapter);
         if (_scrollPosition != -1) {
@@ -188,7 +191,7 @@ public class ArticlesActivity extends MvpActivity implements ArticlesView {
         }
     }
 
-    private void initToolbar(){
+    private void initToolbar() {
         _toolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
     }
 }
