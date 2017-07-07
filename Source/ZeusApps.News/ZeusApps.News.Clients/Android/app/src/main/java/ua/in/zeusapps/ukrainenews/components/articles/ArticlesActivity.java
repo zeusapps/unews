@@ -48,11 +48,11 @@ public class ArticlesActivity extends MvpActivity implements ArticlesView {
     @BindView(R.id.toolbar)
     Toolbar _toolbar;
     @Inject
-    Formatter formatter;
+    Formatter _formatter;
     @Inject
-    RecyclerViewAdapter.AdsProvider adsProvider;
+    RecyclerViewAdapter.AdsProvider _adsProvider;
     @Inject
-    SettingsService settingsService;
+    SettingsService _settingsService;
 
     @Override
     protected ArticlesPresenter getPresenter() {
@@ -170,16 +170,13 @@ public class ArticlesActivity extends MvpActivity implements ArticlesView {
     }
 
     private void initAdapter(List<Article> articles){
-        int resource = settingsService.getArticleTemplateType() == SettingsService.ARTICLE_TEMPLATE_BIG
+        int resource = _settingsService.getArticleTemplateType() == SettingsService.ARTICLE_TEMPLATE_BIG
                 ? R.layout.fragment_article_item_template
                 : R.layout.fragment_article_item_template_small;
 
-
-
-
-        _adapter = new ArticleAdapter(this, formatter, article -> _source.getTitle(), resource);
+        _adapter = new ArticleAdapter(this, _formatter, article -> _source.getTitle(), resource);
         _adapter.addAll(articles);
-        _adapter.setAdsProvider(adsProvider);
+        _adapter.setAdsProvider(_adsProvider);
         _disposable = _adapter.getItemClicked().subscribe(article -> getPresenter().showArticle(article, _source));
     }
 

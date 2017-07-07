@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import io.reactivex.disposables.Disposable;
 import ua.in.zeusapps.ukrainenews.R;
+import ua.in.zeusapps.ukrainenews.adapter.RecyclerViewAdapter;
 import ua.in.zeusapps.ukrainenews.common.App;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
@@ -30,6 +31,8 @@ public class TopStoriesFragment extends BaseMainFragment implements TopStoriesVi
     TopStoriesPresenter _presenter;
     @Inject
     Formatter _formatter;
+    @Inject
+    RecyclerViewAdapter.AdsProvider _adsProvider;
     @BindView(R.id.fragment_top_articles_recyclerView)
     RecyclerView _recyclerView;
 
@@ -66,6 +69,7 @@ public class TopStoriesFragment extends BaseMainFragment implements TopStoriesVi
                 new ArticleAdapter.MultiSourceTitleSelector(sources),
                 R.layout.fragment_article_item_template_small);
         adapter.addAll(articles);
+        adapter.setAdsProvider(_adsProvider);
         _disposable = adapter
                 .getItemClicked()
                 .subscribe(article -> getPresenter().showArticle(article));
