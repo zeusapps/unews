@@ -2,6 +2,8 @@ package ua.in.zeusapps.ukrainenews.data;
 
 import android.content.Context;
 
+import com.j256.ormlite.stmt.QueryBuilder;
+
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +29,15 @@ class SourceRepository
     @Override
     public Single<Source> getById(String id) {
         return Single.fromCallable(() -> getDao().queryForId(id));
+    }
+
+    @Override
+    public Single<Source> getByKey(String key) {
+        return Single.fromCallable(() -> {
+            QueryBuilder<Source, String> builder = getDao().queryBuilder();
+            builder.where().eq(Source.KEY_FIELD_NAME, key);
+            return builder.queryForFirst();
+        });
     }
 
     @Override

@@ -23,9 +23,13 @@ class ArticleRepository
 
     @Override
     public Single<List<Article>> getBySource(Source source) {
+        return getBySource(source.getKey());
+    }
+
+    private Single<List<Article>> getBySource(String sourceId){
         return Single.fromCallable(() -> {
             QueryBuilder<Article, String> builder = getDao().queryBuilder();
-            builder.where().eq(Article.SOURCE_ID_FIELD_NAME, source.getKey());
+            builder.where().eq(Article.SOURCE_ID_FIELD_NAME, sourceId);
             return builder
                     .orderBy(Article.PUBLISHED_FIELD_NAME, false)
                     .query();
@@ -58,8 +62,8 @@ class ArticleRepository
     }
 
     @Override
-    public Single<List<String>> getIds(Source source) {
-        return getBySource(source)
+    public Single<List<String>> getIds(String sourceKey) {
+        return getBySource(sourceKey)
                 .map(articles -> {
                     List<String> ids = new ArrayList<>();
 

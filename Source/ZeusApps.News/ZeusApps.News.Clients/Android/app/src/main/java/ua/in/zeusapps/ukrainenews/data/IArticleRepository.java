@@ -11,7 +11,7 @@ public interface IArticleRepository {
     Single<List<Article>> getTopArticles();
     Single<Article> getById(String id);
     Single<Article> getNewest(Source source);
-    Single<List<String>> getIds(Source source);
+    Single<List<String>> getIds(String sourceKey);
     void create(Article article);
     void create(List<Article> articles);
     void removeBySource(Source source);

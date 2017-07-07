@@ -9,6 +9,7 @@ import ua.in.zeusapps.ukrainenews.models.Source;
 public interface ISourceRepository {
     Single<List<Source>> getAll();
     Single<Source> getById(String id);
+    Single<Source> getByKey(String key);
     Single<List<Source>> checkSources(List<Source> remoteSources);
     void create(Source source);
     void delete(Source source);
