@@ -46,7 +46,6 @@ import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpFragment;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
-import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
 import ua.in.zeusapps.ukrainenews.domain.GetArticleInteractor;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
