@@ -13,7 +13,6 @@ import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpActivity;
-import ua.in.zeusapps.ukrainenews.models.Source;
 
 @Layout(R.layout.activity_details)
 public class DetailsActivity
@@ -23,7 +22,8 @@ public class DetailsActivity
     public static final String TAG = DetailsActivity.class.getSimpleName();
 
     public static final String ARTICLE_ID_EXTRA = "article_id_extra";
-    public static final String SOURCE_EXTRA = "source_extra";
+
+    public static final String SOURCE_ID_EXTRA = "source_id_extra";
 
     private DetailsAdapter _adapter;
 
@@ -40,9 +40,9 @@ public class DetailsActivity
         viewPager.addOnPageChangeListener(this);
 
         String articleId = getIntent().getStringExtra(ARTICLE_ID_EXTRA);
-        Source source = getIntent().getParcelableExtra(SOURCE_EXTRA);
+        String sourceId = getIntent().getStringExtra(SOURCE_ID_EXTRA);
 
-        getPresenter().init(source, articleId);
+        getPresenter().init(articleId, sourceId);
     }
 
     @Override
@@ -51,10 +51,10 @@ public class DetailsActivity
     }
 
     @Override
-    public void load(List<String> articleIds, Source source) {
+    public void load(List<String> articleIds) {
         Log.d(TAG, "Article IDs loaded");
 
-        _adapter = new DetailsAdapter(getSupportFragmentManager(), articleIds, source);
+        _adapter = new DetailsAdapter(getSupportFragmentManager(), articleIds);
         viewPager.setAdapter(_adapter);
     }
 

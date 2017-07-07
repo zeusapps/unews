@@ -47,6 +47,7 @@ import ua.in.zeusapps.ukrainenews.common.Layout;
 import ua.in.zeusapps.ukrainenews.common.MvpFragment;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
 import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
+import ua.in.zeusapps.ukrainenews.domain.GetArticleInteractor;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
@@ -58,7 +59,6 @@ public class ArticleDetailsFragment
 
     private static final String TAG = ArticleDetailsFragment.class.getSimpleName();
     private static final String ARTICLE_ID_EXTRA = "article_id";
-    private static final String SOURCE_EXTRA = "source";
     private static final String MIME_TYPE = "text/html";
     private static final String HASH_TAG = "#UkraineNews";
 
@@ -71,7 +71,8 @@ public class ArticleDetailsFragment
     @Inject
     Formatter formatter;
     @Inject
-    IArticleRepository articleRepository;
+    GetArticleInteractor _articleInteractor;
+
     @BindView(R.id.fragment_article_view_image)
     ImageView articleImage;
     @BindView(R.id.fragment_article_view_title)
@@ -98,11 +99,10 @@ public class ArticleDetailsFragment
         return presenter;
     }
 
-    public static ArticleDetailsFragment newInstance(String articleId, Source source) {
+    public static ArticleDetailsFragment newInstance(String articleId) {
         ArticleDetailsFragment fragment = new ArticleDetailsFragment();
         Bundle args = new Bundle();
         args.putString(ARTICLE_ID_EXTRA, articleId);
-        args.putParcelable(SOURCE_EXTRA, source);
         fragment.setArguments(args);
         return fragment;
     }
@@ -118,15 +118,15 @@ public class ArticleDetailsFragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        _source = getArguments().getParcelable(SOURCE_EXTRA);
         String articleId = getArguments().getString(ARTICLE_ID_EXTRA);
-        articleRepository
-            .getById(articleId)
-            .subscribe(article -> {
-                _article = article;
-                showArticle();
-            });
-        setToolbar();
+        _articleInteractor.execute(bundle -> {
+            _article = bundle.getArticle();
+            _source = bundle.getSource();
+
+            setToolbar();
+            showArticle();
+        }, articleId);
+
         return view;
     }
 

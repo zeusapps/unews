@@ -31,12 +31,10 @@ import ua.in.zeusapps.ukrainenews.services.SettingsService;
 public class ArticlesActivity extends MvpActivity implements ArticlesView {
 
     public static final String SOURCE_ID_EXTRA = "source_id";
-    public static final String SOURCE_TITLE_EXTRA = "source_title";
     private static final String SCROLL_POSITION = "scroll_position";
 
     private LinearLayoutManager _layoutManager = new LinearLayoutManager(this);
     private Source _source;
-    private String _sourceTitle;
     private Disposable _disposable;
     private RecyclerViewAdapter<Article> _adapter;
     private int _scrollPosition = -1;
@@ -64,7 +62,6 @@ public class ArticlesActivity extends MvpActivity implements ArticlesView {
     @Override
     protected void onCreateOverride(@Nullable Bundle savedInstanceState) {
         String sourceId = getIntent().getStringExtra(SOURCE_ID_EXTRA);
-        _sourceTitle = getIntent().getStringExtra(SOURCE_TITLE_EXTRA);
 
         if (!_presenter.isInRestoreState(this)){
             _presenter.init(sourceId);
@@ -176,7 +173,11 @@ public class ArticlesActivity extends MvpActivity implements ArticlesView {
         int resource = settingsService.getArticleTemplateType() == SettingsService.ARTICLE_TEMPLATE_BIG
                 ? R.layout.fragment_article_item_template
                 : R.layout.fragment_article_item_template_small;
-        _adapter = new ArticleAdapter(this, formatter, _source, resource);
+
+
+
+
+        _adapter = new ArticleAdapter(this, formatter, article -> _source.getTitle(), resource);
         _adapter.addAll(articles);
         _adapter.setAdsProvider(adsProvider);
         _disposable = _adapter.getItemClicked().subscribe(article -> getPresenter().showArticle(article, _source));

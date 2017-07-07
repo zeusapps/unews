@@ -11,13 +11,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import io.reactivex.disposables.Disposable;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.App;
 import ua.in.zeusapps.ukrainenews.common.Layout;
-import ua.in.zeusapps.ukrainenews.common.MvpPresenter;
 import ua.in.zeusapps.ukrainenews.components.ApplicationComponent;
-import ua.in.zeusapps.ukrainenews.components.main.base.BaseMainFragment;
 import ua.in.zeusapps.ukrainenews.components.articles.ArticleAdapter;
+import ua.in.zeusapps.ukrainenews.components.main.base.BaseMainFragment;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.services.Formatter;
@@ -25,6 +25,7 @@ import ua.in.zeusapps.ukrainenews.services.Formatter;
 @Layout(R.layout.fragment_top_stories)
 public class TopStoriesFragment extends BaseMainFragment implements TopStoriesView {
 
+    private Disposable _disposable;
     @InjectPresenter
     TopStoriesPresenter _presenter;
     @Inject
@@ -53,23 +54,31 @@ public class TopStoriesFragment extends BaseMainFragment implements TopStoriesVi
     }
 
     @Override
-    public MvpPresenter getPresenter() {
+    public TopStoriesPresenter getPresenter() {
         return _presenter;
     }
 
     @Override
-    public void showArticles(List<Article> articles) {
-        Source source = new Source();
-        source.setTitle(getString(R.string.fragment_top_stories_title));
-
+    public void showArticles(List<Article> articles, List<Source> sources) {
         ArticleAdapter adapter = new ArticleAdapter(
                 getActivity(),
                 _formatter,
-                source,
+                new ArticleAdapter.MultiSourceTitleSelector(sources),
                 R.layout.fragment_article_item_template_small);
         adapter.addAll(articles);
-
+        _disposable = adapter
+                .getItemClicked()
+                .subscribe(article -> getPresenter().showArticle(article));
         _recyclerView.setAdapter(adapter);
         _recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (_disposable != null && !_disposable.isDisposed()) {
+            _disposable.dispose();
+        }
     }
 }

@@ -17,7 +17,7 @@ public class ArticlesRouter extends MvpRouter {
     public void showArticleDetails(Article article, Source source){
         Intent articleDetailsIntent = new Intent(getActivity(), DetailsActivity.class);
         articleDetailsIntent.putExtra(DetailsActivity.ARTICLE_ID_EXTRA, article.getId());
-        articleDetailsIntent.putExtra(DetailsActivity.SOURCE_EXTRA, source);
+        articleDetailsIntent.putExtra(DetailsActivity.SOURCE_ID_EXTRA, source.getId());
 
         startIntent(articleDetailsIntent);
     }

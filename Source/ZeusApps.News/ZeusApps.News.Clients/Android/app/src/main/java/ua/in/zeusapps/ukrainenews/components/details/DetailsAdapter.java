@@ -7,21 +7,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.List;
 
 import ua.in.zeusapps.ukrainenews.components.details.fragments.ArticleDetailsFragment;
-import ua.in.zeusapps.ukrainenews.models.Source;
 
 class DetailsAdapter extends FragmentPagerAdapter {
 
     private final List<String> _articleIds;
-    private final Source _source;
 
-    public DetailsAdapter(
+    DetailsAdapter(
             FragmentManager manager,
-            List<String> articleIds,
-            Source source) {
+            List<String> articleIds) {
         super(manager);
 
         _articleIds = articleIds;
-        _source = source;
     }
 
     int find(String id){
@@ -40,7 +36,7 @@ class DetailsAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return ArticleDetailsFragment.newInstance(_articleIds.get(position), _source);
+        return ArticleDetailsFragment.newInstance(_articleIds.get(position));
     }
 
     @Override

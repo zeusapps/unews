@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import butterknife.BindView;
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.adapter.BaseViewHolder;
@@ -19,17 +21,17 @@ import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 public class ArticleAdapter extends RecyclerViewAdapter<Article>{
     private final Formatter _formatter;
-    private final Source _source;
+    private final SourceTitleSelector _titleSelector;
     private final int _itemTemplateId;
     public ArticleAdapter(
             Context context,
             Formatter formatter,
-            Source source,
+            SourceTitleSelector titleSelector,
             @LayoutRes int itemTemplateId) {
         super(context);
         _formatter = formatter;
         _itemTemplateId = itemTemplateId;
-        _source = source;
+        _titleSelector = titleSelector;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class ArticleAdapter extends RecyclerViewAdapter<Article>{
 
             publishedTextView.setText(_formatter.formatDate(article.getPublished()));
             titleTextView.setText(article.getTitle());
-            sourceTextView.setText(_source.getTitle());
+            sourceTextView.setText(_titleSelector.getTitle(article));
 
             String url = article.getImageUrl();
 
@@ -82,6 +84,44 @@ public class ArticleAdapter extends RecyclerViewAdapter<Article>{
                         .error(R.drawable.un)
                         .into(articleImageView);
             }
+        }
+    }
+
+    interface SourceTitleSelector {
+        String getTitle(Article article);
+    }
+
+    public class SingleSourceTitleSelector implements SourceTitleSelector{
+
+        private final Source _source;
+
+        public SingleSourceTitleSelector(Source source) {
+            _source = source;
+        }
+
+        @Override
+        public String getTitle(Article article) {
+            return _source.getTitle();
+        }
+    }
+
+    public static class MultiSourceTitleSelector implements SourceTitleSelector {
+
+        private final List<Source> _sources;
+
+        public MultiSourceTitleSelector(List<Source> sources) {
+            _sources = sources;
+        }
+
+        @Override
+        public String getTitle(Article article) {
+            for (Source source: _sources) {
+                if (article.getSourceId().equals(source.getKey())){
+                    return source.getTitle();
+                }
+            }
+
+            return "";
         }
     }
 }

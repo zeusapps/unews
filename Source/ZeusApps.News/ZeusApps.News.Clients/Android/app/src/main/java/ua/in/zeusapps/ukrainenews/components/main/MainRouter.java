@@ -6,13 +6,12 @@ import javax.inject.Inject;
 
 import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.MvpRouter;
+import ua.in.zeusapps.ukrainenews.components.articles.ArticlesActivity;
 import ua.in.zeusapps.ukrainenews.components.details.DetailsActivity;
-import ua.in.zeusapps.ukrainenews.components.main.fragments.topStories.TopStoriesFragment;
+import ua.in.zeusapps.ukrainenews.components.main.fragments.pager.PagerFragment;
+import ua.in.zeusapps.ukrainenews.components.main.fragments.settings.SettingsFragment;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.components.main.fragments.articles.ArticleFragment;
-import ua.in.zeusapps.ukrainenews.components.main.fragments.settings.SettingsFragment;
-import ua.in.zeusapps.ukrainenews.components.main.fragments.sources.SourcesFragment;
 
 public class MainRouter extends MvpRouter {
 
@@ -21,12 +20,17 @@ public class MainRouter extends MvpRouter {
     }
 
     public void showSources() {
-        addClearStack(new TopStoriesFragment(), R.id.activity_root_content);
+        addClearStack(new PagerFragment(), R.id.activity_root_content);
     }
 
     public void showArticles(Source source) {
-        addToStack(ArticleFragment.newInstance(source), R.id.activity_root_content);
+        Intent intent = new Intent(getActivity(), ArticlesActivity.class);
+        intent.putExtra(ArticlesActivity.SOURCE_ID_EXTRA, source.getId());
+
+        startIntent(intent);
     }
+
+
 
     public void showSettings() {
         addToStack(new SettingsFragment(), R.id.activity_root_content);
@@ -35,7 +39,14 @@ public class MainRouter extends MvpRouter {
     public void showArticleDetails(Article article, Source source){
         Intent articleDetailsIntent = new Intent(getActivity(), DetailsActivity.class);
         articleDetailsIntent.putExtra(DetailsActivity.ARTICLE_ID_EXTRA, article.getId());
-        articleDetailsIntent.putExtra(DetailsActivity.SOURCE_EXTRA, source);
+        articleDetailsIntent.putExtra(DetailsActivity.SOURCE_ID_EXTRA, source.getId());
+
+        startIntent(articleDetailsIntent);
+    }
+
+    public void showArticleDetails(Article article){
+        Intent articleDetailsIntent = new Intent(getActivity(), DetailsActivity.class);
+        articleDetailsIntent.putExtra(DetailsActivity.ARTICLE_ID_EXTRA, article.getId());
 
         startIntent(articleDetailsIntent);
     }
