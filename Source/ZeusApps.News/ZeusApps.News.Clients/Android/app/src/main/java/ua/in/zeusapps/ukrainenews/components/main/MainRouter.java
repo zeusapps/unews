@@ -4,12 +4,9 @@ import android.content.Intent;
 
 import javax.inject.Inject;
 
-import ua.in.zeusapps.ukrainenews.R;
 import ua.in.zeusapps.ukrainenews.common.MvpRouter;
 import ua.in.zeusapps.ukrainenews.components.articles.ArticlesActivity;
 import ua.in.zeusapps.ukrainenews.components.details.DetailsActivity;
-import ua.in.zeusapps.ukrainenews.components.main.fragments.pager.PagerFragment;
-import ua.in.zeusapps.ukrainenews.components.main.fragments.settings.SettingsFragment;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
@@ -17,10 +14,6 @@ public class MainRouter extends MvpRouter {
 
     @Inject
     public MainRouter() {
-    }
-
-    public void showSources() {
-        addClearStack(new PagerFragment(), R.id.activity_root_content);
     }
 
     public void showArticles(Source source) {
@@ -33,7 +26,7 @@ public class MainRouter extends MvpRouter {
 
 
     public void showSettings() {
-        addToStack(new SettingsFragment(), R.id.activity_root_content);
+        //addToStack(new SettingsFragment(), R.id.activity_root_content);
     }
 
     public void showArticleDetails(Article article, Source source){

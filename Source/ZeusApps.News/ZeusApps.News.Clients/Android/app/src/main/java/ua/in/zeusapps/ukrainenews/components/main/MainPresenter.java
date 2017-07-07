@@ -18,11 +18,19 @@ public class MainPresenter extends MvpPresenter<MainView, MainRouter> {
 
     @Override
     protected void onFirstViewAttach() {
-        getRouter().showSources();
+        //getRouter().showSources();
     }
 
     void showSettings(){
         getRouter().showSettings();
+    }
+
+    void init(){
+        getViewState().init();
+    }
+
+    void pageChanged(int position){
+        getViewState().changePage(position);
     }
 
     @Override

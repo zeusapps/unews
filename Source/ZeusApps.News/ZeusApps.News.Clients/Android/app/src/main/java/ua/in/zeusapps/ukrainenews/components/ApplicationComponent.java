@@ -8,7 +8,6 @@ import ua.in.zeusapps.ukrainenews.components.articles.ArticlesPresenter;
 import ua.in.zeusapps.ukrainenews.components.details.DetailsPresenter;
 import ua.in.zeusapps.ukrainenews.components.details.fragments.ArticleDetailsFragment;
 import ua.in.zeusapps.ukrainenews.components.details.fragments.ArticleDetailsPresenter;
-import ua.in.zeusapps.ukrainenews.components.main.fragments.pager.PagerPresenter;
 import ua.in.zeusapps.ukrainenews.components.main.fragments.topStories.TopStoriesFragment;
 import ua.in.zeusapps.ukrainenews.components.main.fragments.topStories.TopStoriesPresenter;
 import ua.in.zeusapps.ukrainenews.data.DataModule;
@@ -34,7 +33,6 @@ public interface ApplicationComponent {
     void inject(ArticleDetailsFragment fragment);
     void inject(TopStoriesFragment fragment);
     void inject(TopStoriesPresenter presenter);
-    void inject(PagerPresenter presenter);
     void inject(ArticlesPresenter presenter);
     void inject(ArticlesActivity activity);
 }
