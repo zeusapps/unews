@@ -9,7 +9,7 @@ import ua.in.zeusapps.ukrainenews.common.SingleInteractor;
 import ua.in.zeusapps.ukrainenews.data.IArticleRepository;
 import ua.in.zeusapps.ukrainenews.models.Source;
 
-public class GetLocalArticleIdsInteractor extends SingleInteractor<List<String>, Source> {
+public class GetLocalArticleIdsInteractor extends SingleInteractor<List<String>, String> {
 
     private final IArticleRepository _articleRepository;
 
@@ -19,7 +19,7 @@ public class GetLocalArticleIdsInteractor extends SingleInteractor<List<String>,
     }
 
     @Override
-    protected Single<List<String>> build(Source source) {
-        return _articleRepository.getIds(source);
+    protected Single<List<String>> build(String sourceId) {
+        return _articleRepository.getIds(sourceId);
     }
 }
