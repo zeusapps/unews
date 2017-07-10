@@ -12,13 +12,16 @@ namespace ZeusApps.News.Server.Services
 {
     public class MapperService : IMapperService
     {
+        private static readonly DateTime Diff = new DateTime(1970, 1, 1, 0, 0, 0);
+
         static MapperService()
         {
             Mapper
                 .Initialize(config =>
                 {
                     config.CreateMap<Source, SourceDto>();
-                    config.CreateMap<Article, ArticleDto>();
+                    config.CreateMap<Article, ArticleDto>()
+                        .AfterMap((article, dto) => dto.PublishedTimespan = (dto.Published - Diff).Milliseconds);
                     config.CreateMap<Article, ArticleVoteDto>();
                     config.CreateMap<Source, SourceDownloadableDto>();
                     config.CreateMap<ArticleDownloadableDto, Article>()
