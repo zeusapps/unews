@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ZeusApps.News.Core.DTOs;
@@ -69,10 +68,7 @@ namespace ZeusApps.News.Server.Controllers
             }
             
             var article = _mapperService.Map<Article>(dto);
-            article.IsClean = ValidateArtile(article);
-
             await _repository.AddArticle(article);
-
 
             var articleToShow = _mapperService.Map<ArticleDto>(article);
             return Created(
@@ -130,22 +126,6 @@ namespace ZeusApps.News.Server.Controllers
 
             _logger.LogInformation($"Article {articleId} not found");
             return BadRequest();
-        }
-
-        private static bool ValidateArtile(Article article)
-        {
-            if (string.IsNullOrEmpty(article.Html) || article.Html.Length < 75)
-            {
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(article.Title))
-            {
-                return false;
-            }
-
-            var constraints = new[] {"Інтерфакс", "Интерфакс"};
-            return !constraints.Any(x => article.Html.Contains(x));
         }
     }
 
