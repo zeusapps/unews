@@ -18,7 +18,7 @@ namespace ZeusApps.News.Server.DTOs
 
         public DateTime Published { get; set; }
 
-        public int PublishedTimespan { get; set; }
+        public long PublishedLong { get; set; }
 
         public int Upvote { get; set; }
 
