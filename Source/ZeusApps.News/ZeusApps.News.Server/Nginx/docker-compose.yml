@@ -8,17 +8,17 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - unews
+      - unews-server
       - mongo
     restart: always
   unews-parser:
     image: zeusapps/unews-parser
     depends_on:
-      - unews
+      - unews-server
       - mongo
       - nginx
     restart: always
-  unews:
+  unews-server:
     image: zeusapps/unews
     depends_on:
       - mongo
