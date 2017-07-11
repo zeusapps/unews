@@ -33,10 +33,7 @@ namespace ZeusApps.News.Parser
             AddServices(collection);
             _serviceProvider = collection.BuildServiceProvider();
 
-            Run(
-                ResolveService<ILoggerFactory>(),
-                ResolveService<Parsers.Parser>()
-                ).Wait();
+            Run().Wait();
         }
 
         public static void AddServices(IServiceCollection serviceCollection)
@@ -52,10 +49,11 @@ namespace ZeusApps.News.Parser
                 .ConfigureOptions<ExecuteOptions>(_configuration);
         }
 
-        public static Task Run(ILoggerFactory loggerFactory, Parsers.Parser parser)
+        public static async Task Run()
         {
-            loggerFactory.AddConsole(_configuration.GetSection("Logging"));
-            return parser.Parse();
+            ResolveService<ILoggerFactory>().AddConsole(_configuration.GetSection("Logging"));
+            await Task.Delay(TimeSpan.FromMinutes(1));
+            await ResolveService<Parsers.Parser>().Parse();
         }
 
         public static T ResolveService<T>()

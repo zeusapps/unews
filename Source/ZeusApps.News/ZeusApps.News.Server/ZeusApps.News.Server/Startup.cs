@@ -37,6 +37,7 @@ namespace ZeusApps.News.Server
                 .AddLogging()
                 .AddSingleton<IArticleRepository, ArticleRepository>()
                 .AddSingleton<ISourceRepository, SourceRepository>()
+                .AddSingleton<IValidationService, ValidationService>()
                 .AddSingleton<IMapperService, MapperService>()
                 .AddSingleton<IActionContextAccessor, ActionContextAccessor>()
                 .AddTransient<IUrlHelper, UrlHelper>(x => new UrlHelper(x.GetService<IActionContextAccessor>().ActionContext))

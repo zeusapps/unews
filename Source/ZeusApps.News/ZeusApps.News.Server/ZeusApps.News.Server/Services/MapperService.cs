@@ -12,18 +12,31 @@ namespace ZeusApps.News.Server.Services
 {
     public class MapperService : IMapperService
     {
+        private static readonly DateTime Diff = new DateTime(1970, 1, 1, 0, 0, 0);
+        private static IValidationService _validationService;
+
         static MapperService()
         {
             Mapper
                 .Initialize(config =>
                 {
                     config.CreateMap<Source, SourceDto>();
-                    config.CreateMap<Article, ArticleDto>();
+                    config.CreateMap<Article, ArticleDto>()
+                        .AfterMap((article, dto) => dto.PublishedLong = (long)(dto.Published - Diff).TotalMilliseconds);
                     config.CreateMap<Article, ArticleVoteDto>();
                     config.CreateMap<Source, SourceDownloadableDto>();
                     config.CreateMap<ArticleDownloadableDto, Article>()
-                        .AfterMap((dto, article) => article.Downloaded = DateTime.UtcNow);
+                        .AfterMap((dto, article) =>
+                        {
+                            article.Downloaded = DateTime.UtcNow;
+                            article.IsClean = _validationService?.Validate(article) ?? false;
+                        });
                 });
+        }
+
+        public MapperService(IValidationService validationService)
+        {
+            _validationService = validationService;
         }
 
         public T Map<T>(object source)
