@@ -17,7 +17,7 @@ abstract class RepositoryBase<TItem, TKey> {
 
     private static List<Class> _childClasses = new ArrayList<>();
 
-    private static int _databaseVersion = 2;
+    private static int _databaseVersion = 3;
 
     private static String _databaseName = "data.db";
 
@@ -26,15 +26,15 @@ abstract class RepositoryBase<TItem, TKey> {
         _dao = helper.getRuntimeExceptionDao(clazz);
     }
 
-    public static void setDatebaseVersion(int databaseVersion){
+    static void setDatabaseVersion(int databaseVersion){
         _databaseVersion = databaseVersion;
     }
 
-    public static void setDatabaseName(String name){
+    static void setDatabaseName(String name){
         _databaseName = name;
     }
 
-    public static void RegisterClass(Class clazz){
+    static void RegisterClass(Class clazz){
         _childClasses.add(clazz);
     }
 

@@ -1,7 +1,6 @@
 package ua.in.zeusapps.ukrainenews.domain;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -13,15 +12,12 @@ import ua.in.zeusapps.ukrainenews.data.IDataService;
 import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 public class GetInitialArticlesInteractor extends SingleInteractor<List<Article>, Source> {
 
     private final IDataService _dataService;
     private final IArticleRepository _articleRepository;
     private final ISourceRepository _sourceRepository;
-    private final Formatter _formatter;
-
 
     private static final int PAGE_SIZE = 20;
 
@@ -29,12 +25,10 @@ public class GetInitialArticlesInteractor extends SingleInteractor<List<Article>
     GetInitialArticlesInteractor(
             IDataService dataService,
             IArticleRepository articleRepository,
-            ISourceRepository sourceRepository,
-            Formatter formatter) {
+            ISourceRepository sourceRepository) {
         _dataService = dataService;
         _articleRepository = articleRepository;
         _sourceRepository = sourceRepository;
-        _formatter = formatter;
     }
 
     @Override
@@ -61,10 +55,10 @@ public class GetInitialArticlesInteractor extends SingleInteractor<List<Article>
     }
 
     private Single<List<Article>> getNewerArticles(Source source, List<Article> olderArticles){
-        String published = _formatter.formatDate(olderArticles.get(0).getPublished());
+        Article article = olderArticles.get(0);
 
         return _dataService
-                .getArticles(source.getKey(), PAGE_SIZE, published, false)
+                .getArticles(source.getKey(), PAGE_SIZE, article.getPublished(), false)
                 .onErrorReturn(throwable -> new ArrayList<>())
                 .map(articles -> {
                     if (articles.size() == PAGE_SIZE){

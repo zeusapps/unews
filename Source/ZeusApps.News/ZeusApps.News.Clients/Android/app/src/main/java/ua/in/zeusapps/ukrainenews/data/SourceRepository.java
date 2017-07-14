@@ -53,17 +53,12 @@ class SourceRepository
 
             for (Source source : remoteSources) {
                 if (!localSources.contains(source)) {
-                    create(source);
+                    getDao().create(source);
                 }
             }
 
             return getDao().queryForAll();
         });
-    }
-
-    @Override
-    public void create(Source source) {
-        getDao().create(source);
     }
 
     @Override

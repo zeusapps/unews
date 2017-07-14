@@ -2,7 +2,6 @@ package ua.in.zeusapps.ukrainenews.components.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -41,8 +40,6 @@ public class MainActivity
     Toolbar _toolbar;
     @BindView(R.id.activity_root_fab)
     FloatingActionButton _fab;
-    //@BindView(R.id.activity_root_appBar)
-    //AppBarLayout _appBarLayout;
     @BindView(R.id.activity_main_view_pager)
     ViewPager _viewPager;
     @BindView(R.id.activity_main_tab_layout)
@@ -95,13 +92,6 @@ public class MainActivity
 
     @Override
     public void onBackPressed() {
-//        int count = FragmentHelper.getStackCount(getSupportFragmentManager());
-//
-//        if (count > 0){
-//            super.onBackPressed();
-//        } else {
-//            tryClose();
-//        }
         tryClose();
     }
 
@@ -149,10 +139,6 @@ public class MainActivity
             _toolbar.setNavigationOnClickListener(null);
         }
     }
-
-//    public Toolbar getToolbar(){
-//        return toolbar;
-//    }
 
     private void tryClose(){
         long timestamp = System.currentTimeMillis();

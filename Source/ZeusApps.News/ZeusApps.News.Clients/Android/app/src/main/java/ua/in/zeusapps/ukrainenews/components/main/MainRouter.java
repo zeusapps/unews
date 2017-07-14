@@ -23,18 +23,9 @@ public class MainRouter extends MvpRouter {
         startIntent(intent);
     }
 
-
-
-    public void showSettings() {
+    void showSettings() {
+        //TODO implement showing settings
         //addToStack(new SettingsFragment(), R.id.activity_root_content);
-    }
-
-    public void showArticleDetails(Article article, Source source){
-        Intent articleDetailsIntent = new Intent(getActivity(), DetailsActivity.class);
-        articleDetailsIntent.putExtra(DetailsActivity.ARTICLE_ID_EXTRA, article.getId());
-        articleDetailsIntent.putExtra(DetailsActivity.SOURCE_ID_EXTRA, source.getId());
-
-        startIntent(articleDetailsIntent);
     }
 
     public void showArticleDetails(Article article){

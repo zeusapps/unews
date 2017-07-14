@@ -27,7 +27,7 @@
             app:tabGravity="fill"
             app:tabMode="fixed"/>
     </android.support.design.widget.AppBarLayout>
-    
+
     <android.support.v4.view.ViewPager
         android:id="@+id/activity_main_view_pager"
         android:layout_width="match_parent"

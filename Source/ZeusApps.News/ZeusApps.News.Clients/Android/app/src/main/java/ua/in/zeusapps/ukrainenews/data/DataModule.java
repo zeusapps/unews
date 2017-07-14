@@ -18,7 +18,7 @@ public class DataModule {
         RepositoryBase.RegisterClass(Article.class);
         RepositoryBase.RegisterClass(Source.class);
         RepositoryBase.setDatabaseName("news.db");
-        RepositoryBase.setDatebaseVersion(10);
+        RepositoryBase.setDatabaseVersion(11);
     }
 
     @Provides

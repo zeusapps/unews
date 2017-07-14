@@ -10,7 +10,6 @@ import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
 import ua.in.zeusapps.ukrainenews.models.ArticleRequestBundle;
 import ua.in.zeusapps.ukrainenews.models.ArticleResponse;
 import ua.in.zeusapps.ukrainenews.models.Source;
-import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 public class GetArticlesInteractor extends SingleInteractor<ArticleResponse, ArticleRequestBundle> {
 
@@ -18,25 +17,22 @@ public class GetArticlesInteractor extends SingleInteractor<ArticleResponse, Art
     private final ISourceRepository _sourceRepository;
     private final IArticleRepository _articleRepository;
     private final IDataService _dataService;
-    private final Formatter _formatter;
 
     @Inject
     GetArticlesInteractor(
             ISourceRepository sourceRepository,
             IArticleRepository articleRepository,
-            IDataService dataService,
-            Formatter formatter) {
+            IDataService dataService) {
         _sourceRepository = sourceRepository;
         _articleRepository = articleRepository;
         _dataService = dataService;
-        _formatter = formatter;
     }
 
     @Override
     protected Single<ArticleResponse> build(final ArticleRequestBundle bundle) {
 
         Source source = bundle.getSource();
-        String published = _formatter.toStringDate(bundle.getArticle().getPublished());
+        long published = bundle.getArticle().getPublished();
         String key = source.getKey();
         boolean isAfter = bundle.getIsAfter();
 
@@ -46,7 +42,7 @@ public class GetArticlesInteractor extends SingleInteractor<ArticleResponse, Art
     }
 
     private Single<ArticleResponse> getNewerArticles(
-            Source source, String key, String published) {
+            Source source, String key, long published) {
         return _dataService
                 .getArticles(key, PAGE_COUNT, published, false)
                 .map(articles -> {
@@ -61,7 +57,7 @@ public class GetArticlesInteractor extends SingleInteractor<ArticleResponse, Art
                 });
     }
 
-    private Single<ArticleResponse> getOlderArticles(String key, String published) {
+    private Single<ArticleResponse> getOlderArticles(String key, long published) {
         return _dataService
                 .getArticles(key, PAGE_COUNT, published, true)
                 .map(articles -> {

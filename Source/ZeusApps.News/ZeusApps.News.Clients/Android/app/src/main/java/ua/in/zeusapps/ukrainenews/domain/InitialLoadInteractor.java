@@ -11,7 +11,6 @@ import ua.in.zeusapps.ukrainenews.data.ISourceRepository;
 import ua.in.zeusapps.ukrainenews.models.Article;
 import ua.in.zeusapps.ukrainenews.models.Source;
 import ua.in.zeusapps.ukrainenews.models.SourceBundle;
-import ua.in.zeusapps.ukrainenews.services.Formatter;
 
 public class InitialLoadInteractor
         extends ObservableInteractor<SourceBundle, Void> {
@@ -19,7 +18,6 @@ public class InitialLoadInteractor
     private final ISourceRepository _sourceRepository;
     private final IArticleRepository _articleRepository;
     private final IDataService _dataService;
-    private final Formatter _formatter;
     private final static int ITEMS_COUNT = 20;
     private final Article NullArticle = new Article();
 
@@ -27,18 +25,17 @@ public class InitialLoadInteractor
     InitialLoadInteractor(
             ISourceRepository sourceRepository,
             IArticleRepository articleRepository,
-            IDataService dataService,
-            Formatter formatter) {
+            IDataService dataService) {
         _sourceRepository = sourceRepository;
         _articleRepository = articleRepository;
         _dataService = dataService;
-        _formatter = formatter;
     }
 
     @Override
     protected Observable<SourceBundle> build(Void parameter) {
         return _dataService
                 .getSources()
+                .flatMap(_sourceRepository::checkSources)
                 .toObservable()
                 .flatMap(sources ->
                         Observable
@@ -55,9 +52,8 @@ public class InitialLoadInteractor
                         return _dataService.getArticles(source.getKey(), ITEMS_COUNT);
                     }
 
-                    String published = _formatter.formatDate(article.getPublished());
-
-                    return _dataService.getArticles(source.getKey(), ITEMS_COUNT, published, false);
+                    return _dataService.getArticles(
+                            source.getKey(), ITEMS_COUNT, article.getPublished(), false);
                 })
                 .map(articles -> {
                     _sourceRepository.updateTimestamp(source);

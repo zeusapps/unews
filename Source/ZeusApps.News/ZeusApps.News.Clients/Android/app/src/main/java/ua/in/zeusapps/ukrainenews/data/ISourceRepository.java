@@ -11,7 +11,6 @@ public interface ISourceRepository {
     Single<Source> getById(String id);
     Single<Source> getByKey(String key);
     Single<List<Source>> checkSources(List<Source> remoteSources);
-    void create(Source source);
     void delete(Source source);
     void update(Source source);
     void updateTimestamp(Source source);

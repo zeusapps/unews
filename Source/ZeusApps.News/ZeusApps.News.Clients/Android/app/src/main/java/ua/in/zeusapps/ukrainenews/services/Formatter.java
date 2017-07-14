@@ -16,6 +16,7 @@ import ua.in.zeusapps.ukrainenews.R;
 
 public class Formatter {
     public final static String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public final static String LOCAL_DATE_FORMAT = "dd MMMM yyyy HH:mm";
     private final SimpleDateFormat _formatterUTC;
     private final SimpleDateFormat _formatterLocal;
     private final String _htmlTemplate;
@@ -24,18 +25,18 @@ public class Formatter {
         _formatterUTC = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         _formatterUTC.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        _formatterLocal = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
+        _formatterLocal = new SimpleDateFormat(LOCAL_DATE_FORMAT, Locale.getDefault());
         _formatterLocal.setTimeZone(TimeZone.getDefault());
 
         _htmlTemplate = readTemplate(context);
     }
 
-    public String toStringDate(Date date){
-        return _formatterUTC.format(date);
+    public String toStringDate(long timestamp){
+        return _formatterUTC.format(new Date(timestamp));
     }
 
-    public String formatDate(Date dateTime){
-        return _formatterLocal.format(dateTime);
+    public String formatDate(long timestamp){
+        return _formatterLocal.format(new Date(timestamp));
     }
 
     public String formatHtml(String html){

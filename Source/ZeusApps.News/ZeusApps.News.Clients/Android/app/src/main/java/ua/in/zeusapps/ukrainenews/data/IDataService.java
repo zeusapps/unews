@@ -19,7 +19,7 @@ public interface IDataService {
     Single<List<Article>> getArticles(
             @Path("sourceId") String sourceId,
             @Query("count") int count,
-            @Query("published") String published,
+            @Query("timestamp") long timestamp,
             @Query("isAfter") boolean isAfter);
 
     @GET("api/sources")

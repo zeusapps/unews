@@ -5,11 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-
-import java.util.Date;
 
 @DatabaseTable
 public class Article implements Parcelable {
@@ -48,10 +45,10 @@ public class Article implements Parcelable {
     @Expose
     private String imageUrl;
 
-    @DatabaseField(useGetSet = true, columnName = PUBLISHED_FIELD_NAME, dataType = DataType.DATE_STRING)
-    @SerializedName("published")
+    @DatabaseField(useGetSet = true, columnName = PUBLISHED_FIELD_NAME)
+    @SerializedName("publishedLong")
     @Expose
-    private Date published;
+    private long published;
 
     @DatabaseField(useGetSet = true)
     @SerializedName("upvote")
@@ -72,7 +69,7 @@ public class Article implements Parcelable {
         html = in.readString();
         url = in.readString();
         imageUrl = in.readString();
-        published = new Date(in.readLong());
+        published = in.readLong();
         upvote = in.readInt();
         downvote = in.readInt();
     }
@@ -85,7 +82,7 @@ public class Article implements Parcelable {
         dest.writeString(html);
         dest.writeString(url);
         dest.writeString(imageUrl);
-        dest.writeLong(published.getTime());
+        dest.writeLong(published);
         dest.writeInt(upvote);
         dest.writeInt(downvote);
     }
@@ -150,11 +147,11 @@ public class Article implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
-    public Date getPublished() {
+    public long getPublished() {
         return published;
     }
 
-    public void setPublished(Date published) {
+    public void setPublished(long published) {
         this.published = published;
     }
 
